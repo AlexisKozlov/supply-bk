@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #ffcc00; /* основной цвет Burger King */
+            background-color: #ffcc00;
             color: #333;
             margin: 0;
             padding: 0;
@@ -16,7 +16,6 @@
             align-items: center;
             height: 100vh;
             flex-direction: column;
-            transition: background-color 0.3s ease;
         }
 
         h1 {
@@ -33,13 +32,6 @@
             border-radius: 5px;
             margin-bottom: 20px;
             width: 300px;
-            transition: transform 0.3s ease-in-out;
-        }
-
-        input:focus {
-            transform: scale(1.05);
-            border-color: #ffcc00;
-            outline: none;
         }
 
         button {
@@ -50,13 +42,6 @@
             font-size: 1.2em;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease-in-out;
-        }
-
-        button:hover {
-            background-color: #ffcc00;
-            color: #cc0000;
-            transform: scale(1.1);
         }
 
         #result {
@@ -67,59 +52,29 @@
             background-color: white;
             border-radius: 10px;
             box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
-            opacity: 0;
-            animation: fadeIn 1s forwards;
         }
 
-        #result h2 {
-            color: #cc0000;
-            font-size: 1.8em;
-            margin-bottom: 10px;
-        }
-
-        #result p {
-            font-size: 1.2em;
-            margin: 10px 0;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
     </style>
 </head>
 <body>
 
     <h1>Поиск карточки</h1>
 
-    <input type="text" id="search" placeholder="Введите неактуальный артикул">
+    <input type="text" id="search" placeholder="Введите артикул">
     <button onclick="searchCard()">Искать</button>
 
     <div id="result"></div>
 
     <script>
+        // Пример данных
         const data = [
-            ['566666', 'Дольки картофельные 12 5 кг', 'Деревенская картошка', '1010026090 Картофель дольк. с кож. по-дер.2 5кг*4', '05.03.2025'],
-            ['155555', 'Картофель "фри" 12 5 кг', 'Картофель фри', 'FMS9 «Картофель фри с паниров.» (9x9мм) 5шт*2 5кг', '05.03.2025'],
-            ['69889', 'Лук красный марин. закус заморож. 6 уп * 500 г', 'Красный лук', '69890 Лук красный марин. заморож. 6 уп * 500 г', '05.03.2025'],
-            ['1054445', 'Стрипсы замороженные 1кг * 12шт', 'Стрипсы', '69097 Стрипсы п/ф из мяса птицы, зам, вес 14,495 кг', '05.03.2025',
-                [['1054444', 'Стрипсы панир. запечен. флоупак 12 кг зам'],
-                ['1010023409', 'Стрипсы куриные, 12 кг'],
-                ['69101', 'Стрипсы куриные в панировке, зам. 12 кг']]
-            ],
-            ['511511', 'Минтай филе порции в панир. обжар. 5000 г', 'Минтай филе', '51174 Минтай филе порции в панир. обжар. 5000 г', '05.03.2025'],
-            ['20048', 'Креветка Ваннамей в панировке 5 кг', 'Креветки', '51180 Креветка в панир с/м 21/25 10уп*1кг', '05.03.2025'],
-            ['67501', 'Луковый конфитюр 6 уп*500 гр.', 'Луковый конфитюр', '67500 Луковый конфитюр 6уп*500гр', '05.03.2025'],
-            ['69089', 'Гамбургеры "Нежные" замор. 5.5 кг', 'Котлета нежная/аппетитная', '69086 Котлеты "Аппетитные" мясной п/ф зам. 5 5кг', '05.03.2025'],
-            ['69204', 'Булочка 3" гамбург. глазир. 48 шт/КОР', 'Булка гамбургера', '69205 Булочка для гамбургера с кунж. 3"75" 48 шт', '05.03.2025'],
-            ['34683', 'Булочка с кунж. 5" Воппер 24 шт. КОР', 'Булочка воппер', '55137 Булочка с кунжутом "5" ВОППЕР 89 г*24 шт', '05.03.2025']
-            // Добавьте другие данные по аналогии...
+            ['1054445', 'Стрипсы замороженные 1кг * 12шт', 'Стрипсы', '69097 Стрипсы п/ф из мяса птицы, зам, вес 14,495 кг'],
+            ['1054444', 'Стрипсы панир. запечен. флоупак 12 кг зам', 'Стрипсы панированные', '69097 Стрипсы п/ф из мяса птицы, зам, вес 14,495 кг'],
+            ['1010023409', 'Стрипсы куриные, 12 кг', 'Стрипсы куриные', '69097 Стрипсы п/ф из мяса птицы, зам, вес 14,495 кг'],
+            ['69101', 'Стрипсы куриные в панировке, зам. 12 кг', 'Стрипсы панированные куриные', '69097 Стрипсы п/ф из мяса птицы, зам, вес 14,495 кг']
         ];
 
+        // Функция поиска карточки
         function searchCard() {
             const searchTerm = document.getElementById('search').value.trim();
             const resultElement = document.getElementById('result');
@@ -130,25 +85,17 @@
                 return;
             }
 
-            const foundCards = data.filter(card => {
-                // Проверяем, есть ли в карточке аналог с нужным артикулом
-                return card[5] && card[5].some(analogue => analogue[0] === searchTerm);
-            });
+            // Поиск карточки по артикулу
+            const foundCard = data.find(card => card[0] === searchTerm);
 
-            if (foundCards.length === 0) {
-                resultElement.innerHTML = 'Артикул не найден, возможно у карточки нет актуальных аналогов.';
+            if (!foundCard) {
+                resultElement.innerHTML = 'Артикул не найден.';
             } else {
-                let resultHtml = '<h2>Актуальная карточка:</h2>';
-                foundCards.forEach(card => {
-                    const matchingAnalogue = card[5].find(analogue => analogue[0] === searchTerm);
-                    if (matchingAnalogue) {
-                        resultHtml += `<p><strong>Актуальный артикул:</strong> ${card[0]}<br>
-                                        <strong>Актуальная карточка:</strong> ${card[1]}<br>
-                                        <strong>Аналог для:</strong> ${matchingAnalogue[1]}<br>
-                                        <strong>Обновлено:</strong> ${card[4]}</p>`;
-                    }
-                });
-                resultElement.innerHTML = resultHtml;
+                resultElement.innerHTML = `
+                    <h2>Найдена карточка:</h2>
+                    <p><strong>Артикул:</strong> ${foundCard[0]}<br>
+                    <strong>Наименование:</strong> ${foundCard[1]}</p>
+                `;
             }
         }
     </script>
