@@ -63,6 +63,7 @@
         const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnzoZ95MSuNYWNNhqldp9o2gQkZZnraRCzxwoF2VtYZFwjWzq8_5u-pHGE5nqcQniEdTixCgR-pbNb/pub?gid=886700453&single=true&output=csv";
         let dataMap = new Map();
 
+        // Загружаем данные один раз при открытии страницы
         async function loadCSV() {
             try {
                 const response = await fetch(sheetUrl);
@@ -75,9 +76,9 @@
                     const [actualCode, actualName, ...oldArticles] = rows[i].map(item => item.trim());
 
                     if (actualCode && actualName) {
-                        dataMap.set(actualCode, actualName);
+                        dataMap.set(actualCode.trim(), actualName.trim()); // Обрабатываем артикул и название
                         oldArticles.forEach(oldCode => {
-                            if (oldCode) dataMap.set(oldCode, actualName);
+                            if (oldCode) dataMap.set(oldCode.trim(), actualName.trim()); // Точно также обрабатываем старые артикула
                         });
                     }
                 }
@@ -88,8 +89,9 @@
             }
         }
 
+        // Функция поиска артикула
         async function searchArticle() {
-            const input = document.getElementById("searchInput").value.trim();
+            const input = document.getElementById("searchInput").value.trim(); // Очищаем ввод от пробелов
             const resultDiv = document.getElementById("result");
 
             console.log("Введенный артикул:", input);
@@ -100,8 +102,12 @@
                 return;
             }
 
-            if (dataMap.size === 0) await loadCSV();
+            // Если данные еще не загружены, загружаем их
+            if (dataMap.size === 0) {
+                await loadCSV();
+            }
 
+            // Ищем по введенному артикулу
             if (dataMap.has(input)) {
                 resultDiv.textContent = `Актуальная карточка: ${input} - ${dataMap.get(input)}`;
                 resultDiv.className = "success";
