@@ -3,102 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Поиск карточки</title>
+    <title>Поиск актуальной карточки</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #ffcc00;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #FFC72C;
+            color: #DA291C;
         }
-
-        h1 {
-            color: #cc0000;
-            font-size: 3em;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+        .container {
+            margin-top: 50px;
         }
-
-        input {
-            padding: 15px;
-            font-size: 1.2em;
-            border: 2px solid #cc0000;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            width: 300px;
+        input, button {
+            padding: 10px;
+            font-size: 16px;
         }
-
-        button {
-            background-color: #cc0000;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1.2em;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
         #result {
-            margin-top: 30px;
-            padding: 20px;
-            width: 80%;
-            max-width: 600px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            font-weight: bold;
         }
-
     </style>
 </head>
 <body>
-
-    <h1>Поиск карточки</h1>
-
-    <input type="text" id="search" placeholder="Введите артикул">
-    <button onclick="searchCard()">Искать</button>
-
-    <div id="result"></div>
+    <div class="container">
+        <h1>Поиск актуальной карточки</h1>
+        <input type="text" id="searchInput" placeholder="Введите артикул">
+        <button onclick="searchCard()">Найти</button>
+        <div id="result"></div>
+    </div>
 
     <script>
-        // Пример данных
-        const data = [
-            ['1054445', 'Стрипсы замороженные 1кг * 12шт', 'Стрипсы', '69097 Стрипсы п/ф из мяса птицы, зам, вес 14,495 кг'],
-            ['1054444', 'Стрипсы панир. запечен. флоупак 12 кг зам', 'Стрипсы панированные', '69097 Стрипсы п/ф из мяса птицы, зам, вес 14,495 кг'],
-            ['1010023409', 'Стрипсы куриные, 12 кг', 'Стрипсы куриные', '69097 Стрипсы п/ф из мяса птицы, зам, вес 14,495 кг'],
-            ['69101', 'Стрипсы куриные в панировке, зам. 12 кг', 'Стрипсы панированные куриные', '69097 Стрипсы п/ф из мяса птицы, зам, вес 14,495 кг']
-        ];
-
-        // Функция поиска карточки
+        const analogs = {
+            "1054445": ["69097", "1054444", "1010023409", "69101"],
+            "566666": ["1010026090", "58553", "TRW01"],
+            "155555": ["FMS9", "58542", "68544", "555555"]
+        };
+        
+        const cards = {
+            "1054445": "1054445 Стрипсы замороженные 1кг * 12шт",
+            "566666": "566666 Дольки картофельные 12,5 кг",
+            "155555": "155555 Картофель 'фри' 12,5 кг"
+        };
+        
         function searchCard() {
-            const searchTerm = document.getElementById('search').value.trim();
-            const resultElement = document.getElementById('result');
-            resultElement.innerHTML = ''; // Очистить результаты поиска
-
-            if (searchTerm === '') {
-                resultElement.innerHTML = 'Пожалуйста, введите артикул.';
-                return;
+            const input = document.getElementById('searchInput').value.trim();
+            let found = false;
+            
+            for (const [actual, outdated] of Object.entries(analogs)) {
+                if (actual === input || outdated.includes(input)) {
+                    document.getElementById('result').textContent = `${actual} ${cards[actual]}`;
+                    found = true;
+                    break;
+                }
             }
-
-            // Поиск карточки по артикулу
-            const foundCard = data.find(card => card[0] === searchTerm);
-
-            if (!foundCard) {
-                resultElement.innerHTML = 'Артикул не найден.';
-            } else {
-                resultElement.innerHTML = `
-                    <h2>Найдена карточка:</h2>
-                    <p><strong>Артикул:</strong> ${foundCard[0]}<br>
-                    <strong>Наименование:</strong> ${foundCard[1]}</p>
-                `;
+            
+            if (!found) {
+                document.getElementById('result').textContent = "Артикул не найден, возможно у карточки нет актуальных аналогов.";
             }
         }
     </script>
-
 </body>
 </html>
