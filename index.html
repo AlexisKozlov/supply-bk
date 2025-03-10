@@ -65,9 +65,9 @@
         };
 
         const cardNames = {
-            "1054445": "1054445 Стрипсы замороженные 1кг * 12шт",
-            "566666": "566666 Дольки картофельные 12,5 кг",
-            "155555": "155555 Картофель \"фри\" 12,5 кг"
+            "1054445": "Стрипсы замороженные 1кг * 12шт",
+            "566666": "Дольки картофельные 12,5 кг",
+            "155555": "Картофель \"фри\" 12,5 кг"
         };
 
         function searchCard() {
@@ -78,7 +78,7 @@
             let found = false;
             for (let actual in analogGroups) {
                 if (actual === input || analogGroups[actual].includes(input)) {
-                    resultDiv.innerHTML = `${cardNames[actual]}`;
+                    resultDiv.innerHTML = `${actual} ${cardNames[actual]}`;
                     resultDiv.classList.add("show");
                     found = true;
                     break;
