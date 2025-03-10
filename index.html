@@ -131,7 +131,7 @@
             }
 
             const foundCards = data.filter(card => {
-                // Проверяем наличие артикулов аналогов
+                // Проверяем, есть ли в карточке аналог с нужным артикулом
                 return card[5] && card[5].some(analogue => analogue[0] === searchTerm);
             });
 
