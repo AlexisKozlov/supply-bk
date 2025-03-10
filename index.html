@@ -3,39 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Поиск актуальной карточки</title>
+    <title>Поиск карточки</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #ffc72c;
+            background-color: #ffe600;
             text-align: center;
-            margin: 0;
-            padding: 20px;
-            color: #d62300;
+            padding: 50px;
+            color: #702c14;
         }
         h1 {
-            font-size: 28px;
-            font-weight: bold;
+            color: #d62300;
+            font-size: 32px;
         }
         input {
             padding: 10px;
             font-size: 16px;
+            width: 300px;
             border: 2px solid #d62300;
             border-radius: 5px;
-            width: 250px;
         }
         button {
-            padding: 10px 15px;
-            font-size: 16px;
             background-color: #d62300;
             color: white;
+            padding: 10px 20px;
+            font-size: 16px;
             border: none;
-            border-radius: 5px;
             cursor: pointer;
-            transition: transform 0.2s;
+            border-radius: 5px;
+            transition: 0.3s;
         }
         button:hover {
-            transform: scale(1.1);
+            background-color: #a81e00;
         }
         #result {
             margin-top: 20px;
@@ -43,52 +42,55 @@
             font-weight: bold;
             opacity: 0;
             transform: translateY(-10px);
-            transition: opacity 0.5s, transform 0.5s;
+            transition: opacity 0.5s ease, transform 0.5s ease;
         }
         .show {
-            opacity: 1 !important;
-            transform: translateY(0) !important;
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
 <body>
+
     <h1>Поиск актуальной карточки</h1>
-    <input type="text" id="articleInput" placeholder="Введите артикул">
-    <button onclick="searchCard()">Искать</button>
+    <input type="text" id="inputArticle" placeholder="Введите артикул...">
+    <button onclick="searchCard()">Найти</button>
     <div id="result"></div>
 
     <script>
-        const cardGroups = {
+        const analogGroups = {
             "1054445": ["69097", "1054444", "1010023409", "69101"],
             "566666": ["1010026090", "58553", "TRW01"],
             "155555": ["FMS9", "58542", "68544", "555555"]
         };
 
-        const names = {
-            "1054445": "Стрипсы замороженные 1кг * 12шт",
-            "566666": "Дольки картофельные 12,5 кг",
-            "155555": "Картофель \"фри\" 12,5 кг"
+        const cardNames = {
+            "1054445": "1054445 Стрипсы замороженные 1кг * 12шт",
+            "566666": "566666 Дольки картофельные 12,5 кг",
+            "155555": "155555 Картофель \"фри\" 12,5 кг"
         };
 
         function searchCard() {
-            const input = document.getElementById("articleInput").value.trim();
+            const input = document.getElementById("inputArticle").value.trim();
             const resultDiv = document.getElementById("result");
-            let found = false;
+            resultDiv.classList.remove("show");
 
-            for (const [actual, analogs] of Object.entries(cardGroups)) {
-                if (actual === input || analogs.includes(input)) {
-                    resultDiv.textContent = names[actual];
+            let found = false;
+            for (let actual in analogGroups) {
+                if (actual === input || analogGroups[actual].includes(input)) {
+                    resultDiv.innerHTML = `${cardNames[actual]}`;
                     resultDiv.classList.add("show");
                     found = true;
                     break;
                 }
             }
-            
+
             if (!found) {
-                resultDiv.textContent = "Артикул не найден, возможно у карточки нет актуальных аналогов.";
+                resultDiv.innerHTML = "Артикул не найден, возможно, у карточки нет актуальных аналогов.";
                 resultDiv.classList.add("show");
             }
         }
     </script>
+
 </body>
 </html>
