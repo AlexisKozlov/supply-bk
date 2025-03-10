@@ -55,28 +55,36 @@
 <body>
 
     <h1>Поиск актуальных карточек</h1>
-    <input type="text" id="searchInput" placeholder="Введите артикул">
+    <input type="text" id="searchInput" placeholder="Введите артикул" onkeypress="handleKeyPress(event)">
     <button onclick="searchArticle()">Поиск</button>
     <div id="result"></div>
 
     <script>
         const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTnzoZ95MSuNYWNNhqldp9o2gQkZZnraRCzxwoF2VtYZFwjWzq8_5u-pHGE5nqcQniEdTixCgR-pbNb/pub?gid=886700453&single=true&output=csv";
         let dataMap = new Map();
+        let isDataLoaded = false;
 
         async function loadCSV() {
-            const response = await fetch(sheetUrl);
-            const text = await response.text();
-            const rows = text.split("\n").map(row => row.split(","));
+            try {
+                const response = await fetch(sheetUrl);
+                const text = await response.text();
+                const rows = text.split("\n").map(row => row.split(","));
 
-            for (let i = 1; i < rows.length; i++) {
-                const [actualCode, actualName, ...oldArticles] = rows[i].map(item => item.trim());
-                dataMap.set(actualCode, actualName);
-                oldArticles.forEach(oldCode => dataMap.set(oldCode, actualName));
+                for (let i = 1; i < rows.length; i++) {
+                    const [actualCode, actualName, ...oldArticles] = rows[i].map(item => item.trim().toLowerCase());
+                    dataMap.set(actualCode, actualName);
+                    oldArticles.forEach(oldCode => dataMap.set(oldCode, actualName));
+                }
+                isDataLoaded = true;
+            } catch (error) {
+                console.error("Ошибка загрузки данных:", error);
             }
         }
 
         async function searchArticle() {
-            const input = document.getElementById("searchInput").value.trim();
+            if (!isDataLoaded) await loadCSV();
+
+            const input = document.getElementById("searchInput").value.trim().toLowerCase();
             const resultDiv = document.getElementById("result");
 
             if (!input) {
@@ -85,10 +93,8 @@
                 return;
             }
 
-            if (dataMap.size === 0) await loadCSV();
-
             if (dataMap.has(input)) {
-                resultDiv.textContent = `Актуальная карточка: ${input} - ${dataMap.get(input)}`;
+                resultDiv.textContent = `Актуальная карточка: ${input.toUpperCase()} - ${dataMap.get(input)}`;
                 resultDiv.className = "success";
             } else {
                 resultDiv.textContent = "Артикул не найден, возможно у карточки нет аналогов.";
@@ -96,7 +102,12 @@
             }
         }
 
-        // Запускаем загрузку данных при открытии страницы
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                searchArticle();
+            }
+        }
+
         loadCSV();
     </script>
 
