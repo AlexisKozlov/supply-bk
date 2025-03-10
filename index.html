@@ -96,7 +96,7 @@
 
     <h1>Поиск карточки</h1>
 
-    <input type="text" id="search" placeholder="Введите артикул">
+    <input type="text" id="search" placeholder="Введите неактуальный артикул">
     <button onclick="searchCard()">Искать</button>
 
     <div id="result"></div>
@@ -130,27 +130,21 @@
                 return;
             }
 
-            const foundCards = data.filter(card => card[0].includes(searchTerm)); // Ищем по первому столбцу (артикул)
-            
+            const foundCards = data.filter(card => {
+                // Проверяем наличие артикулов аналогов
+                return card.slice(5).some(analogue => analogue[0] === searchTerm);
+            });
+
             if (foundCards.length === 0) {
-                resultElement.innerHTML = 'Артикул не найден, возможно у карточки нет аналогов.';
+                resultElement.innerHTML = 'Артикул не найден, возможно у карточки нет актуальных аналогов.';
             } else {
-                let resultHtml = '<h2>Результаты поиска:</h2>';
+                let resultHtml = '<h2>Актуальная карточка:</h2>';
                 foundCards.forEach(card => {
-                    resultHtml += `<p><strong>Артикул:</strong> ${card[0]}<br>
+                    const matchingAnalogue = card[5].find(analogue => analogue[0] === searchTerm);
+                    resultHtml += `<p><strong>Актуальный артикул:</strong> ${card[0]}<br>
                                     <strong>Актуальная карточка:</strong> ${card[1]}<br>
-                                    <strong>Неактуальная/временно:</strong> ${card[3]}<br>
-                                    <strong>Обновлено:</strong> ${card[4]}<br>`;
-
-                    if (card.length > 5) {
-                        resultHtml += '<strong>Аналоги:</strong><ul>';
-                        card[5].forEach(analogue => {
-                            resultHtml += `<li><strong>Артикул:</strong> ${analogue[0]} - ${analogue[1]}</li>`;
-                        });
-                        resultHtml += '</ul>';
-                    }
-
-                    resultHtml += '</p>';
+                                    <strong>Аналог для:</strong> ${matchingAnalogue[1]}<br>
+                                    <strong>Обновлено:</strong> ${card[4]}</p>`;
                 });
                 resultElement.innerHTML = resultHtml;
             }
