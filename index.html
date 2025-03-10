@@ -3,64 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Поиск актуальной карточки</title>
+    <title>Обновление сервиса</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
             background-color: #FFC72C;
             color: #DA291C;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
         }
-        .container {
-            margin-top: 50px;
-        }
-        input, button {
-            padding: 10px;
-            font-size: 16px;
-        }
-        #result {
-            margin-top: 20px;
+        .message {
+            font-size: 24px;
             font-weight: bold;
+            animation: fadeIn 2s ease-in-out;
+        }
+        .loader {
+            border: 8px solid #fff;
+            border-top: 8px solid #DA291C;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-top: 20px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Поиск актуальной карточки</h1>
-        <input type="text" id="searchInput" placeholder="Введите артикул">
-        <button onclick="searchCard()">Найти</button>
-        <div id="result"></div>
-    </div>
-
-    <script>
-        const analogs = {
-            "1054445": ["69097", "1054444", "1010023409", "69101"],
-            "566666": ["1010026090", "58553", "TRW01"],
-            "155555": ["FMS9", "58542", "68544", "555555"]
-        };
-        
-        const cards = {
-            "1054445": "1054445 Стрипсы замороженные 1кг * 12шт",
-            "566666": "566666 Дольки картофельные 12,5 кг",
-            "155555": "155555 Картофель 'фри' 12,5 кг"
-        };
-        
-        function searchCard() {
-            const input = document.getElementById('searchInput').value.trim();
-            let found = false;
-            
-            for (const [actual, outdated] of Object.entries(analogs)) {
-                if (actual === input || outdated.includes(input)) {
-                    document.getElementById('result').textContent = `${actual} ${cards[actual]}`;
-                    found = true;
-                    break;
-                }
-            }
-            
-            if (!found) {
-                document.getElementById('result').textContent = "Артикул не найден, возможно у карточки нет актуальных аналогов.";
-            }
-        }
-    </script>
+    <div class="message">На сервисе идет обновление.<br>Пожалуйста, подождите...</div>
+    <div class="loader"></div>
 </body>
 </html>
