@@ -3,94 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Поиск карточки</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #ffe600;
-            text-align: center;
-            padding: 50px;
-            color: #702c14;
-        }
-        h1 {
-            color: #d62300;
-            font-size: 32px;
-        }
-        input {
-            padding: 10px;
-            font-size: 16px;
-            width: 300px;
-            border: 2px solid #d62300;
-            border-radius: 5px;
-        }
-        button {
-            background-color: #d62300;
-            color: white;
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: 0.3s;
-        }
-        button:hover {
-            background-color: #a81e00;
-        }
-        #result {
-            margin-top: 20px;
-            font-size: 20px;
-            font-weight: bold;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-        .show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    </style>
+    <title>Поиск актуальной карточки</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <h1>Поиск актуальной карточки</h1>
-    <input type="text" id="inputArticle" placeholder="Введите артикул...">
-    <button onclick="searchCard()">Найти</button>
-    <div id="result"></div>
-
-    <script>
-        const analogGroups = {
-            "1054445": ["69097", "1054444", "1010023409", "69101"],
-            "566666": ["1010026090", "58553", "TRW01"],
-            "155555": ["FMS9", "58542", "68544", "555555"]
-        };
-
-        const cardNames = {
-            "1054445": "Стрипсы замороженные 1кг * 12шт",
-            "566666": "Дольки картофельные 12,5 кг",
-            "155555": "Картофель \"фри\" 12,5 кг"
-        };
-
-        function searchCard() {
-            const input = document.getElementById("inputArticle").value.trim();
-            const resultDiv = document.getElementById("result");
-            resultDiv.classList.remove("show");
-
-            let found = false;
-            for (let actual in analogGroups) {
-                if (actual === input || analogGroups[actual].includes(input)) {
-                    resultDiv.innerHTML = `${actual} ${cardNames[actual]}`;
-                    resultDiv.classList.add("show");
-                    found = true;
-                    break;
-                }
-            }
-
-            if (!found) {
-                resultDiv.innerHTML = "Артикул не найден, возможно, у карточки нет актуальных аналогов.";
-                resultDiv.classList.add("show");
-            }
-        }
-    </script>
-
+    <div class="container">
+        <h1>Поиск актуальной карточки</h1>
+        <input type="text" id="searchInput" placeholder="Введите артикул...">
+        <button onclick="searchCard()">Найти</button>
+        <div id="result"></div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
