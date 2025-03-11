@@ -7,16 +7,17 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <div class="header-content">
+    <div class="container">
+        <div class="logo-container">
             <img src="burger-king-logo.png" alt="Burger King" class="logo">
             <h1>Поиск актуальной карточки</h1>
         </div>
-    </header>
+        
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Введите артикул..." onkeypress="handleKeyPress(event)">
+            <button onclick="searchCard()">🔍 Найти</button>
+        </div>
 
-    <div class="container">
-        <input type="text" id="searchInput" placeholder="Введите артикул...">
-        <button onclick="searchCard()">Найти</button>
         <div id="result"></div>
     </div>
 
