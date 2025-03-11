@@ -26,7 +26,8 @@ function searchCard() {
 
     for (let [actual, data] of Object.entries(cardDatabase)) {
         if (input === actual || data.analogs.includes(input)) {
-            resultDiv.textContent = `Актуальная карточка: ${actual} - ${data.name}`;
+            resultDiv.textContent = `Актуальная карточка:
+            ${actual} - ${data.name}`;
             found = true;
             break;
         }
