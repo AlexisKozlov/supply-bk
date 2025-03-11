@@ -19,7 +19,7 @@ body, html {
     border-radius: 15px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     width: 90%;
-    max-width: 400px;
+    max-width: 500px;
 }
 
 .logo-container {
@@ -29,7 +29,7 @@ body, html {
 }
 
 .logo {
-    width: 120px;
+    width: 100px;
     animation: logoAppear 1s ease-in-out;
 }
 
@@ -42,14 +42,11 @@ h1 {
 
 .search-box {
     margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
 input {
-    width: 70%; /* Теперь строка ввода занимает 70% ширины контейнера */
-    padding: 12px;
+    width: 70%;
+    padding: 10px;
     border: 2px solid #d62300;
     border-radius: 5px;
     font-size: 16px;
@@ -79,22 +76,10 @@ button:hover {
     font-size: 18px;
     font-weight: bold;
     color: #d62300;
-    opacity: 0;
-    animation: fadeIn 0.5s ease-in-out forwards;
 }
 
 /* Анимации */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
 @keyframes logoAppear {
     from { opacity: 0; transform: scale(0.5); }
     to { opacity: 1; transform: scale(1); }
-}
-
-@keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
 }
