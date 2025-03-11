@@ -77,6 +77,18 @@ button:hover {
     font-weight: bold;
     color: #d62300;
 }
+.maintenance {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: white;
+    color: red;
+    font-size: 24px;
+    text-align: center;
+}
+
 
 /* Анимации */
 @keyframes logoAppear {
