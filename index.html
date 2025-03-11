@@ -8,11 +8,13 @@
 </head>
 <body>
     <header>
-        <img src="burger-king-logo.png" alt="Burger King" class="logo">
+        <div class="header-content">
+            <img src="burger-king-logo.png" alt="Burger King" class="logo">
+            <h1>Поиск актуальной карточки</h1>
+        </div>
     </header>
-    
+
     <div class="container">
-        <h1>Поиск актуальной карточки</h1>
         <input type="text" id="searchInput" placeholder="Введите артикул...">
         <button onclick="searchCard()">Найти</button>
         <div id="result"></div>
