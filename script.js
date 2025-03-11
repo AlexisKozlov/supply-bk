@@ -22,7 +22,7 @@ const cardDatabase = {
 };
 
 function searchCard() {
-    let input = document.getElementById("searchInput").value.trim();
+    let input = document.getElementById("searchInput").value.trim().toLowerCase();
     let resultDiv = document.getElementById("result");
     resultDiv.innerHTML = "";
 
@@ -31,22 +31,22 @@ function searchCard() {
         return;
     }
 
-    if (cardDatabase[input]) {
+    let foundExact = Object.entries(cardDatabase).find(([actual]) => actual.toLowerCase() === input);
+
+    if (foundExact) {
         resultDiv.textContent = "Введённая карточка актуальна!";
         return;
     }
 
-    let found = false;
+    let foundPartial = Object.entries(cardDatabase).find(([actual, data]) =>
+        actual.toLowerCase().includes(input) ||
+        data.analogs.some(analog => analog.toLowerCase().includes(input))
+    );
 
-    for (let [actual, data] of Object.entries(cardDatabase)) {
-        if (data.analogs.includes(input)) {
-            resultDiv.innerHTML = `<strong>Актуальная карточка:</strong><br>${actual} - ${data.name}`;
-            found = true;
-            break;
-        }
-    }
-
-    if (!found) {
+    if (foundPartial) {
+        let [actual, data] = foundPartial;
+        resultDiv.innerHTML = `<strong>Актуальная карточка:</strong><br>${actual} - ${data.name}`;
+    } else {
         resultDiv.textContent = "Артикул не найден, возможно, у карточки нет актуальных аналогов.";
     }
 }
