@@ -41,24 +41,37 @@ function findCardByArticle(article) {
 }
 
 function searchCard() {
-    const input = document.getElementById("articleInput").value.trim();
-    const resultDiv = document.getElementById("result");
-    resultDiv.innerHTML = "";
+    let inputElement = document.getElementById("searchInput");
+    if (!inputElement) {
+        console.error("Поле ввода не найдено!");
+        return;
+    }
     
-    const foundCard = findCardByArticle(input);
-    if (foundCard) {
-        let output = `<h2>Актуальная карточка:</h2><p><strong>${foundCard.name}</strong></p>`;
-        if (foundCard.analogs.length > 0) {
+    let article = inputElement.value.trim();
+    if (!article) {
+        alert("Введите артикул!");
+        return;
+    }
+
+    let resultElement = document.getElementById("result");
+    resultElement.innerHTML = ""; // Очищаем результат
+
+    if (cardDatabase[article]) {
+        let card = cardDatabase[article];
+        let output = `<h2>${card.name}</h2>`;
+        if (card.analogs.length > 0) {
             output += "<h3>Аналоги:</h3><ul>";
-            foundCard.analogs.forEach(analog => {
+            card.analogs.forEach(analog => {
                 if (cardDatabase[analog]) {
-                    output += `<li>${cardDatabase[analog].name}</li>`;
+                    output += `<li>${cardDatabase[analog].name} (${analog})</li>`;
                 }
             });
             output += "</ul>";
+        } else {
+            output += "<p>Аналогов нет.</p>";
         }
-        resultDiv.innerHTML = output;
+        resultElement.innerHTML = output;
     } else {
-        resultDiv.innerHTML = "<p>Артикул не найден, возможно у карточки нет аналогов.</p>";
+        resultElement.innerHTML = "<p>Артикул не найден, возможно у карточки нет аналогов</p>";
     }
 }
