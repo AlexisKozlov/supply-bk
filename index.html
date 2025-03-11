@@ -3,30 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Поиск карточки</title>
+    <title>Поиск карточек</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <div class="logo-container">
-            <img src="burger-king-logo.png" alt="Burger King" class="logo">
-            <h1>Поиск актуальной карточки</h1>
+            <img src="burgerking-logo.png" alt="Burger King Logo" class="logo">
+            <h1>Поиск актуальных карточек</h1>
         </div>
-        
+
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Введите артикул..." onkeypress="handleKeyPress(event)">
-            <button onclick="searchCard()">🔍 Найти</button>
+            <input type="text" id="searchInput" placeholder="Введите артикул...">
+            <button onclick="searchCard()">Найти</button>
         </div>
 
         <div id="result"></div>
+
+        <div class="add-card">
+            <h2>Добавить / Обновить карточку</h2>
+            <input type="text" id="newActual" placeholder="Актуальный артикул">
+            <input type="text" id="newName" placeholder="Название">
+            <input type="text" id="newAnalogs" placeholder="Неактуальные артикулы (через запятую)">
+            <button onclick="addOrUpdateCard()">Добавить / Обновить</button>
+        </div>
     </div>
-    
-<div class="add-card">
-    <input type="text" id="newActual" placeholder="Актуальный артикул">
-    <input type="text" id="newName" placeholder="Название">
-    <input type="text" id="newAnalogs" placeholder="Неактуальные артикулы (через запятую)">
-    <button onclick="addOrUpdateCard()">Добавить / Обновить</button>
-</div>
     
     <script src="script.js"></script>
 </body>
