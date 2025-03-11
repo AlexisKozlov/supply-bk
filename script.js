@@ -1,4 +1,4 @@
-const cardDatabase = {
+cardDatabase = {
     "1054445": {
         name: "Стрипсы замороженные 1кг * 12шт",
         analogs: ["69097", "1054444", "1010023409", "69101"]
@@ -18,8 +18,13 @@ const cardDatabase = {
     "511511": {
         name: "Минтай филе порции в панир. обжар. 5000 г",
         analogs: ["51174"]
+    },
+    "20048": {
+        name: "Креветка Ваннамей в панировке 5 кг",
+        analogs: ["51180", "51185"]
     }
 };
+
 
 function searchCard() {
     let input = document.getElementById("searchInput").value.trim().toLowerCase();
