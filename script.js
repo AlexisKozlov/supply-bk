@@ -50,27 +50,7 @@ function searchCard() {
     }
 }
 
-function addOrUpdateCard() {
-    let actual = document.getElementById("newActual").value.trim();
-    let name = document.getElementById("newName").value.trim();
-    let analogs = document.getElementById("newAnalogs").value.trim().split(",").map(a => a.trim()).filter(a => a);
 
-    if (!actual || !name) {
-        alert("Введите артикул и название!");
-        return;
-    }
-
-    if (cardDatabase[actual]) {
-        cardDatabase[actual].name = name;
-        cardDatabase[actual].analogs = analogs;
-        alert("Карточка обновлена!");
-    } else {
-        cardDatabase[actual] = { name: name, analogs: analogs };
-        alert("Карточка добавлена!");
-    }
-
-    console.log("Обновленная база данных:", cardDatabase);
-}
 
 document.getElementById("searchInput").addEventListener("keypress", function(event) {
     if (event.key === "Enter") {
