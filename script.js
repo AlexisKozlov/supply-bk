@@ -61,20 +61,20 @@ document.getElementById("searchInput").addEventListener("keypress", function(eve
     if (event.key === "Enter") {
         searchCard();
     }
-    const isMaintenance = true; // true — включен режим, false — выключен
+    
+const isMaintenance = false; // true — включен режим, false — выключен
 
-if (isMaintenance) {
-    document.body.innerHTML = `
-        <div class="maintenance">
-            <h1>Ведутся технические работы</h1>
-            <p>Мы скоро вернемся!</p>
-        </div>
-    `;
-} else {
-    document.body.innerHTML = `
-        <h1>Добро пожаловать!</h1>
-        <p>Основной контент сайта.</p>
-    `;
-}
+window.onload = function () {
+    if (isMaintenance) {
+        document.body.innerHTML = `
+            <div class="maintenance">
+                <h1>Ведутся технические работы</h1>
+                <p>Мы скоро вернемся!</p>
+            </div>
+        `;
+    } else {
+        document.getElementById("content").style.display = "block";
+    }
+};
 
 });
