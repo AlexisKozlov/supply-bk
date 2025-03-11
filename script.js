@@ -50,3 +50,27 @@ function searchCard() {
         resultDiv.textContent = "Артикул не найден, возможно, у карточки нет актуальных аналогов.";
     }
 }
+function addOrUpdateCard() {
+    let actual = document.getElementById("newActual").value.trim();
+    let name = document.getElementById("newName").value.trim();
+    let analogs = document.getElementById("newAnalogs").value.trim().split(",").map(a => a.trim()).filter(a => a);
+
+    if (!actual || !name) {
+        alert("Введите артикул и название!");
+        return;
+    }
+
+    if (cardDatabase[actual]) {
+        // Если карточка уже есть – обновляем её
+        cardDatabase[actual].name = name;
+        cardDatabase[actual].analogs = analogs;
+        alert("Карточка обновлена!");
+    } else {
+        // Если карточки нет – добавляем новую
+        cardDatabase[actual] = { name: name, analogs: analogs };
+        alert("Карточка добавлена!");
+    }
+
+    console.log("Обновленная база данных:", cardDatabase);
+}
+
