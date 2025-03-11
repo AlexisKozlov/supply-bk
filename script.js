@@ -11,7 +11,7 @@ const cardDatabase = {
         name: "Картофель \"фри\" 12,5 кг",
         analogs: ["FMS9", "58542", "68544", "555555"]
     },
-      "69889": {
+    "69889": {
         name: "Лук красный марин. закус заморож. 6 уп * 500 г",
         analogs: ["69890"]
     },
@@ -19,7 +19,7 @@ const cardDatabase = {
         name: "Минтай филе порции в панир. обжар. 5000 г",
         analogs: ["51174"]
     },
-}
+};
 
 function searchCard() {
     let input = document.getElementById("searchInput").value.trim();
@@ -30,8 +30,7 @@ function searchCard() {
 
     for (let [actual, data] of Object.entries(cardDatabase)) {
         if (input === actual || data.analogs.includes(input)) {
-            resultDiv.textContent = `Актуальная карточка:
-            ${actual} - ${data.name}`;
+            resultDiv.innerHTML = `<strong>Актуальная карточка:</strong><br>${actual} - ${data.name}`;
             found = true;
             break;
         }
