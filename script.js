@@ -160,7 +160,7 @@ function searchCard() {
     }
 
     if (foundCards.length > 0) {
-        let output = foundCards.map(card => `<h2>${card.article} ${card.name}</h2>`).join("");
+        let output = foundCards.map(card => `<h3>${card.article} ${card.name}</h3>`).join("");
         resultElement.innerHTML = output;
     } else {
         resultElement.innerHTML = "<p>Артикул не найден, возможно у карточки нет аналогов</p>";
