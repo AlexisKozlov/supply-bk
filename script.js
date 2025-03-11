@@ -11,11 +11,11 @@ const cardDatabase = {
         name: "Картофель \"фри\" 12,5 кг",
         analogs: ["FMS9", "58542", "68544", "555555"]
     }
-};
  "69889": {
         name: "Лук красный марин. закус заморож. 6 уп * 500 г",
         analogs: ["69890"]
     },
+};
 
 function searchCard() {
     let input = document.getElementById("searchInput").value.trim();
