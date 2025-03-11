@@ -18,7 +18,7 @@ const cardDatabase = {
     "511511": {
         name: "Минтай филе порции в панир. обжар. 5000 г",
         analogs: ["51174"]
-    },
+    }
 };
 
 function searchCard() {
@@ -26,30 +26,30 @@ function searchCard() {
     let resultDiv = document.getElementById("result");
     resultDiv.innerHTML = "";
 
-    if (input === "") {
+    if (!input) {
         resultDiv.textContent = "Введите артикул!";
         return;
     }
 
-    let foundExact = Object.entries(cardDatabase).find(([actual]) => actual.toLowerCase() === input);
+    let found = false;
 
-    if (foundExact) {
-        resultDiv.textContent = "Введённая карточка актуальна!";
-        return;
+    for (let [actual, data] of Object.entries(cardDatabase)) {
+        if (actual.toLowerCase().includes(input) || data.analogs.some(a => a.toLowerCase().includes(input))) {
+            if (input === actual.toLowerCase()) {
+                resultDiv.innerHTML = `<strong>Введённая карточка актуальна!</strong>`;
+            } else {
+                resultDiv.innerHTML = `<strong>Актуальная карточка:</strong><br>${actual} - ${data.name}`;
+            }
+            found = true;
+            break;
+        }
     }
 
-    let foundPartial = Object.entries(cardDatabase).find(([actual, data]) =>
-        actual.toLowerCase().includes(input) ||
-        data.analogs.some(analog => analog.toLowerCase().includes(input))
-    );
-
-    if (foundPartial) {
-        let [actual, data] = foundPartial;
-        resultDiv.innerHTML = `<strong>Актуальная карточка:</strong><br>${actual} - ${data.name}`;
-    } else {
+    if (!found) {
         resultDiv.textContent = "Артикул не найден, возможно, у карточки нет актуальных аналогов.";
     }
 }
+
 function addOrUpdateCard() {
     let actual = document.getElementById("newActual").value.trim();
     let name = document.getElementById("newName").value.trim();
@@ -61,12 +61,10 @@ function addOrUpdateCard() {
     }
 
     if (cardDatabase[actual]) {
-        // Если карточка уже есть – обновляем её
         cardDatabase[actual].name = name;
         cardDatabase[actual].analogs = analogs;
         alert("Карточка обновлена!");
     } else {
-        // Если карточки нет – добавляем новую
         cardDatabase[actual] = { name: name, analogs: analogs };
         alert("Карточка добавлена!");
     }
@@ -74,3 +72,8 @@ function addOrUpdateCard() {
     console.log("Обновленная база данных:", cardDatabase);
 }
 
+document.getElementById("searchInput").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        searchCard();
+    }
+});
