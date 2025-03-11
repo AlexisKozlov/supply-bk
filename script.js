@@ -1,4 +1,16 @@
-cardDatabase = {
+const isMaintenance = true; // true — включен режим, false — выключен
+
+window.onload = function () {
+    if (isMaintenance) {
+        document.getElementById("maintenance").style.display = "flex";
+        document.querySelector(".container").style.display = "none";
+    } else {
+        document.getElementById("maintenance").style.display = "none";
+        document.querySelector(".container").style.display = "block";
+    }
+};
+
+const cardDatabase = { 
     "1054445": {
         name: "Стрипсы замороженные 1кг * 12шт",
         analogs: ["69097", "1054444", "1010023409", "69101"]
@@ -24,7 +36,6 @@ cardDatabase = {
         analogs: ["51180", "51185"]
     }
 };
-
 
 function searchCard() {
     let input = document.getElementById("searchInput").value.trim().toLowerCase();
@@ -55,26 +66,8 @@ function searchCard() {
     }
 }
 
-
-
 document.getElementById("searchInput").addEventListener("keypress", function(event) {
     if (event.key === "Enter") {
         searchCard();
     }
-    
-const isMaintenance = true; // true — включен режим, false — выключен
-
-window.onload = function () {
-    if (isMaintenance) {
-        document.body.innerHTML = `
-            <div class="maintenance">
-                <h1>Ведутся технические работы</h1>
-                <p>Мы скоро вернемся!</p>
-            </div>
-        `;
-    } else {
-        document.getElementById("content").style.display = "block";
-    }
-};
-
 });
