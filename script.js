@@ -1,4 +1,4 @@
-const isMaintenance = true; // true — включен режим, false — выключен
+const isMaintenance = false; // true — включен режим, false — выключен
 
 window.onload = function () {
     if (isMaintenance) {
