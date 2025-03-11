@@ -26,10 +26,20 @@ function searchCard() {
     let resultDiv = document.getElementById("result");
     resultDiv.innerHTML = "";
 
+    if (input === "") {
+        resultDiv.textContent = "Введите артикул!";
+        return;
+    }
+
+    if (cardDatabase[input]) {
+        resultDiv.textContent = "Введённая карточка актуальна!";
+        return;
+    }
+
     let found = false;
 
     for (let [actual, data] of Object.entries(cardDatabase)) {
-        if (input === actual || data.analogs.includes(input)) {
+        if (data.analogs.includes(input)) {
             resultDiv.innerHTML = `<strong>Актуальная карточка:</strong><br>${actual} - ${data.name}`;
             found = true;
             break;
