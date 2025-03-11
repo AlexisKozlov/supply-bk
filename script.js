@@ -119,6 +119,14 @@ const cardDatabase = {
         name: "Салат Айсберг круп. Нарез., 0,5 кг ШТУКА",
         analogs: ["4444"]
     }
+        "574761": {
+        name: "Кламшелл универсальный, 260 шт (ДЛЯ РОЯЛ ФРИ)",
+        analogs: ["57527", "57476", "57421", "57528"]
+    },
+    "57295": {
+        name: "Коробка Кламшелл Мистери Бургер, 260 шт (ДЛЯ ИСПАНСКОЙ)",
+        analogs: ["57527", "57476", "57421", "57528"]
+    }
 };
 
 function searchCard() {
@@ -152,7 +160,7 @@ function searchCard() {
     }
 
     if (foundCards.length > 0) {
-        let output = foundCards.map(card => `<h2>${card.name} (${card.article})</h2>`).join("");
+        let output = foundCards.map(card => `<h2>${card.article} ${card.name}</h2>`).join("");
         resultElement.innerHTML = output;
     } else {
         resultElement.innerHTML = "<p>Артикул не найден, возможно у карточки нет аналогов</p>";
