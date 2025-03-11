@@ -43,7 +43,7 @@ function searchCard() {
             if (input === actual.toLowerCase()) {
                 resultDiv.innerHTML = `<strong>Введённая карточка актуальна!</strong>`;
             } else {
-                resultDiv.innerHTML = `<strong>Актуальная карточка:</strong><br>${actual} - ${data.name}`;
+                resultDiv.innerHTML = `<strong>Актуальная карточка:</strong><br>${actual} ${data.name}`;
             }
             found = true;
             break;
