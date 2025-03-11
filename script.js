@@ -62,7 +62,7 @@ document.getElementById("searchInput").addEventListener("keypress", function(eve
         searchCard();
     }
     
-const isMaintenance = false; // true — включен режим, false — выключен
+const isMaintenance = true; // true — включен режим, false — выключен
 
 window.onload = function () {
     if (isMaintenance) {
