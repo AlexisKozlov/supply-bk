@@ -159,12 +159,12 @@ function searchCard() {
         }
     }
 
-    // Ищем по частичному совпадению в названии (без учёта регистра)
-    for (let key in cardDatabase) {
-        if (cardDatabase[key].name.toLowerCase().includes(article)) {
-            foundCards.push({ article: key, ...cardDatabase[key] });
-        }
+// Ищем по частичному совпадению в названии (без учёта регистра)
+for (let key in cardDatabase) {
+    if (cardDatabase[key].name.toLowerCase().includes(article.toLowerCase())) {
+        foundCards.push({ article: key, ...cardDatabase[key] });
     }
+}
 
     if (foundCards.length > 0) {
         let output = foundCards.map(card => `<h3>${card.article} ${card.name}</h3>`).join("<br>");
