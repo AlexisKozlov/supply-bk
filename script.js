@@ -173,7 +173,7 @@ function searchCard() {
     }
     
     if (foundCards.length > 0) {
-        let output = foundCards.map(card => `<h3 style='margin-bottom: 5px;'>${card.article} ${card.name}</h3>`);
+        let output = foundCards.map(card => `<h3 style='margin-bottom: 5px;'>${card.article} ${card.name}</h3>`).join("");
         resultElement.innerHTML = output;
     } else {
         resultElement.innerHTML = "<p>Карточка не найдена, возможно она актуальна!</p>";
