@@ -167,7 +167,7 @@ for (let key in cardDatabase) {
 }
 
     if (foundCards.length > 0) {
-        let output = foundCards.map(card => `<h3>${card.article} ${card.name}</h3>`).join("<br>");
+        let output = foundCards.map(card => `${card.article} ${card.name}>`).join("<br>");
         resultElement.innerHTML = output;
     } else {
         resultElement.innerHTML = "<p>Артикул не найден, возможно у карточки нет аналогов</p>";
