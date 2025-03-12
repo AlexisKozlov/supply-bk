@@ -17,10 +17,17 @@
   gtag('config', 'G-QXQ8VG3PXB');
 </script>
 <body>
-        <div id="maintenance" style="display: none;">
+        <!-- Страница тех работ -->
+    <div id="maintenance" class="maintenance">
         <h1>Ведутся технические работы</h1>
-            <br>
         <p>Мы скоро вернемся!</p>
+        <!-- Кнопка для доступа -->
+        <button id="adminBtn">Администратор</button>
+        <!-- Форма для ввода пароля -->
+        <div id="passwordForm" class="password-form" style="display: none;">
+            <input type="password" id="adminPassword" placeholder="Введите пароль" />
+            <button onclick="checkPassword()">Войти</button>
+        </div>
     </div>
     <div class="container">
         <div class="logo-container">
