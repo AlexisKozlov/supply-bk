@@ -140,36 +140,43 @@ function searchCard() {
         return;
     }
     
-    let inputText = inputElement.value.trim();
-    if (inputText.length < 3) {
+    let article = inputElement.value.trim();
+    if (article.length < 3) {
         alert("Введите минимум 3 символа!");
         return;
     }
     
-    let article = inputText.split(" ")[0]; // Берем первый элемент ввода как артикул
+    let firstWord = article.split(" ")[0]; // Извлекаем первое слово (артикул)
     
     let resultElement = document.getElementById("result");
     resultElement.innerHTML = "";
-
+    
     let foundCards = [];
-
-    // Ищем по точному совпадению артикула
-    if (cardDatabase[article]) {
-        foundCards.push({ article, ...cardDatabase[article] });
+    
+    // Поиск по точному совпадению артикула
+    if (cardDatabase[firstWord]) {
+        foundCards.push({ article: firstWord, ...cardDatabase[firstWord] });
     }
-
-    // Ищем по аналогам
+    
+    // Поиск по аналогам
     for (let key in cardDatabase) {
-        if (cardDatabase[key].analogs.includes(article)) {
+        if (cardDatabase[key].analogs.includes(firstWord)) {
             foundCards.push({ article: key, ...cardDatabase[key] });
         }
     }
-
+    
+    // Поиск по названию карточки
+    for (let key in cardDatabase) {
+        if (cardDatabase[key].name.toLowerCase().includes(article.toLowerCase())) {
+            foundCards.push({ article: key, ...cardDatabase[key] });
+        }
+    }
+    
     if (foundCards.length > 0) {
-        let output = foundCards.map(card => `<h3 style='margin-bottom: 10px;'>${card.article} ${card.name}</h3>`).join("");
+        let output = foundCards.map(card => `<h3 style='margin-bottom: 10px;'>${card.article} ${card.name}</h3>`).join("<br>");
         resultElement.innerHTML = output;
     } else {
-        resultElement.innerHTML = "<p>Артикул не найден, возможно у карточки нет аналогов</p>";
+        resultElement.innerHTML = "<p>Артикул или название не найдено</p>";
     }
 }
 
