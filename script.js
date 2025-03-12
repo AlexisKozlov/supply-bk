@@ -140,8 +140,8 @@ function searchCard() {
         return;
     }
     
-    let article = inputElement.value.trim().toLowerCase();
-    if (!article) {
+    let inputValue = inputElement.value.trim();
+    if (!inputValue) {
         alert("Введите артикул или название!");
         return;
     }
@@ -151,28 +151,26 @@ function searchCard() {
 
     let foundCards = [];
 
-    // Ищем по точному совпадению артикула
-    if (cardDatabase[article]) {
-        foundCards.push({ article, ...cardDatabase[article] });
-    }
+    // Извлекаем артикул из начала строки (если есть)
+    let parts = inputValue.split(" ");
+    let potentialArticle = parts[0]; // Первый элемент ввода
 
-    // Ищем по аналогам
-    for (let key in cardDatabase) {
-        if (cardDatabase[key].analogs.includes(article)) {
-            foundCards.push({ article: key, ...cardDatabase[key] });
+    if (cardDatabase[potentialArticle]) {
+        // Если первый элемент - артикул, ищем по нему
+        foundCards.push({ article: potentialArticle, ...cardDatabase[potentialArticle] });
+    } else {
+        // Ищем по аналогам
+        for (let key in cardDatabase) {
+            if (cardDatabase[key].analogs.includes(potentialArticle)) {
+                foundCards.push({ article: key, ...cardDatabase[key] });
+            }
         }
     }
 
-// Ищем по частичному совпадению в названии (без учёта регистра)
-for (let key in cardDatabase) {
-    if (cardDatabase[key].name.toLowerCase().includes(article.toLowerCase())) {
-        foundCards.push({ article: key, ...cardDatabase[key] });
-    }
-}
-
-if (foundCards.length > 0) {
-    let output = foundCards.map(card => `<h3 style="margin-bottom: 10px;">${card.article} ${card.name}</h3>`).join("");
-    resultElement.innerHTML = output;
+    // Вывод результатов
+    if (foundCards.length > 0) {
+        let output = foundCards.map(card => `<h3 style="margin-bottom: 10px;">${card.article} ${card.name}</h3>`).join("");
+        resultElement.innerHTML = output;
     } else {
         resultElement.innerHTML = "<p>Артикул не найден, возможно у карточки нет аналогов</p>";
     }
@@ -184,3 +182,4 @@ document.getElementById("searchInput").addEventListener("keypress", function(eve
         searchCard();
     }
 });
+
