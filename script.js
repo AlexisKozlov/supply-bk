@@ -187,17 +187,3 @@ document.getElementById("searchInput").addEventListener("keypress", function(eve
     }
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-    const logos = document.querySelectorAll('.floating-logo');
-    logos.forEach(logo => {
-        // Генерация случайной длительности анимации для каждого логотипа
-        const duration = Math.random() * (20 - 10) + 10;  // случайное время от 10 до 20 секунд
-        logo.style.animationDuration = `${duration}s`;
-
-        // Генерация случайной начальной позиции
-        const startTop = Math.random() * 100;  // случайное значение от 0 до 100%
-        const startLeft = Math.random() * 100; // случайное значение от 0 до 100%
-        logo.style.top = `${startTop}%`;
-        logo.style.left = `${startLeft}%`;
-    });
-});
