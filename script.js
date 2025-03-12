@@ -187,3 +187,21 @@ document.getElementById("searchInput").addEventListener("keypress", function(eve
     }
 });
 
+// Проверка пароля
+function checkPassword() {
+    const password = document.getElementById('adminPassword').value;
+    const correctPassword = '157'; // Заданный пароль
+
+    if (password === correctPassword) {
+        // Скрываем страницу тех работ и показываем обычный сайт
+        document.getElementById('maintenance').style.display = 'none';
+        document.getElementById('normalSite').style.display = 'block';
+    } else {
+        alert('Неверный пароль!');
+    }
+}
+
+// Показать форму для ввода пароля по клику на кнопку
+document.getElementById('adminBtn').addEventListener('click', function() {
+    document.getElementById('passwordForm').style.display = 'block';
+});
