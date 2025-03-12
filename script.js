@@ -196,8 +196,20 @@ function checkPassword() {
         // Скрываем страницу тех работ и показываем обычный сайт
         document.getElementById('maintenance').style.display = 'none';
         document.getElementById('normalSite').style.display = 'block';
+        isMaintenance = false;
     } else {
         alert('Неверный пароль!');
+    }
+}
+
+// Проверка, должна ли быть показана страница тех работ
+function checkMaintenanceMode() {
+    if (isMaintenance) {
+        document.getElementById('maintenance').style.display = 'block';
+        document.getElementById('normalSite').style.display = 'none';
+    } else {
+        document.getElementById('maintenance').style.display = 'none';
+        document.getElementById('normalSite').style.display = 'block';
     }
 }
 
@@ -205,3 +217,6 @@ function checkPassword() {
 document.getElementById('adminBtn').addEventListener('click', function() {
     document.getElementById('passwordForm').style.display = 'block';
 });
+
+// Проверяем состояние техработ при загрузке
+window.onload = checkMaintenanceMode;
