@@ -115,54 +115,40 @@ const cardDatabase = {
         name: "Соус 1000 островов Хайнц, ДИП, 125шт",
         analogs: ["51230"]
     },
-"300065": {
-    name: "Салат Айсберг круп. Нарез., 0,5 кг ШТУКА",
-    analogs: ["4444"]
-},
-"574761": {  // <-- теперь здесь запятая, ошибок нет
-    name: "Кламшелл универсальный, 260 шт (ДЛЯ РОЯЛ ФРИ)",
-    analogs: ["57527", "57476", "57421", "57528"]
-},
-"57295": {
-    name: "Коробка Кламшелл Мистери Бургер, 260 шт (ДЛЯ ИСПАНСКОЙ)",
-    analogs: ["57527", "57476", "57421", "57528"]
-}
+    "300065": {
+        name: "Салат Айсберг круп. Нарез., 0,5 кг ШТУКА",
+        analogs: ["4444"]
+    },
+    "574761": {
+        name: "Кламшелл универсальный, 260 шт (ДЛЯ РОЯЛ ФРИ)",
+        analogs: ["57527", "57476", "57421", "57528"]
+    },
+    "57295": {
+        name: "Коробка Кламшелл Мистери Бургер, 260 шт (ДЛЯ ИСПАНСКОЙ)",
+        analogs: ["57527", "57476", "57421", "57528"]
+    }
 };
 
 function searchCard() {
     let inputElement = document.getElementById("searchInput");
-    if (!inputElement) {
-        console.error("Поле ввода не найдено!");
-        return;
-    }
-    
-    let article = inputElement.value.trim();
-    if (!article) {
-        alert("Введите артикул!");
-        return;
-    }
-
+    let article = inputElement.value.trim().toLowerCase();
     let resultElement = document.getElementById("result");
-    resultElement.innerHTML = ""; // Очищаем результат
-
+    resultElement.innerHTML = "";
     let foundCards = [];
-
-    // Если ввели актуальную карточку — сразу её добавляем
-    if (cardDatabase[article]) {
-        foundCards.push({ article, ...cardDatabase[article] });
-    }
-
-    // Проверяем, есть ли введённый артикул среди аналогов актуальных карточек
+    
     for (let key in cardDatabase) {
-        if (cardDatabase[key].analogs.includes(article)) {
+        if (key.includes(article) || cardDatabase[key].name.toLowerCase().includes(article)) {
             foundCards.push({ article: key, ...cardDatabase[key] });
         }
     }
-
-    if (foundCards.length > 0) {
-        let output = foundCards.map(card => `<h3>${card.article} ${card.name}</h3>`).join("");
-        resultElement.innerHTML = output;
-    } else {
-        resultElement.innerHTML = "<p>Артикул не найден, возможно у карточки нет аналогов</p>";
-    }
+    
+    resultElement.innerHTML = foundCards.length > 0 
+        ? foundCards.map(card => `<h3>${card.article} ${card.name}</h3>`).join("") 
+        : "<p>Артикул не найден, возможно у карточки нет аналогов</p>";
 }
+
+document.getElementById("searchInput").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        searchCard();
+    }
+});
