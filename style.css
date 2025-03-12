@@ -10,6 +10,7 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 
 .container {
@@ -90,6 +91,36 @@ button:hover {
 }
 
 
+.floating-logos {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;  /* Чтобы логотипы не мешали кликам по другим элементам */
+    overflow: hidden;
+}
+
+.floating-logo {
+    position: absolute;
+    animation: float 10s ease-in-out infinite;
+    opacity: 0.8;
+    width: 50px;  /* Можно настроить размер */
+    animation-duration: random(10, 20s); /* Меняем длительность анимации случайным образом */
+}
+
+/* Анимация движения логотипа */
+@keyframes float {
+    0% {
+        transform: translateX(100vw) translateY(100vh);
+    }
+    50% {
+        transform: translateX(-100vw) translateY(-100vh);
+    }
+    100% {
+        transform: translateX(100vw) translateY(100vh);
+    }
+}
 /* Анимации */
 @keyframes logoAppear {
     from { opacity: 0; transform: scale(0.5); }
