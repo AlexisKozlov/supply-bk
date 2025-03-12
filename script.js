@@ -170,9 +170,9 @@ for (let key in cardDatabase) {
     }
 }
 
-    if (foundCards.length > 0) {
-        let output = foundCards.map(card => `${card.article} ${card.name}`).join("<br>");
-        resultElement.innerHTML = output;
+if (foundCards.length > 0) {
+    let output = foundCards.map(card => `<h3 style="margin-bottom: 10px;">${card.article} ${card.name}</h3>`).join("");
+    resultElement.innerHTML = output;
     } else {
         resultElement.innerHTML = "<p>Артикул не найден, возможно у карточки нет аналогов</p>";
     }
