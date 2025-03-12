@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 
-body, html {
+ody, html {
     margin: 0;
     padding: 0;
     height: 100%;
@@ -11,8 +11,8 @@ body, html {
     justify-content: center;
     align-items: center;
     position: relative;
+    overflow: hidden; /* Предотвращает выход логотипов за пределы экрана */
 }
-
 .container {
     text-align: center;
     padding: 20px;
@@ -95,30 +95,40 @@ button:hover {
     position: absolute;
     top: 0;
     left: 0;
-    width: 10%;
-    height: 10%;
-    pointer-events: none;  /* Чтобы логотипы не мешали кликам по другим элементам */
+    width: 100%;
+    height: 100%;
+    pointer-events: none;  /* Чтобы логотипы не мешали кликам */
     overflow: hidden;
 }
 
 .floating-logo {
     position: absolute;
-    animation: float 10s ease-in-out infinite;
+    width: 60px; /* Размер логотипа */
+    animation: float 10s linear infinite;
     opacity: 0.8;
-    width: 50px;  /* Можно настроить размер */
-    animation-duration: random(10, 20s); /* Меняем длительность анимации случайным образом */
 }
 
-/* Анимация движения логотипа */
+/* Анимация движения логотипов по экрану */
 @keyframes float {
     0% {
-        transform: translateX(100vw) translateY(100vh);
+        left: 100%; /* Начало справа за пределами экрана */
+        top: 0%;
+    }
+    25% {
+        left: 50%; /* Перемещение в центр по горизонтали */
+        top: 0%;
     }
     50% {
-        transform: translateX(-100vw) translateY(-100vh);
+        left: 0%; /* Перемещение влево */
+        top: 50%; /* Перемещение вниз */
+    }
+    75% {
+        left: 50%; /* Перемещение в центр по горизонтали */
+        top: 100%; /* Перемещение вниз */
     }
     100% {
-        transform: translateX(100vw) translateY(100vh);
+        left: 100%; /* Возвращаемся на правый край */
+        top: 0%;
     }
 }
 /* Анимации */
