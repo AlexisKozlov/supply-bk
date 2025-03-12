@@ -71,50 +71,6 @@ const cardDatabase = {
         name: "Сыр твердый \"PALERMO\", 10 упак*0,18кг",
         analogs: ["51304"]
     },
-    "76018473": {
-        name: "Соус Цезарь Хайнц Пакет 2 кг*6 шт",
-        analogs: ["76008070", "51224"]
-    },
-    "76022215": {
-        name: "Соус ТарТар Премиум, 2 КГ х 6 ШТ",
-        analogs: ["51267", "76018892"]
-    },
-    "61124": {
-        name: "Соус \"Сырный Оригинальный\" 1 кг * 6 шт",
-        analogs: ["76017308", "61000"]
-    },
-    "51019": {
-        name: "Майонез \"Провансаль Н Оригинальный\" 65% 2 кг * 3 шт",
-        analogs: ["61416"]
-    },
-    "76022472": {
-        name: "Соус Сырный Хайнц, ДИП, 125 шт",
-        analogs: ["60004"]
-    },
-    "79000316": {
-        name: "Соус Чесночный Хайнц ДИП,125шт",
-        analogs: ["51210", "51223"]
-    },
-    "76022473": {
-        name: "Соус Parmegiano Heinz дип-пот 125* 25мл",
-        analogs: ["51290", "76019797", "51212"]
-    },
-    "51225": {
-        name: "Соус Горчичный ориг. 25г*125шт",
-        analogs: ["75980018"]
-    },
-    "76020815": {
-        name: "Соус Цезарь Хайнц, дип-пот 25 мл*125 шт",
-        analogs: ["76006275"]
-    },
-    "51206": {
-        name: "Соус Карри ориг. 25г*125шт",
-        analogs: ["75980017"]
-    },
-    "76015928": {
-        name: "Соус 1000 островов Хайнц, ДИП, 125шт",
-        analogs: ["51230"]
-    },
     "300065": {
         name: "Салат Айсберг круп. Нарез., 0,5 кг ШТУКА",
         analogs: ["4444"]
@@ -131,22 +87,50 @@ const cardDatabase = {
 
 function searchCard() {
     let inputElement = document.getElementById("searchInput");
+    if (!inputElement) {
+        console.error("Поле ввода не найдено!");
+        return;
+    }
+    
     let article = inputElement.value.trim().toLowerCase();
+    if (!article) {
+        alert("Введите артикул или название!");
+        return;
+    }
+
     let resultElement = document.getElementById("result");
     resultElement.innerHTML = "";
+
     let foundCards = [];
-    
+
+    // Ищем по точному совпадению артикула
+    if (cardDatabase[article]) {
+        foundCards.push({ article, ...cardDatabase[article] });
+    }
+
+    // Ищем по аналогам
     for (let key in cardDatabase) {
-        if (key.includes(article) || cardDatabase[key].name.toLowerCase().includes(article)) {
+        if (cardDatabase[key].analogs.includes(article)) {
             foundCards.push({ article: key, ...cardDatabase[key] });
         }
     }
-    
-    resultElement.innerHTML = foundCards.length > 0 
-        ? foundCards.map(card => `<h3>${card.article} ${card.name}</h3>`).join("") 
-        : "<p>Артикул не найден, возможно у карточки нет аналогов</p>";
+
+    // Ищем по частичному совпадению в названии (без учёта регистра)
+    for (let key in cardDatabase) {
+        if (cardDatabase[key].name.toLowerCase().includes(article)) {
+            foundCards.push({ article: key, ...cardDatabase[key] });
+        }
+    }
+
+    if (foundCards.length > 0) {
+        let output = foundCards.map(card => `<h3>${card.article} ${card.name}</h3>`).join("<br>");
+        resultElement.innerHTML = output;
+    } else {
+        resultElement.innerHTML = "<p>Артикул не найден, возможно у карточки нет аналогов</p>";
+    }
 }
 
+// Запуск поиска по нажатию Enter
 document.getElementById("searchInput").addEventListener("keypress", function(event) {
     if (event.key === "Enter") {
         searchCard();
