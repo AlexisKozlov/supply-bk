@@ -7,17 +7,8 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="favicon.png">
 </head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-QXQ8VG3PXB"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-QXQ8VG3PXB');
-</script>
 <body>
-        <!-- Страница тех работ -->
+    <!-- Страница тех работ -->
     <div id="maintenance" class="maintenance">
         <h1>Ведутся технические работы</h1>
         <p>Мы скоро вернемся!</p>
@@ -29,21 +20,24 @@
             <button onclick="checkPassword()">Войти</button>
         </div>
     </div>
-    <div class="container">
-        <div class="logo-container">
-            <img src="burger-king-logo.png" alt="Burger King Logo" class="logo">
-            <h1>Поиск актуальных карточек</h1>
-        </div>
-
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Введите артикул...">
-            <button onclick="searchCard()">Найти</button>
-        </div>
-
-        <div id="result"></div>
-
-    </div>
     
+    <!-- Содержимое обычного сайта -->
+    <div id="normalSite" style="display: none;">
+        <div class="container">
+            <div class="logo-container">
+                <img src="burger-king-logo.png" alt="Burger King Logo" class="logo">
+                <h1>Поиск актуальных карточек</h1>
+            </div>
+
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Введите артикул...">
+                <button onclick="searchCard()">Найти</button>
+            </div>
+
+            <div id="result"></div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
