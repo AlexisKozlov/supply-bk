@@ -140,36 +140,33 @@ function searchCard() {
         return;
     }
     
-    let inputValue = inputElement.value.trim();
-    if (!inputValue) {
-        alert("Введите артикул или название!");
+    let inputText = inputElement.value.trim();
+    if (inputText.length < 3) {
+        alert("Введите минимум 3 символа!");
         return;
     }
-
+    
+    let article = inputText.split(" ")[0]; // Берем первый элемент ввода как артикул
+    
     let resultElement = document.getElementById("result");
     resultElement.innerHTML = "";
 
     let foundCards = [];
 
-    // Извлекаем артикул из начала строки (если есть)
-    let parts = inputValue.split(" ");
-    let potentialArticle = parts[0]; // Первый элемент ввода
+    // Ищем по точному совпадению артикула
+    if (cardDatabase[article]) {
+        foundCards.push({ article, ...cardDatabase[article] });
+    }
 
-    if (cardDatabase[potentialArticle]) {
-        // Если первый элемент - артикул, ищем по нему
-        foundCards.push({ article: potentialArticle, ...cardDatabase[potentialArticle] });
-    } else {
-        // Ищем по аналогам
-        for (let key in cardDatabase) {
-            if (cardDatabase[key].analogs.includes(potentialArticle)) {
-                foundCards.push({ article: key, ...cardDatabase[key] });
-            }
+    // Ищем по аналогам
+    for (let key in cardDatabase) {
+        if (cardDatabase[key].analogs.includes(article)) {
+            foundCards.push({ article: key, ...cardDatabase[key] });
         }
     }
 
-    // Вывод результатов
     if (foundCards.length > 0) {
-        let output = foundCards.map(card => `<h3 style="margin-bottom: 10px;">${card.article} ${card.name}</h3>`).join("");
+        let output = foundCards.map(card => `<h3 style='margin-bottom: 10px;'>${card.article} ${card.name}</h3>`).join("");
         resultElement.innerHTML = output;
     } else {
         resultElement.innerHTML = "<p>Артикул не найден, возможно у карточки нет аналогов</p>";
@@ -182,4 +179,3 @@ document.getElementById("searchInput").addEventListener("keypress", function(eve
         searchCard();
     }
 });
-
