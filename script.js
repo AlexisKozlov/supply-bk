@@ -341,7 +341,7 @@ function searchCard() {
         let output = foundCards.map(card => `<h3 style='margin-bottom: 5px;'>${card.article} ${card.name}</h3>`).join("");
         resultElement.innerHTML = output;
     } else {
-        resultElement.innerHTML = "<p>Карточка не найдена, возможно она не имеет аналогов!</p>";
+        resultElement.innerHTML = "<p>Карточка не найдена, возможно она не имеет аналогов или её пока нет в базе данных😢</p>";
     }
 }
 
