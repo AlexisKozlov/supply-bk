@@ -341,7 +341,7 @@ function searchCard() {
         }
         
         if (foundCards.length > 0) {
-            let output = foundCards.map(card => `<h3 class="copyable" onclick="copyToClipboard('${card.article} ${card.name}', this)">${card.article}</h3>`).join("");
+            let output = foundCards.map(card => `<h3 class="copyable" onclick="copyToClipboard('${card.article} ${card.name}', this)">${card.article}${card.name}</h3>`).join("");
             resultElement.innerHTML = output;
         } else {
             resultElement.innerHTML = `
