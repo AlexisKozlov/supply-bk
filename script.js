@@ -450,15 +450,15 @@ function selectSuggestion(article) {
   searchCard();
 }
 
-// Обработчики для кнопки очистки
-document.getElementById('searchInput').addEventListener('input', function() {
-  const clearBtn = document.getElementById('clearSearch');
-  clearBtn.style.display = this.value ? 'block' : 'none';
-});
+// Анимация прогресс-бара (для демонстрации)
+let progress = 42;
+const progressInterval = setInterval(() => {
+    progress = (progress + 1) % 100;
+    document.getElementById('progressValue').textContent = progress;
+    document.querySelector('.progress-bar::after').style.width = `${progress}%`;
+}, 3000);
 
-document.getElementById('clearSearch').addEventListener('click', function() {
-  document.getElementById('searchInput').value = '';
-  this.style.display = 'none';
-  document.getElementById('result').innerHTML = '';
-  document.getElementById('searchInput').focus(); // Возвращаем фокус на поле ввода
+// Очистка интервала при уходе со страницы техработ
+document.getElementById('adminBtn').addEventListener('click', () => {
+    clearInterval(progressInterval);
 });
