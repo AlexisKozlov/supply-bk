@@ -314,40 +314,47 @@ function searchCard() {
         return;
     }
     
-    let firstWord = article.split(" ")[0];
+    // Показываем loader
+    document.getElementById("loader").style.display = "flex";
     
-    let resultElement = document.getElementById("result");
-    resultElement.innerHTML = "";
-    
-    let foundCards = [];
-    
-    if (cardDatabase[firstWord]) {
-        foundCards.push({ article: firstWord, ...cardDatabase[firstWord] });
-    }
-    
-    for (let key in cardDatabase) {
-        if (cardDatabase[key].analogs.includes(firstWord)) {
-            foundCards.push({ article: key, ...cardDatabase[key] });
+    // Через 1 секунду выполняем поиск и скрываем loader
+    setTimeout(() => {
+        let firstWord = article.split(" ")[0];
+        let resultElement = document.getElementById("result");
+        resultElement.innerHTML = "";
+        let foundCards = [];
+        
+        if (cardDatabase[firstWord]) {
+            foundCards.push({ article: firstWord, ...cardDatabase[firstWord] });
         }
-    }
-    
-    for (let key in cardDatabase) {
-        if (cardDatabase[key].name.toLowerCase().includes(article.toLowerCase())) {
-            foundCards.push({ article: key, ...cardDatabase[key] });
+        
+        for (let key in cardDatabase) {
+            if (cardDatabase[key].analogs.includes(firstWord)) {
+                foundCards.push({ article: key, ...cardDatabase[key] });
+            }
         }
-    }
-    
-    if (foundCards.length > 0) {
-        let output = foundCards.map(card => `<h3 style='margin-bottom: 5px;'>${card.article} ${card.name}</h3>`).join("");
-        resultElement.innerHTML = output;
-  } else {
-    resultElement.innerHTML = `
-        <div class="not-found-animation">
-            <p>Карточка не найдена, возможно она не имеет аналогов или её пока нет в базе данных</p>
-            <img src="sad.gif" alt="Грустный смайлик" class="sad-gif">
-        </div>
-    `;
-}
+        
+        for (let key in cardDatabase) {
+            if (cardDatabase[key].name.toLowerCase().includes(article.toLowerCase())) {
+                foundCards.push({ article: key, ...cardDatabase[key] });
+            }
+        }
+        
+        if (foundCards.length > 0) {
+            let output = foundCards.map(card => `<h3 style='margin-bottom: 5px;'>${card.article} ${card.name}</h3>`).join("");
+            resultElement.innerHTML = output;
+        } else {
+            resultElement.innerHTML = `
+                <div class="not-found-animation">
+                    <p>Карточка не найдена, возможно она не имеет аналогов или её пока нет в базе данных</p>
+                    <img src="sad.gif" alt="Грустный смайлик" class="sad-gif">
+                </div>
+            `;
+        }
+        
+        // Скрываем loader
+        document.getElementById("loader").style.display = "none";
+    }, 1000); // 1000ms = 1 секунда
 }
 
 // Запуск поиска по нажатию Enter
