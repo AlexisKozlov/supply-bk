@@ -180,12 +180,3 @@ button:hover {
 
 
 
-.clear-btn {
-  background: none;
-  border: none;
-  color: #aaa;
-  font-size: 20px;
-  cursor: pointer;
-  margin-left: 5px;
-  display: none;
-}
