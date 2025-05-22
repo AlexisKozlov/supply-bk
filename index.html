@@ -9,15 +9,44 @@
 </head>
 <body>
     <!-- Страница тех работ -->
-    <div id="maintenance" class="maintenance" style="display: none;">
-        <h1>Ведутся технические работы ⚙️</h1>
-        <p>Скоро всё заработает</p>
-        <button id="adminBtn">Отдел закупок</button>
-        <div id="passwordForm" class="password-form" style="display: none;">
-            <input type="password" id="adminPassword" placeholder="Введите пароль">
-            <button onclick="checkPassword()">Войти</button>
+   <div id="maintenance" class="maintenance" style="display: none;">
+    <div class="maintenance-container">
+        <div class="maintenance-content">
+            <div class="animation-container">
+                <div class="gear gear-large">⚙️</div>
+                <div class="gear gear-medium">⚙️</div>
+                <div class="gear gear-small">⚙️</div>
+            </div>
+            <h1>Идут технические работы</h1>
+            <p class="subtext">Мы обновляем систему для вашего удобства</p>
+            <div class="progress-container">
+                <div class="progress-bar"></div>
+                <div class="progress-text">Завершено: <span id="progressValue">42</span>%</div>
+            </div>
+            
+            <div class="admin-section">
+                <button id="adminBtn" class="admin-button">
+                    <span class="button-icon">🔒</span>
+                    <span class="button-text">Доступ для отдела закупок</span>
+                </button>
+                
+                <div id="passwordForm" class="password-form" style="display: none;">
+                    <div class="input-group">
+                        <input type="password" id="adminPassword" placeholder="Введите пароль">
+                        <button onclick="checkPassword()" class="submit-button">
+                            <span class="button-icon">→</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contact-info">
+                <p>По срочным вопросам:</p>
+                <a href="mailto:support@example.com" class="contact-link">✉️ support@example.com</a>
+            </div>
         </div>
     </div>
+</div>
     
     <!-- Основной контент -->
     <div id="normalSite" style="display: none;">
