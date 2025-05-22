@@ -27,11 +27,12 @@
                 <h1>Поиск актуальных карточек</h1>
             </div>
 
-           <div class="search-box">
-  <input type="text" id="searchInput" placeholder="Введите артикул или название..." autocomplete="off">
-  <div id="suggestions" class="suggestions-container"></div>
+       <div class="search-box">
+  <div class="search-input-wrapper">
+    <input type="text" id="searchInput" placeholder="Введите артикул...">
+    <span class="clear-btn" id="clearSearch">×</span>
+  </div>
   <button onclick="searchCard()">Найти</button>
-               <button id="clearSearch" style="display:none;">×</button>
 </div>
             <div id="result"></div>
         </div>
