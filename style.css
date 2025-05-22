@@ -177,3 +177,33 @@ button:hover {
 }
 
 
+
+
+
+.search-input-wrapper {
+  position: relative;
+  width: 70%;
+  display: inline-block;
+}
+
+.clear-btn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #aaa;
+  font-size: 20px;
+  display: none;
+}
+
+.clear-btn:hover {
+  color: #d62300;
+}
+
+/* Для мобильной адаптации */
+@media (max-width: 480px) {
+  .search-input-wrapper {
+    width: 60%;
+  }
+}
