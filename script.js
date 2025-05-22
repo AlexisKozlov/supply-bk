@@ -356,7 +356,6 @@ function performSearch(article) {
                 <img src="sad.gif" alt="Грустный смайлик" class="sad-gif">
             </div>
         `;
-    }
 }
 
 // Запуск поиска по нажатию Enter
