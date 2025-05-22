@@ -1,5 +1,5 @@
 // Переменная для контроля технических работ
-let isMaintenance = true; //
+let isMaintenance = false; //
 
 const cardDatabase = { 
     "1054445": {
