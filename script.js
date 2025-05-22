@@ -416,3 +416,86 @@ function copyToClipboard(text, element) {
         alert('Не удалось скопировать артикул');
     });
 }
+
+function showSuggestions(query) {
+  const container = document.getElementById('suggestions');
+  if (!query || query.length < 2) {
+    container.style.display = 'none';
+    return;
+  }
+
+  const results = searchDatabase(query, true);
+  container.innerHTML = results.map(item => `
+    <div class="suggestion-item" onclick="selectSuggestion('${item.article}')">
+      ${highlightMatch(item.article, query)} → 
+      ${highlightMatch(item.name, query)}
+    </div>
+  `).join('');
+
+  container.style.display = results.length ? 'block' : 'none';
+}
+
+function highlightMatch(text, query) {
+  const regex = new RegExp(`(${escapeRegExp(query)})`, 'gi');
+  return text.replace(regex, '<span class="suggestion-highlight">$1</span>');
+}
+
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function selectSuggestion(article) {
+  document.getElementById('searchInput').value = article;
+  document.getElementById('suggestions').style.display = 'none';
+  searchCard();
+}
+
+// Модифицированная функция поиска
+function searchDatabase(query, isSuggestion = false) {
+  const results = [];
+  const cleanQuery = query.toLowerCase().trim();
+
+  // Поиск по всем полям
+  for (const [article, data] of Object.entries(cardDatabase)) {
+    const score = calculateMatchScore(article, data, cleanQuery);
+    if (score > 0) {
+      results.push({ article, name: data.name, score });
+    }
+  }
+
+  // Сортировка по релевантности
+  return results.sort((a, b) => b.score - a.score).slice(0, isSuggestion ? 5 : Infinity);
+}
+
+function calculateMatchScore(article, data, query) {
+  let score = 0;
+  
+  // Точное совпадение артикула
+  if (article.toLowerCase() === query) score += 100;
+  
+  // Частичное совпадение артикула
+  if (article.toLowerCase().includes(query)) score += 50;
+  
+  // Совпадение в названии
+  if (data.name.toLowerCase().includes(query)) score += 30;
+  
+  // Совпадение в аналогах
+  if (data.analogs.some(a => a.toLowerCase().includes(query))) score += 20;
+  
+  // Учет длины запроса
+  score += query.length * 2;
+  
+  return score;
+}
+
+// Обновите обработчик ввода
+document.getElementById('searchInput').addEventListener('input', function(e) {
+  showSuggestions(this.value);
+});
+
+// Закрытие подсказок при клике вне блока
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.search-box')) {
+    document.getElementById('suggestions').style.display = 'none';
+  }
+});
