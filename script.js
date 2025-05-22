@@ -309,58 +309,54 @@ document.addEventListener('mousemove', function(e) {
 });
 
 function searchCard() {
-    let inputElement = document.getElementById("searchInput");
-    if (!inputElement) {
-        console.error("Поле ввода не найдено!");
-        return;
-    }
+    const inputElement = document.getElementById("searchInput");
+    if (!inputElement) return;
     
-    let article = inputElement.value.trim();
+    const article = inputElement.value.trim();
     if (article.length < 3) {
         alert("Введите минимум 3 символа!");
         return;
     }
     
-    // Показываем анимированный курсор
-    document.getElementById('custom-cursor').style.display = 'block';
+    const result = performSearch(article);
+    document.getElementById("result").innerHTML = result;
+}
+
+function performSearch(article) {
+    const firstWord = article.split(" ")[0];
+    let foundCards = [];
     
-    setTimeout(() => {
-        let firstWord = article.split(" ")[0];
-        let resultElement = document.getElementById("result");
-        resultElement.innerHTML = "";
-        let foundCards = [];
-        
-        if (cardDatabase[firstWord]) {
-            foundCards.push({ article: firstWord, ...cardDatabase[firstWord] });
+    // Поиск по точному совпадению
+    if (cardDatabase[firstWord]) {
+        foundCards.push({ article: firstWord, ...cardDatabase[firstWord] });
+    }
+    
+    // Поиск по аналогам
+    for (const key in cardDatabase) {
+        if (cardDatabase[key].analogs.includes(firstWord)) {
+            foundCards.push({ article: key, ...cardDatabase[key] });
         }
-        
-        for (let key in cardDatabase) {
-            if (cardDatabase[key].analogs.includes(firstWord)) {
-                foundCards.push({ article: key, ...cardDatabase[key] });
-            }
+    }
+    
+    // Поиск по названию
+    for (const key in cardDatabase) {
+        if (cardDatabase[key].name.toLowerCase().includes(article.toLowerCase())) {
+            foundCards.push({ article: key, ...cardDatabase[key] });
         }
-        
-        for (let key in cardDatabase) {
-            if (cardDatabase[key].name.toLowerCase().includes(article.toLowerCase())) {
-                foundCards.push({ article: key, ...cardDatabase[key] });
-            }
-        }
-        
-        if (foundCards.length > 0) {
-            let output = foundCards.map(card => `<h3 style='margin-bottom: 5px;'>${card.article} ${card.name}</h3>`).join("");
-            resultElement.innerHTML = output;
-        } else {
-            resultElement.innerHTML = `
-                <div class="not-found-animation">
-                    <p>Карточка не найдена, возможно она не имеет аналогов или её пока нет в базе данных</p>
-                    <img src="sad.gif" alt="Грустный смайлик" class="sad-gif">
-                </div>
-            `;
-        }
-        
-        // Скрываем анимированный курсор
-        document.getElementById('custom-cursor').style.display = 'none';
-    }, 1000);
+    }
+    
+    if (foundCards.length > 0) {
+        return foundCards.map(card => 
+            `<h3 style='margin-bottom: 5px;'>${card.article} ${card.name}</h3>`
+        ).join("");
+    } else {
+        return `
+            <div class="not-found-animation">
+                <p>Карточка не найдена, возможно она не имеет аналогов или её пока нет в базе данных</p>
+                <img src="sad.gif" alt="Грустный смайлик" class="sad-gif">
+            </div>
+        `;
+    }
 }
 
 // Запуск поиска по нажатию Enter
