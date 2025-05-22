@@ -301,6 +301,13 @@ const cardDatabase = {
 };
 
 
+// Обработчики движения курсора
+document.addEventListener('mousemove', function(e) {
+    const cursor = document.getElementById('custom-cursor');
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+});
+
 function searchCard() {
     let inputElement = document.getElementById("searchInput");
     if (!inputElement) {
@@ -314,10 +321,9 @@ function searchCard() {
         return;
     }
     
-    // Показываем loader
-    document.getElementById("loader").style.display = "flex";
+    // Показываем анимированный курсор
+    document.getElementById('custom-cursor').style.display = 'block';
     
-    // Через 1 секунду выполняем поиск и скрываем loader
     setTimeout(() => {
         let firstWord = article.split(" ")[0];
         let resultElement = document.getElementById("result");
@@ -352,9 +358,9 @@ function searchCard() {
             `;
         }
         
-        // Скрываем loader
-        document.getElementById("loader").style.display = "none";
-    }, 1000); // 1000ms = 1 секунда
+        // Скрываем анимированный курсор
+        document.getElementById('custom-cursor').style.display = 'none';
+    }, 1000);
 }
 
 // Запуск поиска по нажатию Enter
