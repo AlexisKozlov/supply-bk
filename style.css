@@ -178,5 +178,196 @@ button:hover {
 
 
 
+.maintenance {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Montserrat', sans-serif;
+}
 
+.maintenance-container {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.maintenance-content h1 {
+    color: #d62300;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.subtext {
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 16px;
+}
+
+/* Анимация шестеренок */
+.animation-container {
+    position: relative;
+    height: 100px;
+    margin-bottom: 30px;
+}
+
+.gear {
+    position: absolute;
+    font-size: 40px;
+    animation: rotate linear infinite;
+}
+
+.gear-large {
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    animation-duration: 8s;
+}
+
+.gear-medium {
+    left: 30%;
+    top: 40px;
+    animation-duration: 6s;
+    animation-direction: reverse;
+}
+
+.gear-small {
+    right: 30%;
+    top: 50px;
+    animation-duration: 4s;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Прогресс-бар */
+.progress-container {
+    margin: 25px 0;
+}
+
+.progress-bar {
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-bar::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 42%;
+    background: linear-gradient(90deg, #d62300, #ffcc00);
+    border-radius: 4px;
+    animation: progressAnimation 2s ease-in-out infinite alternate;
+}
+
+@keyframes progressAnimation {
+    from { width: 42%; }
+    to { width: 45%; }
+}
+
+.progress-text {
+    font-size: 14px;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* Стили для кнопок */
+.admin-button {
+    background: linear-gradient(135deg, #12168c, #d62300);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px auto;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(18, 22, 140, 0.2);
+}
+
+.admin-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(18, 22, 140, 0.3);
+}
+
+.button-icon {
+    font-size: 18px;
+}
+
+/* Форма пароля */
+.input-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+#adminPassword {
+    flex: 1;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 50px;
+    font-size: 16px;
+}
+
+.submit-button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #d62300;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.submit-button:hover {
+    background: #12168c;
+    transform: scale(1.05);
+}
+
+/* Контактная информация */
+.contact-info {
+    margin-top: 30px;
+    font-size: 14px;
+    color: #666;
+}
+
+.contact-link {
+    color: #12168c;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 5px;
+    transition: color 0.3s;
+}
+
+.contact-link:hover {
+    color: #d62300;
+}
 
