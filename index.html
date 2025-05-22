@@ -12,16 +12,14 @@
     <div id="maintenance" class="maintenance" style="display: none;">
         <h1>Ведутся технические работы ⚙️</h1>
         <p>Скоро всё заработает</p>
-        <!-- Кнопка для доступа -->
         <button id="adminBtn">Отдел закупок</button>
-        <!-- Форма для ввода пароля -->
         <div id="passwordForm" class="password-form" style="display: none;">
-            <input type="password" id="adminPassword" placeholder="Введите пароль" />
+            <input type="password" id="adminPassword" placeholder="Введите пароль">
             <button onclick="checkPassword()">Войти</button>
         </div>
     </div>
     
-    <!-- Содержимое обычного сайта -->
+    <!-- Основной контент -->
     <div id="normalSite" style="display: none;">
         <div class="container">
             <div class="logo-container">
@@ -38,14 +36,11 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Плашка "Сообщить об ошибке" -->
     <div class="error-report">
-    <a href="https://t.me/alexiskozlov" target="_blank">Сообщить об ошибке</a>
-</div>
-    <div id="loader" style="display: none;">
-    <img src="load.gif" alt="Загрузка" class="loader-gif">
-<div id="cursor-loader" style="display: none;">
-    <img src="load.gif" alt="Загрузка">
-</div>
+        <a href="https://t.me/alexiskozlov" target="_blank">Сообщить об ошибке</a>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
