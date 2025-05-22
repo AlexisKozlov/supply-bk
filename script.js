@@ -450,13 +450,15 @@ function selectSuggestion(article) {
   searchCard();
 }
 
-
+// Обработчики для кнопки очистки
 document.getElementById('searchInput').addEventListener('input', function() {
-    document.getElementById('clearSearch').style.display = this.value ? 'block' : 'none';
+  const clearBtn = document.getElementById('clearSearch');
+  clearBtn.style.display = this.value ? 'block' : 'none';
 });
 
 document.getElementById('clearSearch').addEventListener('click', function() {
-    document.getElementById('searchInput').value = '';
-    this.style.display = 'none';
-    document.getElementById('result').innerHTML = '';
+  document.getElementById('searchInput').value = '';
+  this.style.display = 'none';
+  document.getElementById('result').innerHTML = '';
+  document.getElementById('searchInput').focus(); // Возвращаем фокус на поле ввода
 });
