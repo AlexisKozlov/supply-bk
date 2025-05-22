@@ -301,13 +301,6 @@ const cardDatabase = {
 };
 
 
-// Обработчики движения курсора
-document.addEventListener('mousemove', function(e) {
-    const cursor = document.getElementById('custom-cursor');
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
-});
-
 function searchCard() {
     const inputElement = document.getElementById("searchInput");
     if (!inputElement) return;
