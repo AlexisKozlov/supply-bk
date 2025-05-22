@@ -200,10 +200,11 @@ button:hover {
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     padding: 40px;
-    max-width: 500px;
-    width: 90%;
+    width: 100%;
+    max-width: 500px; /* Фиксируем максимальную ширину */
     text-align: center;
     animation: fadeInUp 0.6s ease-out;
+    margin: auto; /* Добавляем для подстраховки */
 }
 
 @keyframes fadeInUp {
