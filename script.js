@@ -340,14 +340,14 @@ function searchCard() {
     if (foundCards.length > 0) {
         let output = foundCards.map(card => `<h3 style='margin-bottom: 5px;'>${card.article} ${card.name}</h3>`).join("");
         resultElement.innerHTML = output;
-    } else {
-        resultElement.innerHTML = `
-            <div class="not-found-animation">
-                <p>Карточка не найдена, возможно она не имеет аналогов или её пока нет в базе данных</p>
-                <div class="sad-face">😢</div>
-            </div>
-        `;
-    }
+   } else {
+    resultElement.innerHTML = `
+        <div class="not-found-animation">
+            <p>Карточка не найдена, возможно она не имеет аналогов или её пока нет в базе данных</p>
+            <div class="sad-face">😢</div>
+        </div>
+    `;
+}
 }
 
 // Запуск поиска по нажатию Enter
