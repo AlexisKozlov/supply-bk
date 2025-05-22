@@ -301,7 +301,6 @@ const cardDatabase = {
 };
 
 
-
 function searchCard() {
     let inputElement = document.getElementById("searchInput");
     if (!inputElement) {
@@ -315,26 +314,23 @@ function searchCard() {
         return;
     }
     
-    let firstWord = article.split(" ")[0]; // Извлекаем первое слово (артикул)
+    let firstWord = article.split(" ")[0];
     
     let resultElement = document.getElementById("result");
     resultElement.innerHTML = "";
     
     let foundCards = [];
     
-    // Поиск по точному совпадению артикула
     if (cardDatabase[firstWord]) {
         foundCards.push({ article: firstWord, ...cardDatabase[firstWord] });
     }
     
-    // Поиск по аналогам
     for (let key in cardDatabase) {
         if (cardDatabase[key].analogs.includes(firstWord)) {
             foundCards.push({ article: key, ...cardDatabase[key] });
         }
     }
     
-    // Поиск по названию карточки
     for (let key in cardDatabase) {
         if (cardDatabase[key].name.toLowerCase().includes(article.toLowerCase())) {
             foundCards.push({ article: key, ...cardDatabase[key] });
@@ -349,10 +345,9 @@ function searchCard() {
             <div class="not-found-animation">
                 <p>Карточка не найдена, возможно она не имеет аналогов или её пока нет в базе данных</p>
                 <div class="sad-face">😢</div>
-            </div>  
-            `;
+            </div>
+        `;
     }
-
 }
 
 // Запуск поиска по нажатию Enter
@@ -365,10 +360,9 @@ document.getElementById("searchInput").addEventListener("keypress", function(eve
 // Проверка пароля
 function checkPassword() {
     const password = document.getElementById('adminPassword').value;
-    const correctPassword = '157'; // Заданный пароль
+    const correctPassword = '157';
 
     if (password === correctPassword) {
-        // Скрываем страницу тех работ и показываем обычный сайт
         document.getElementById('maintenance').style.display = 'none';
         document.getElementById('normalSite').style.display = 'block';
         isMaintenance = false;
