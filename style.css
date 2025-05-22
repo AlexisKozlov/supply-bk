@@ -143,3 +143,37 @@ button:hover {
     width: 200px;
     height: 200px;
 }
+
+
+
+.copyable {
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+}
+
+.copyable:hover {
+    background-color: #ffcc00;
+    border-radius: 3px;
+}
+
+.copy-notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #d62300;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    animation: fadeOut 2s forwards;
+    opacity: 0;
+    z-index: 1000;
+}
+
+@keyframes fadeOut {
+    0% { opacity: 0; bottom: 10px; }
+    20% { opacity: 1; bottom: 20px; }
+    80% { opacity: 1; bottom: 20px; }
+    100% { opacity: 0; bottom: 30px; }
+}
