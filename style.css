@@ -177,34 +177,3 @@ button:hover {
 }
 
 
-
-
-
-
-
-
-.suggestions-container {
-  position: absolute;
-  width: 70%;
-  max-height: 200px;
-  overflow-y: auto;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 0 0 5px 5px;
-  z-index: 100;
-  display: none;
-}
-
-.suggestion-item {
-  padding: 8px 10px;
-  cursor: pointer;
-}
-
-.suggestion-item:hover {
-  background-color: #f0f0f0;
-}
-
-.suggestion-highlight {
-  color: #d62300;
-  font-weight: bold;
-}
