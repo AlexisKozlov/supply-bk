@@ -341,7 +341,7 @@ function searchCard() {
         }
         
         if (foundCards.length > 0) {
-            let output = foundCards.map(card => `<h3 style='margin-bottom: 5px;'>${card.article} ${card.name}</h3>`).join("");
+            let output = foundCards.map(card => `<h3 class="copyable" onclick="copyToClipboard('${card.article}', this)">${card.article}</h3>`).join("");
             resultElement.innerHTML = output;
         } else {
             resultElement.innerHTML = `
@@ -396,3 +396,23 @@ document.getElementById('adminBtn').addEventListener('click', function() {
 
 // Проверяем состояние техработ при загрузке
 window.onload = checkMaintenanceMode;
+
+function copyToClipboard(text, element) {
+    navigator.clipboard.writeText(text).then(() => {
+        // Визуальный эффект
+        element.style.color = "#d62300";
+        setTimeout(() => element.style.color = "", 500);
+        
+        // Уведомление
+        const notification = document.createElement('div');
+        notification.className = 'copy-notification';
+        notification.textContent = `Артикул ${text} скопирован!`;
+        document.body.appendChild(notification);
+        
+        // Автоудаление уведомления
+        setTimeout(() => notification.remove(), 2000);
+    }).catch(err => {
+        console.error('Ошибка копирования:', err);
+        alert('Не удалось скопировать артикул');
+    });
+}
