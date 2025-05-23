@@ -1,26 +1,12 @@
-// Установка даты последнего обновления при загрузке
+// В самом начале script.js (ПЕРЕД объявлением cardDatabase)
+const scriptVersion = "1.2.0"; // Увеличивайте это число при обновлениях
+const lastUpdateDate = "15.07.2024 14:30"; // Меняйте эту дату вручную
+
+// При загрузке
 document.addEventListener('DOMContentLoaded', function() {
-    const lastUpdate = localStorage.getItem('lastDBUpdate') || new Date().toISOString();
-    const updateDate = new Date(lastUpdate);
-    
-    document.getElementById('lastUpdateDate').textContent = 
-        updateDate.toLocaleDateString('ru-RU', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-    
-    // Показываем плашку
+    document.getElementById('lastUpdateDate').textContent = lastUpdateDate;
     document.getElementById('updateInfo').style.display = 'flex';
 });
-
-// Функция для обновления даты (вызывайте при изменениях базы)
-function updateTimestamp() {
-    localStorage.setItem('lastDBUpdate', new Date().toISOString());
-    location.reload(); // Перезагрузка для обновления даты
-}
 
 
 // Переменная для контроля технических работ
