@@ -1,7 +1,30 @@
+// Установка даты последнего обновления при загрузке
+document.addEventListener('DOMContentLoaded', function() {
+    const lastUpdate = localStorage.getItem('lastDBUpdate') || new Date().toISOString();
+    const updateDate = new Date(lastUpdate);
+    
+    document.getElementById('lastUpdateDate').textContent = 
+        updateDate.toLocaleDateString('ru-RU', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    
+    // Показываем плашку
+    document.getElementById('updateInfo').style.display = 'flex';
+});
+
+// Функция для обновления даты (вызывайте при изменениях базы)
+function updateTimestamp() {
+    localStorage.setItem('lastDBUpdate', new Date().toISOString());
+    location.reload(); // Перезагрузка для обновления даты
+}
+
+
 // Переменная для контроля технических работ
 let isMaintenance = false; //
-
-localStorage.setItem('lastDBUpdate', new Date().toISOString());
 
 const cardDatabase = { 
     "1054445": {
@@ -470,13 +493,3 @@ document.getElementById('adminBtn').addEventListener('click', () => {
 });
 
 
-
-// При загрузке страницы
-const updateDate = new Date(localStorage.getItem('lastDBUpdate'));
-document.getElementById('lastUpdateDate').textContent = 
-    updateDate.toLocaleDateString('ru-RU') + ' ' + 
-    updateDate.toLocaleTimeString('ru-RU', {hour: '2-digit', minute:'2-digit'});
-
-// Альтернативный вариант с автоматической датой:
-// document.getElementById('lastUpdateDate').textContent = 
-//    new Date().toLocaleDateString('ru-RU');
