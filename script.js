@@ -1,6 +1,6 @@
 // В самом начале script.js (ПЕРЕД объявлением cardDatabase)
 const scriptVersion = "1.2.0"; // Увеличивайте это число при обновлениях
-const lastUpdateDate = "15.07.2024 14:30"; // Меняйте эту дату вручную
+const lastUpdateDate = "23.05.2025"; // Меняйте эту дату вручную
 
 // При загрузке
 document.addEventListener('DOMContentLoaded', function() {
