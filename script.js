@@ -1,6 +1,8 @@
 // Переменная для контроля технических работ
 let isMaintenance = false; //
 
+localStorage.setItem('lastDBUpdate', new Date().toISOString());
+
 const cardDatabase = { 
     "1054445": {
         name: "Стрипсы замороженные 1кг * 12шт",
@@ -468,11 +470,12 @@ document.getElementById('adminBtn').addEventListener('click', () => {
 });
 
 
-// Установите актуальную дату обновления
-const lastUpdateDate = "15.07.2024"; // Замените на текущую дату
 
-// Инициализация плашки
-document.getElementById('lastUpdateDate').textContent = lastUpdateDate;
+// При загрузке страницы
+const updateDate = new Date(localStorage.getItem('lastDBUpdate'));
+document.getElementById('lastUpdateDate').textContent = 
+    updateDate.toLocaleDateString('ru-RU') + ' ' + 
+    updateDate.toLocaleTimeString('ru-RU', {hour: '2-digit', minute:'2-digit'});
 
 // Альтернативный вариант с автоматической датой:
 // document.getElementById('lastUpdateDate').textContent = 
