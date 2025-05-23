@@ -466,3 +466,14 @@ const progressInterval = setInterval(() => {
 document.getElementById('adminBtn').addEventListener('click', () => {
     clearInterval(progressInterval);
 });
+
+
+// Установите актуальную дату обновления
+const lastUpdateDate = "15.07.2024"; // Замените на текущую дату
+
+// Инициализация плашки
+document.getElementById('lastUpdateDate').textContent = lastUpdateDate;
+
+// Альтернативный вариант с автоматической датой:
+// document.getElementById('lastUpdateDate').textContent = 
+//    new Date().toLocaleDateString('ru-RU');
