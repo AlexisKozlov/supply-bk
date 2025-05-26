@@ -462,7 +462,6 @@ button:hover {
     box-shadow: 0 0 20px #ff3366, inset 0 0 10px #ff3366;
 }
 
-
 .copyable {
   transition: transform 0.3s, box-shadow 0.3s;
   transform-style: preserve-3d;
@@ -472,4 +471,15 @@ button:hover {
   transform: perspective(500px) translateZ(20px);
   box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
+/////////////
 
+
+.logo {
+  filter: drop-shadow(0 0 5px #00ffff) drop-shadow(0 0 10px #ff00ff);
+  animation: hologram 3s infinite alternate;
+}
+
+@keyframes hologram {
+  0% { opacity: 0.8; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.02); }
+}
