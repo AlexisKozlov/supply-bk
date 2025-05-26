@@ -421,23 +421,27 @@ document.getElementById('adminBtn').addEventListener('click', function() {
 window.onload = checkMaintenanceMode;
 
 function copyToClipboard(text, element) {
-    navigator.clipboard.writeText(text).then(() => {
-        // Визуальный эффект
-        element.style.color = "#d62300";
-        setTimeout(() => element.style.color = "", 500);
-        
-        // Уведомление
-        const notification = document.createElement('div');
-        notification.className = 'copy-notification';
-        notification.textContent = `Артикул ${text} скопирован!`;
-        document.body.appendChild(notification);
-        
-        // Автоудаление уведомления
-        setTimeout(() => notification.remove(), 2000);
-    }).catch(err => {
-        console.error('Ошибка копирования:', err);
-        alert('Не удалось скопировать артикул');
-    });
+    try {
+        // Декодируем HTML-сущности обратно в символы
+        const decodedText = text.replace(/&quot;/g, '"');
+        navigator.clipboard.writeText(decodedText).then(() => {
+            element.style.color = "#d62300";
+            setTimeout(() => element.style.color = "", 500);
+            
+            const notification = document.createElement('div');
+            notification.className = 'copy-notification';
+            notification.textContent = `Артикул ${decodedText} скопирован!`;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.remove(), 2000);
+        }).catch(err => {
+            console.error('Ошибка копирования:', err);
+            alert('Не удалось скопировать артикул: ' + err.message);
+        });
+    } catch (err) {
+        console.error('Ошибка в copyToClipboard:', err);
+        alert('Произошла ошибка: ' + err.message);
+    }
 }
 
 function showSuggestions(query) {
