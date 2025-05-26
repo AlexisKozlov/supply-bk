@@ -6,6 +6,9 @@ body, html {
     font-family: 'Montserrat', sans-serif;
     text-align: center;
     overflow-x: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Стили для фона с частицами */
@@ -26,10 +29,11 @@ body, html {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     width: 90%;
     max-width: 500px;
-    margin: 20px auto;
     position: relative;
     z-index: 1;
+    margin: 20px; /* Добавляем отступы по краям */
 }
+
 
 .logo-container {
     display: flex;
