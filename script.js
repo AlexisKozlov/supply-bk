@@ -360,7 +360,11 @@ function searchCard() {
         }
         
         if (foundCards.length > 0) {
-            let output = foundCards.map(card => `<h3 class="copyable" onclick="copyToClipboard('${card.article} ${card.name}', this)">${card.article} ${card.name}</h3>`).join("");
+            let output = foundCards.map(card => {
+                // Экранируем кавычки в тексте
+                const safeText = `${card.article} ${card.name}`.replace(/"/g, '&quot;');
+                return `<h3 class="copyable" onclick="copyToClipboard('${safeText}', this)">${card.article} ${card.name}</h3>`;
+            }).join("");
             resultElement.innerHTML = output;
         } else {
             resultElement.innerHTML = `
@@ -373,7 +377,7 @@ function searchCard() {
         
         // Скрываем loader
         document.getElementById("loader").style.display = "none";
-    }, 1000); // 1000ms = 1 секунда
+    }, 1000);
 }
 
 // Запуск поиска по нажатию Enter
