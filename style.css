@@ -1,23 +1,34 @@
+/* Основные стили */
 body, html {
     margin: 0;
     padding: 0;
     height: 100%;
     font-family: 'Montserrat', sans-serif;
     text-align: center;
-    background-color: #fff3e0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    overflow-x: hidden;
+}
+
+/* Стили для фона с частицами */
+#particles-js {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: #f5f7fa;
+    background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    z-index: -1;
 }
 
 .container {
     text-align: center;
     padding: 20px;
-    background-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.9);
     border-radius: 15px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     width: 90%;
     max-width: 500px;
+    margin: 20px auto;
+    position: relative;
+    z-index: 1;
 }
 
 .logo-container {
@@ -49,6 +60,7 @@ input {
     border-radius: 5px;
     font-size: 16px;
     text-align: center;
+    background-color: rgba(255, 255, 255, 0.8);
 }
 
 button {
@@ -61,6 +73,7 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: all 0.3s;
 }
 
 button:hover {
@@ -126,6 +139,7 @@ button:hover {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
 #loader {
     position: fixed;
     top: 0;
@@ -182,27 +196,26 @@ button:hover {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     z-index: 9999;
     display: flex;
     justify-content: center;
     align-items: center;
     font-family: 'Montserrat', sans-serif;
     margin: 0;
-    padding: 20px; /* Добавляем отступы по краям */
-    box-sizing: border-box; /* Важно! */
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .maintenance-container {
-    background: white;
+    background: rgba(255, 255, 255, 0.95);
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     padding: 40px;
     width: 100%;
-    max-width: 500px; /* Фиксируем максимальную ширину */
+    max-width: 500px;
     text-align: center;
     animation: fadeInUp 0.6s ease-out;
-    margin: auto; /* Добавляем для подстраховки */
+    margin: auto;
 }
 
 @keyframes fadeInUp {
@@ -222,7 +235,6 @@ button:hover {
     font-size: 16px;
 }
 
-/* Анимация шестеренок */
 .animation-container {
     position: relative;
     height: 100px;
@@ -260,7 +272,6 @@ button:hover {
     to { transform: rotate(360deg); }
 }
 
-/* Прогресс-бар */
 .progress-container {
     margin: 25px 0;
 }
@@ -296,7 +307,6 @@ button:hover {
     margin-top: 5px;
 }
 
-/* Стили для кнопок */
 .admin-button {
     background: linear-gradient(135deg, #12168c, #d62300);
     color: white;
@@ -323,7 +333,6 @@ button:hover {
     font-size: 18px;
 }
 
-/* Форма пароля */
 .input-group {
     display: flex;
     gap: 10px;
@@ -336,6 +345,7 @@ button:hover {
     border: 1px solid #ddd;
     border-radius: 50px;
     font-size: 16px;
+    background-color: rgba(255, 255, 255, 0.8);
 }
 
 .submit-button {
@@ -354,7 +364,6 @@ button:hover {
     transform: scale(1.05);
 }
 
-/* Контактная информация */
 .contact-info {
     margin-top: 30px;
     font-size: 14px;
@@ -372,9 +381,6 @@ button:hover {
 .contact-link:hover {
     color: #d62300;
 }
-
-
-
 
 .update-info {
     position: fixed;
@@ -416,7 +422,7 @@ button:hover {
 
 @media (max-width: 768px) {
     .error-report {
-        bottom: 70px; /* Поднимаем выше даты обновления */
+        bottom: 70px;
         right: 10px;
         left: auto;
         padding: 8px 12px;
@@ -432,28 +438,19 @@ button:hover {
     }
     
     .contact-info {
-        margin-bottom: 60px; /* Место для нижних плашек */
+        margin-bottom: 60px;
     }
 }
 
 button {
-  background: none;
-  border: 2px solid #d62300;
-  color: #d62300;
-  text-shadow: 0 0 5px #ff3366;
-  box-shadow: 0 0 10px #ff3366, inset 0 0 5px #ff3366;
-  transition: all 0.3s;
+    background: none;
+    border: 2px solid #d62300;
+    color: #d62300;
+    text-shadow: 0 0 5px #ff3366;
+    box-shadow: 0 0 10px #ff3366, inset 0 0 5px #ff3366;
+    transition: all 0.3s;
 }
 
 button:hover {
-  box-shadow: 0 0 20px #ff3366, inset 0 0 10px #ff3366;
-}
-
-.maintenance-bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
+    box-shadow: 0 0 20px #ff3366, inset 0 0 10px #ff3366;
 }
