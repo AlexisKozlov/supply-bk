@@ -6,6 +6,13 @@ const lastUpdateDate = "23.05.2025"; // Меняйте эту дату вруч�
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('lastUpdateDate').textContent = lastUpdateDate;
     document.getElementById('updateInfo').style.display = 'flex';
+    // Подсчет статистики
+const totalCards = Object.keys(cardDatabase).length;
+const cardsWithAnalogs = Object.values(cardDatabase).filter(card => card.analogs && card.analogs.length > 0).length;
+
+document.getElementById('totalCardsCount').textContent = totalCards;
+document.getElementById('cardsWithAnalogsCount').textContent = cardsWithAnalogs;
+
 });
 
 
