@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Переменная для контроля технических работ
-let isMaintenance = false; //
+let isMaintenance = true; //
 
 const cardDatabase = { 
     "1054445": {
