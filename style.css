@@ -436,4 +436,15 @@ button:hover {
     }
 }
 
+button {
+  background: none;
+  border: 2px solid #d62300;
+  color: #d62300;
+  text-shadow: 0 0 5px #ff3366;
+  box-shadow: 0 0 10px #ff3366, inset 0 0 5px #ff3366;
+  transition: all 0.3s;
+}
 
+button:hover {
+  box-shadow: 0 0 20px #ff3366, inset 0 0 10px #ff3366;
+}
