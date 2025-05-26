@@ -8,9 +8,11 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('updateInfo').style.display = 'flex';
 });
 
+// Подключите библиотеку particles.js в <head>
+particlesJS.load('particles-js', 'particles-config.json');
 
 // Переменная для контроля технических работ
-let isMaintenance = false; //
+let isMaintenance = true; //
 
 const cardDatabase = { 
     "1054445": {
