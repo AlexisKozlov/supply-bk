@@ -479,10 +479,9 @@ button:hover {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.85);
     display: none;
-    z-index: 10000;
-    backdrop-filter: blur(5px);
+    z-index: 10001; /* Увеличено до 10001 */
 }
 
 
@@ -495,16 +494,17 @@ button:hover {
     position: fixed;
     top: 50%;
     left: 50%;
-     transform: translate(-50%, -50%) !important;
+    transform: translate(-50%, -50%);
     background: white;
     padding: 30px;
     border-radius: 15px;
     text-align: center;
     max-width: 350px;
     width: 90%;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     border: 2px solid #d62300;
-    animation: modalFadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 10002; /* Выше чем фон */
+    animation: modalFadeIn 0.3s ease-out;
 }
 
 
@@ -538,27 +538,17 @@ button:hover {
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s;
-    box-shadow: 0 4px 10px rgba(214, 35, 0, 0.3);
 }
-
 
 .error-close-btn:hover {
     background-color: #ffcc00;
     color: #000;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(214, 35, 0, 0.4);
 }
 
 /* Анимации */
 @keyframes modalFadeIn {
-    from {
-        opacity: 0;
-        transform: translate(-50%, -40%);
-    }
-    to {
-        opacity: 1;
-        transform: translate(-50%, -50%);
-    }
+    from { opacity: 0; transform: translate(-50%, -60%); }
+    to { opacity: 1; transform: translate(-50%, -50%); }
 }
 
 @keyframes pulse {
