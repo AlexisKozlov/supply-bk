@@ -354,10 +354,10 @@ function searchCard() {
     }
     
     let article = inputElement.value.trim();
-    if (article.length < 3) {
-        alert("Введите минимум 3 символа!");
-        return;
-    }
+  if (article.length < 3) {
+    showError("Введите минимум 3 символа!");
+    return;
+}
     
     // Показываем loader
     document.getElementById("loader").style.display = "flex";
@@ -422,9 +422,9 @@ function checkPassword() {
         document.getElementById('maintenance').style.display = 'none';
         document.getElementById('normalSite').style.display = 'block';
         isMaintenance = false;
-    } else {
-        alert('Неверный пароль!');
-    }
+} else {
+    showError('Неверный пароль!');
+}
 }
 
 // Проверка, должна ли быть показана страница тех работ
@@ -462,11 +462,11 @@ function copyToClipboard(text, element) {
             setTimeout(() => notification.remove(), 2000);
         }).catch(err => {
             console.error('Ошибка копирования:', err);
-            alert('Не удалось скопировать артикул: ' + err.message);
+            showError('Не удалось скопировать артикул');
         });
     } catch (err) {
         console.error('Ошибка в copyToClipboard:', err);
-        alert('Произошла ошибка: ' + err.message);
+        showError('Произошла ошибка при копировании');
     }
 }
 
