@@ -170,7 +170,9 @@ button:hover {
     position: relative;
     display: inline-block;
 }
-
+h3.copyable {
+margin: 5px;
+}
 .copyable:hover {
     background-color: #ffcc00;
     border-radius: 3px;
