@@ -12,17 +12,6 @@ body, html {
     min-height: 100vh; /* Добавляем для надежности */
 }
 
-///
-h1 {
-    background: linear-gradient(135deg, #d62300, #ffcc00);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    display: inline-block;
-    margin-bottom: 15px;
-}
-
-////
-
 
 /* Стили для фона с частицами */
 #particles-js {
@@ -61,12 +50,12 @@ h1 {
     animation: logoAppear 1s ease-in-out;
 }
 
-/* h1 {
+h1 {
     font-size: 22px;
     font-weight: 700;
     color: #d62300;
     margin-top: 10px;
-}*/
+}
 .search-box {
     margin-top: 20px;
 }
