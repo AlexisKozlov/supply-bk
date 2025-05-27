@@ -349,15 +349,15 @@ const cardDatabase = {
 function searchCard() {
     let inputElement = document.getElementById("searchInput");
     if (!inputElement) {
-        console.error("Поле ввода не найдено!");
+        showError("Поле ввода не найдено!");
         return;
     }
     
     let article = inputElement.value.trim();
-  if (article.length < 3) {
-    showError("Введите минимум 3 символа!");
-    return;
-}
+    if (article.length < 3) {
+        showError("Введите минимум 3 символа!");
+        return;
+    }
     
     // Показываем loader
     document.getElementById("loader").style.display = "flex";
@@ -387,7 +387,6 @@ function searchCard() {
         
         if (foundCards.length > 0) {
             let output = foundCards.map(card => {
-                // Экранируем кавычки в тексте
                 const safeText = `${card.article} ${card.name}`.replace(/"/g, '&quot;');
                 return `<h3 class="copyable" onclick="copyToClipboard('${safeText}', this)">${card.article} ${card.name}</h3>`;
             }).join("");
@@ -401,7 +400,6 @@ function searchCard() {
             `;
         }
         
-        // Скрываем loader
         document.getElementById("loader").style.display = "none";
     }, 1000);
 }
