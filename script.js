@@ -17,19 +17,27 @@ function showError(message) {
     const errorMessage = document.getElementById('errorMessage');
     
     errorMessage.textContent = message;
-    popup.classList.add('active');
+    popup.style.display = 'flex'; // Показываем попап
     
     // Закрытие по кнопке
     document.querySelector('.error-close-btn').onclick = function() {
-        popup.classList.remove('active');
+        popup.style.display = 'none';
     };
     
     // Закрытие по клику вне попапа
     popup.onclick = function(e) {
         if (e.target === popup) {
-            popup.classList.remove('active');
+            popup.style.display = 'none';
         }
     };
+    
+    // Закрытие по Escape
+    document.addEventListener('keydown', function closeOnEscape(e) {
+        if (e.key === 'Escape') {
+            popup.style.display = 'none';
+            document.removeEventListener('keydown', closeOnEscape);
+        }
+    });
 }
 // Функция для показа красивого попапа с ошибкой
 
