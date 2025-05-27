@@ -11,6 +11,29 @@ document.addEventListener('DOMContentLoaded', function() {
 // Переменная для контроля технических работ
 let isMaintenance = false; //
 
+// Функция для показа красивого попапа с ошибкой
+function showError(message) {
+    const popup = document.getElementById('errorPopup');
+    const errorMessage = document.getElementById('errorMessage');
+    
+    errorMessage.textContent = message;
+    popup.classList.add('active');
+    
+    // Закрытие по кнопке
+    document.querySelector('.error-close-btn').onclick = function() {
+        popup.classList.remove('active');
+    };
+    
+    // Закрытие по клику вне попапа
+    popup.onclick = function(e) {
+        if (e.target === popup) {
+            popup.classList.remove('active');
+        }
+    };
+}
+// Функция для показа красивого попапа с ошибкой
+
+
 const cardDatabase = { 
     "1054445": {
         name: "Стрипсы замороженные 1кг * 12шт",
