@@ -405,7 +405,7 @@ function searchCard() {
         }
         
         document.getElementById("loader").style.display = "none";
-    }, 1000);
+    }, 700);
 }
 
 // Запуск поиска по нажатию Enter
