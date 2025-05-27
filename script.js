@@ -16,28 +16,33 @@ function showError(message) {
     const popup = document.getElementById('errorPopup');
     const errorMessage = document.getElementById('errorMessage');
     
-    errorMessage.textContent = message;
-    popup.style.display = 'flex'; // Показываем попап
+    // Устанавливаем сообщение
+    errorMessage.innerHTML = message;
     
-    // Закрытие по кнопке
-    document.querySelector('.error-close-btn').onclick = function() {
+    // Показываем попап
+    popup.style.display = 'flex';
+    document.body.style.overflow = 'hidden'; // Блокируем прокрутку
+    
+    // Функция для закрытия
+    const closePopup = () => {
         popup.style.display = 'none';
+        document.body.style.overflow = ''; // Восстанавливаем прокрутку
+        document.removeEventListener('keydown', handleKeyDown);
     };
     
-    // Закрытие по клику вне попапа
+    // Закрытие по кнопке
+    document.querySelector('.error-close-btn').onclick = closePopup;
+    
+    // Закрытие по клику на фон
     popup.onclick = function(e) {
-        if (e.target === popup) {
-            popup.style.display = 'none';
-        }
+        if (e.target === popup) closePopup();
     };
     
     // Закрытие по Escape
-    document.addEventListener('keydown', function closeOnEscape(e) {
-        if (e.key === 'Escape') {
-            popup.style.display = 'none';
-            document.removeEventListener('keydown', closeOnEscape);
-        }
-    });
+    const handleKeyDown = (e) => {
+        if (e.key === 'Escape') closePopup();
+    };
+    document.addEventListener('keydown', handleKeyDown);
 }
 // Функция для показа красивого попапа с ошибкой
 
