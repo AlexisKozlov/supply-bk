@@ -12,6 +12,18 @@ body, html {
     min-height: 100vh; /* Добавляем для надежности */
 }
 
+///
+h1 {
+    background: linear-gradient(135deg, #d62300, #ffcc00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+////
+
+
 /* Стили для фона с частицами */
 #particles-js {
     position: fixed;
