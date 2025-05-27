@@ -61,13 +61,12 @@ h1 {
     animation: logoAppear 1s ease-in-out;
 }
 
-h1 {
+/* h1 {
     font-size: 22px;
     font-weight: 700;
     color: #d62300;
     margin-top: 10px;
-}
-
+}*/
 .search-box {
     margin-top: 20px;
 }
