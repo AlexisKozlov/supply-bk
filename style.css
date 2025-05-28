@@ -605,7 +605,7 @@ button:hover {
   width: 90%;
   padding: 30px;
   border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
   max-height: 80vh;
   overflow-y: auto;
   border: 2px solid #d62300;
