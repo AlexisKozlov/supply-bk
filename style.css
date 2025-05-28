@@ -467,10 +467,10 @@ margin: 5px;
 
 button {
     background: none;
-    border: 2px solid #d62300;
+    border: 2px solid #ff8732;
     color: #d62300;
-    text-shadow: 0 0 5px #ff3366;
-    box-shadow: 0 0 10px #ff3366, inset 0 0 5px #ff3366;
+    text-shadow: 0 0 5px #ff8732;
+    box-shadow: 0 0 10px #ff8732, inset 0 0 5px #ff8732;
     transition: all 0.3s;
 }
 
