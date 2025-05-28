@@ -30,7 +30,7 @@ body, html {
     z-index: -1;
 }
 
-container {
+.container {
     text-align: center;
     padding: 20px;
     background-color: rgba(255, 255, 255, 0.9);
