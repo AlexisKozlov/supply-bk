@@ -1,3 +1,8 @@
+// Загружаем сохранённое значение режима техработ из localStorage (если есть)
+const storedMaintenanceMode = localStorage.getItem("maintenanceMode")
+if (storedMaintenanceMode !== null) {
+  AppConfig.maintenanceMode = storedMaintenanceMode === "true"
+}
 const AppConfig = {
   version: "1.2.1",
   lastUpdate: "26.05.2025",
@@ -526,7 +531,8 @@ function checkPassword() {
   const password = passwordInput.value
   if (password === AppConfig.adminPassword) {
     // Переключаем режим техработ
-    AppConfig.maintenanceMode = !AppConfig.maintenanceMode
+     AppConfig.maintenanceMode = !AppConfig.maintenanceMode
+    localStorage.setItem("maintenanceMode", AppConfig.maintenanceMode)
 
     if (AppConfig.maintenanceMode) {
       document.getElementById("maintenance").style.display = "block"
