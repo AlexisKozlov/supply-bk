@@ -64,6 +64,7 @@ h1 {
     font-weight: 700;
     color: #d62300;
     margin-top: 10px;
+     text-shadow: 1px 1px 3px rgba(214, 35, 0, 0.2);
 }
 .search-box {
     margin-top: 5px;
