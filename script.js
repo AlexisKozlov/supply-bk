@@ -15,28 +15,27 @@ document.addEventListener("DOMContentLoaded", function () {
 })
 
 function initApplication() {
-  // Инициализация элементов
-  const adminBtn = document.getElementById("adminBtn")
-  const passwordForm = document.getElementById("passwordForm")
-
-  // Администрирование
-  if (adminBtn && passwordForm) {
-    adminBtn.addEventListener("click", function () {
-      // Переключаем видимость формы ввода пароля
-      passwordForm.style.display =
-        passwordForm.style.display === "block" ? "none" : "block"
-    })
-  }
-}
-// Инициализация даты обновления
-updateVersionInfo()
-
-// Инициализация обработчика для кнопки проверки пароля
-const submitButton = document.querySelector(".submit-button")
-if (submitButton) {
-  submitButton.addEventListener("click", checkPassword)
-}
-
+    // Инициализация элементов
+    const adminBtn = document.getElementById('adminBtn');
+    const passwordForm = document.getElementById('passwordForm');
+    
+    // Администрирование
+    if (adminBtn && passwordForm) {
+        adminBtn.addEventListener('click', function() {
+            // Переключаем видимость формы ввода пароля
+            passwordForm.style.display = passwordForm.style.display === 'block' ? 'none' : 'block';
+        });
+    }
+    
+    // Инициализация даты обновления
+    updateVersionInfo();
+    
+    // Инициализация обработчика для кнопки проверки пароля
+    const submitButton = document.querySelector('.submit-button');
+    if (submitButton) {
+        submitButton.addEventListener('click', checkPassword);
+    }
+} 
 function showDisclaimer() {
   const disclaimerPopup = document.getElementById("disclaimerPopup")
   disclaimerPopup.style.display = "flex"
