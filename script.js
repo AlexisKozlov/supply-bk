@@ -454,7 +454,7 @@ function checkMaintenanceMode() {
         document.getElementById('maintenance').style.display = 'none';
         document.getElementById('normalSite').style.display = 'none';
     }
-
+}
 // Показать форму для ввода пароля по клику на кнопку
 document.getElementById('adminBtn').addEventListener('click', function() {
     document.getElementById('passwordForm').style.display = 'block';
