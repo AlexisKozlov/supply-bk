@@ -4,34 +4,20 @@ const AppConfig = {
     maintenanceMode: false,
     adminPassword: "157"
 };
+
 // Инициализация приложения после загрузки DOM
 document.addEventListener('DOMContentLoaded', function() {
-    // Проверяем, нужно ли показывать дисклеймер (всегда показываем)
+    // Всегда показываем дисклеймер при загрузке страницы
     showDisclaimer();
+    
+    // Инициализация остальных элементов
+    initApplication();
 });
 
 function initApplication() {
     // Инициализация элементов
-    const disclaimerPopup = document.getElementById('disclaimerPopup');
-    const acceptBtn = document.getElementById('acceptDisclaimer');
     const adminBtn = document.getElementById('adminBtn');
     const passwordForm = document.getElementById('passwordForm');
-    
-    // Проверка принятия дисклеймера
-    if (!localStorage.getItem('disclaimerAccepted')) {
-        showDisclaimer();
-    } else {
-        initMainContent();
-    }
-    
-    // Обработчик принятия дисклеймера
-    if (acceptBtn) {
-        acceptBtn.addEventListener('click', function() {
-            localStorage.setItem('disclaimerAccepted', 'true');
-            hideDisclaimer();
-            initMainContent();
-        });
-    }
     
     // Администрирование
     if (adminBtn && passwordForm) {
@@ -60,8 +46,8 @@ function showDisclaimer() {
         // После завершения анимации исчезновения скрываем попап
         setTimeout(() => {
             disclaimerPopup.style.display = 'none';
-            // Показываем основной контент
-            document.getElementById('normalSite').style.display = 'block';
+            // Показываем основной контент в зависимости от режима
+            initMainContent();
         }, 300);
     });
 }
@@ -113,8 +99,6 @@ function initSearchFunctionality() {
     }
 }
 
-
-
 // Функция для показа красивого попапа с ошибкой
 function showError(message) {
     const popup = document.getElementById('errorPopup');
@@ -139,9 +123,6 @@ function showError(message) {
         if (e.key === 'Escape') closePopup();
     });
 }
-// Функция для показа красивого попапа с ошибкой
-
-
 const cardDatabase = { 
     "1054445": {
         name: "Стрипсы замороженные 1кг * 12шт",
@@ -520,13 +501,6 @@ function searchCard() {
     }, 700);
 }
 
-// Запуск поиска по нажатию Enter
-document.getElementById("searchInput").addEventListener("keypress", function(event) {
-    if (event.key === "Enter") {
-        searchCard();
-    }
-});
-
 // Проверка пароля
 function checkPassword() {
     const password = document.getElementById('adminPassword').value;
@@ -535,36 +509,11 @@ function checkPassword() {
     if (password === correctPassword) {
         document.getElementById('maintenance').style.display = 'none';
         document.getElementById('normalSite').style.display = 'block';
-        isMaintenance = false;
-} else {
-    showError('Неверный пароль!');
-}
-}
-
-// Проверка, должна ли быть показана страница тех работ
-function checkMaintenanceMode() {
-    // Проверяем, принял ли пользователь дисклеймер
-    if (localStorage.getItem('disclaimerAccepted')) {
-        if (isMaintenance) {
-            document.getElementById('maintenance').style.display = 'block';
-            document.getElementById('normalSite').style.display = 'none';
-        } else {
-            document.getElementById('maintenance').style.display = 'none';
-            document.getElementById('normalSite').style.display = 'block';
-        }
+        AppConfig.maintenanceMode = false;
     } else {
-        // Если дисклеймер не принят, скрываем оба блока
-        document.getElementById('maintenance').style.display = 'none';
-        document.getElementById('normalSite').style.display = 'none';
+        showError('Неверный пароль!');
     }
 }
-// Показать форму для ввода пароля по клику на кнопку
-document.getElementById('adminBtn').addEventListener('click', function() {
-    document.getElementById('passwordForm').style.display = 'block';
-});
-
-// Проверяем состояние техработ при загрузке
-window.onload = checkMaintenanceMode;
 
 function copyToClipboard(text, element) {
     try {
@@ -590,52 +539,10 @@ function copyToClipboard(text, element) {
     }
 }
 
-function showSuggestions(query) {
-  const container = document.getElementById('suggestions');
-  if (!query || query.length < 2) {
-    container.style.display = 'none';
-    return;
-  }
-
-  const results = searchDatabase(query, true);
-  container.innerHTML = results.map(item => `
-    <div class="suggestion-item" onclick="selectSuggestion('${item.article}')">
-      ${highlightMatch(item.article, query)} → 
-      ${highlightMatch(item.name, query)}
-    </div>
-  `).join('');
-
-  container.style.display = results.length ? 'block' : 'none';
-}
-
-function highlightMatch(text, query) {
-  const regex = new RegExp(`(${escapeRegExp(query)})`, 'gi');
-  return text.replace(regex, '<span class="suggestion-highlight">$1</span>');
-}
-
-function escapeRegExp(string) {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-function selectSuggestion(article) {
-  document.getElementById('searchInput').value = article;
-  document.getElementById('suggestions').style.display = 'none';
-  searchCard();
-}
-
-// Анимация прогресс-бара (для демонстрации)
-let progress = 42;
-const progressInterval = setInterval(() => {
-    progress = (progress + 1) % 100;
-    document.getElementById('progressValue').textContent = progress;
-    document.querySelector('.progress-bar::after').style.width = `${progress}%`;
-}, 3000);
-
-// Очистка интервала при уходе со страницы техработ
-document.getElementById('adminBtn').addEventListener('click', () => {
-    clearInterval(progressInterval);
+// Показать форму для ввода пароля по клику на кнопку
+document.getElementById('adminBtn').addEventListener('click', function() {
+    document.getElementById('passwordForm').style.display = 'block';
 });
-
 
 // Конфиг частиц (можно менять параметры)
 const particlesConfig = {
@@ -667,4 +574,5 @@ const particlesConfig = {
   }
 };
 
-
+// Инициализация частиц
+particlesJS('particles-js', particlesConfig);
