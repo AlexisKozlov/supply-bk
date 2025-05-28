@@ -22,13 +22,19 @@ function initApplication() {
     // Администрирование
     if (adminBtn && passwordForm) {
         adminBtn.addEventListener('click', function() {
+            // Переключаем видимость формы ввода пароля
             passwordForm.style.display = passwordForm.style.display === 'block' ? 'none' : 'block';
         });
     }
     
     // Инициализация даты обновления
     updateVersionInfo();
-}
+    
+    // Инициализация обработчика для кнопки проверки пароля
+    const submitButton = document.querySelector('.submit-button');
+    if (submitButton) {
+        submitButton.addEventListener('click', checkPassword);
+    }
 
 function showDisclaimer() {
     const disclaimerPopup = document.getElementById('disclaimerPopup');
