@@ -496,7 +496,7 @@ button:hover {
   transform: perspective(500px) translateZ(20px);
   box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
-/////////////
+
 /* Стили для модального окна ошибки */
 .error-popup {
     position: fixed;
@@ -579,4 +579,24 @@ button:hover {
     0% { transform: scale(1); }
     50% { transform: scale(1.1); }
     100% { transform: scale(1); }
+}
+//////
+
+.disclaimer {
+    margin-top: 25px;
+    padding: 10px 0;
+    border-top: 1px solid rgba(214, 35, 0, 0.2);
+}
+
+.disclaimer p {
+    font-size: 11px;
+    color: #666;
+    line-height: 1.4;
+    margin: 0;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}
+
+.disclaimer:hover p {
+    opacity: 1;
 }
