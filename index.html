@@ -13,44 +13,63 @@
     <div id="particles-js"></div>
     
     <!-- Страница тех работ -->
-    <div id="maintenance" class="maintenance" style="display: none;">
-        <div class="maintenance-container">
-            <div class="maintenance-content">
-                <div class="animation-container">
-                    <div class="gear gear-large">⚙️</div>
-                    <div class="gear gear-medium">⚙️</div>
-                    <div class="gear gear-small">⚙️</div>
+  <div id="maintenance" class="maintenance" style="display: none;">
+    <div class="maintenance-container">
+        <div class="maintenance-header">
+            <img src="burger-king-logo.png" alt="Burger King" class="maintenance-logo">
+            <h1>Мы улучшаем ваш опыт</h1>
+        </div>
+        
+        <div class="maintenance-animation">
+            <div class="burger-animation">
+                <div class="bun-top"></div>
+                <div class="lettuce"></div>
+                <div class="tomato"></div>
+                <div class="cheese"></div>
+                <div class="patty"></div>
+                <div class="bun-bottom"></div>
+            </div>
+            <div class="tools-animation">
+                <div class="tool spatula"></div>
+                <div class="tool tongs"></div>
+            </div>
+        </div>
+        
+        <div class="maintenance-content">
+            <p class="maintenance-text">Наша команда шеф-поваров усердно работает над обновлением системы.<br>Пожалуйста, зайдите позже!</p>
+            
+            <div class="progress-container">
+                <div class="progress-text">Прогресс обновления: <span id="progressValue">67</span>%</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 67%"></div>
                 </div>
-                <h1>Идут технические работы</h1>
-                <p class="subtext">Мы обновляем систему для вашего удобства</p>
-                <div class="progress-container">
-                    <div class="progress-bar"></div>
-                    <div class="progress-text">Завершено: <span id="progressValue">42</span>%</div>
-                </div>
+            </div>
+            
+            <div class="admin-section">
+                <button id="adminBtn" class="admin-button flame-button">
+                    <span class="button-icon">👑</span>
+                    <span class="button-text">Доступ для администратора</span>
+                </button>
                 
-                <div class="admin-section">
-                    <button id="adminBtn" class="admin-button">
-                        <span class="button-icon">🔒</span>
-                        <span class="button-text">Доступ для отдела закупок</span>
-                    </button>
-                    
-                    <div id="passwordForm" class="password-form" style="display: none;">
-                        <div class="input-group">
-                            <input type="password" id="adminPassword" placeholder="Введите пароль">
-                            <button onclick="checkPassword()" class="submit-button">
-                                <span class="button-icon">→</span>
-                            </button>
-                        </div>
+                <div id="passwordForm" class="password-form" style="display: none;">
+                    <div class="input-group">
+                        <input type="password" id="adminPassword" placeholder="Королевский пароль">
+                        <button onclick="checkPassword()" class="submit-button flame-button">
+                            <span class="button-icon">🔑</span>
+                        </button>
                     </div>
                 </div>
-                
-                <div class="contact-info">
-                    <p>По срочным вопросам:</p>
-                    <a href="https://t.me/alexiskozlov" class="contact-link" target="_blank">Связаться</a>
-                </div>
+            </div>
+            
+            <div class="contact-info">
+                <p>Срочные вопросы?</p>
+                <a href="https://t.me/alexiskozlov" class="contact-link flame-link" target="_blank">
+                    <span class="link-icon">💬</span> Написать шеф-повару
+                </a>
             </div>
         </div>
     </div>
+</div>
     
     <!-- Основной контент -->
  <div id="normalSite" style="display: none;">
