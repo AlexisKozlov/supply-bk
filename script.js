@@ -1,13 +1,14 @@
-// Загружаем сохранённое значение режима техработ из localStorage (если есть)
-const storedMaintenanceMode = localStorage.getItem("maintenanceMode")
-if (storedMaintenanceMode !== null) {
-  AppConfig.maintenanceMode = storedMaintenanceMode === "true"
-}
 const AppConfig = {
   version: "1.2.1",
   lastUpdate: "26.05.2025",
   maintenanceMode: false,
   adminPassword: "157",
+}
+
+// Загружаем сохранённое значение режима техработ из localStorage (если есть)
+const storedMaintenanceMode = localStorage.getItem("maintenanceMode")
+if (storedMaintenanceMode !== null) {
+  AppConfig.maintenanceMode = storedMaintenanceMode === "true"
 }
 
 // Инициализация приложения после загрузки DOM
@@ -20,63 +21,48 @@ document.addEventListener("DOMContentLoaded", function () {
 })
 
 function initApplication() {
-    // Инициализация элементов
-    const adminBtn = document.getElementById('adminBtn');
-    const passwordForm = document.getElementById('passwordForm');
-    
-    // Администрирование
-    if (adminBtn && passwordForm) {
-        adminBtn.addEventListener('click', function() {
-            // Переключаем видимость формы ввода пароля
-            passwordForm.style.display = passwordForm.style.display === 'block' ? 'none' : 'block';
-        });
-    }
-    
-    // Инициализация даты обновления
-    updateVersionInfo();
-    
-    // Инициализация обработчика для кнопки проверки пароля
-    const submitButton = document.querySelector('.submit-button');
-    if (submitButton) {
-        submitButton.addEventListener('click', checkPassword);
-    }
-} 
+  const adminBtn = document.getElementById('adminBtn')
+  const passwordForm = document.getElementById('passwordForm')
+
+  if (adminBtn && passwordForm) {
+    adminBtn.addEventListener('click', function () {
+      passwordForm.style.display = passwordForm.style.display === 'block' ? 'none' : 'block'
+    })
+  }
+
+  updateVersionInfo()
+
+  const submitButton = document.querySelector('.submit-button')
+  if (submitButton) {
+    submitButton.addEventListener('click', checkPassword)
+  }
+}
+
 function showDisclaimer() {
   const disclaimerPopup = document.getElementById("disclaimerPopup")
   disclaimerPopup.style.display = "flex"
 
-  // Добавляем анимацию появления
   setTimeout(() => {
     disclaimerPopup.style.opacity = "1"
   }, 10)
 
-  // Обработчик кнопки принятия
-  document
-    .getElementById("acceptDisclaimer")
-    .addEventListener("click", function () {
-      disclaimerPopup.style.opacity = "0"
-
-      // После завершения анимации исчезновения скрываем попап
-      setTimeout(() => {
-        disclaimerPopup.style.display = "none"
-        // Показываем основной контент в зависимости от режима
-        initMainContent()
-      }, 300)
-    })
+  document.getElementById("acceptDisclaimer").addEventListener("click", function () {
+    disclaimerPopup.style.opacity = "0"
+    setTimeout(() => {
+      disclaimerPopup.style.display = "none"
+      initMainContent()
+    }, 300)
+  })
 }
 
 function initMainContent() {
   if (AppConfig.maintenanceMode) {
     document.getElementById("maintenance").style.display = "block"
     document.getElementById("normalSite").style.display = "none"
-
-    // Инициализация анимации техработ
     initMaintenanceAnimation()
   } else {
     document.getElementById("maintenance").style.display = "none"
     document.getElementById("normalSite").style.display = "block"
-
-    // Инициализация основного функционала
     initSearchFunctionality()
   }
 }
@@ -90,7 +76,6 @@ function updateVersionInfo() {
 }
 
 function initMaintenanceAnimation() {
-  // Ваш код анимации для режима техработ
   let progress = 42
   const progressInterval = setInterval(() => {
     progress = (progress + 1) % 100
@@ -112,14 +97,13 @@ function initSearchFunctionality() {
   }
 }
 
-// Функция для показа красивого попапа с ошибкой
 function showError(message) {
   const popup = document.getElementById("errorPopup")
   const errorMessage = document.getElementById("errorMessage")
 
   errorMessage.textContent = message
   popup.style.display = "block"
-  document.body.style.overflow = "hidden" // Блокируем скроллинг
+  document.body.style.overflow = "hidden"
 
   const closePopup = () => {
     popup.style.display = "none"
@@ -131,11 +115,11 @@ function showError(message) {
     if (e.target === popup) closePopup()
   }
 
-  // Закрытие по Escape
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") closePopup()
   })
 }
+
 const cardDatabase = {
   1054445: {
     name: "Стрипсы замороженные 1кг * 12шт",
@@ -468,10 +452,8 @@ function searchCard() {
     return
   }
 
-  // Показываем loader
   document.getElementById("loader").style.display = "flex"
 
-  // Через 1 секунду выполняем поиск и скрываем loader
   setTimeout(() => {
     let firstWord = article.split(" ")[0]
     let resultElement = document.getElementById("result")
@@ -499,28 +481,24 @@ function searchCard() {
     if (foundCards.length > 0) {
       let output = foundCards
         .map((card) => {
-          const safeText = `${card.article} ${card.name}`.replace(
-            /"/g,
-            "&quot;"
-          )
+          const safeText = `${card.article} ${card.name}`.replace(/"/g, "&quot;")
           return `<h3 class="copyable" onclick="copyToClipboard('${safeText}', this)">${card.article} ${card.name}</h3>`
         })
         .join("")
       resultElement.innerHTML = output
     } else {
       resultElement.innerHTML = `
-                <div class="not-found-animation">
-                    <p>Карточка не найдена, возможно она не имеет аналогов или её пока нет в базе данных</p>
-                    <img src="sad.gif" alt="Грустный смайлик" class="sad-gif">
-                </div>
-            `
+        <div class="not-found-animation">
+          <p>Карточка не найдена, возможно она не имеет аналогов или её пока нет в базе данных</p>
+          <img src="sad.gif" alt="Грустный смайлик" class="sad-gif">
+        </div>
+      `
     }
 
     document.getElementById("loader").style.display = "none"
   }, 700)
 }
 
-// Проверка пароля (исправленная версия)
 function checkPassword() {
   const passwordInput = document.getElementById("adminPassword")
   if (!passwordInput) {
@@ -530,8 +508,7 @@ function checkPassword() {
 
   const password = passwordInput.value
   if (password === AppConfig.adminPassword) {
-    // Переключаем режим техработ
-     AppConfig.maintenanceMode = !AppConfig.maintenanceMode
+    AppConfig.maintenanceMode = !AppConfig.maintenanceMode
     localStorage.setItem("maintenanceMode", AppConfig.maintenanceMode)
 
     if (AppConfig.maintenanceMode) {
@@ -543,9 +520,7 @@ function checkPassword() {
       document.getElementById("normalSite").style.display = "block"
     }
 
-    // Скрываем форму ввода пароля
     document.getElementById("passwordForm").style.display = "none"
-    // Очищаем поле ввода
     passwordInput.value = ""
   } else {
     showError("Неверный пароль!")
@@ -554,7 +529,6 @@ function checkPassword() {
 
 function copyToClipboard(text, element) {
   try {
-    // Декодируем HTML-сущности обратно в символы
     const decodedText = text.replace(/&quot;/g, '"')
     navigator.clipboard
       .writeText(decodedText)
@@ -579,16 +553,14 @@ function copyToClipboard(text, element) {
   }
 }
 
-// Показать форму для ввода пароля по клику на кнопку
 document.getElementById("adminBtn").addEventListener("click", function () {
   document.getElementById("passwordForm").style.display = "block"
 })
 
-// Конфиг частиц (можно менять параметры)
 const particlesConfig = {
   particles: {
     number: { value: 80, density: { enable: true, value_area: 800 } },
-    color: { value: "#d62300" }, // Цвет как в Burger King
+    color: { value: "#d62300" },
     shape: { type: "circle" },
     opacity: {
       value: 0.5,
@@ -599,7 +571,7 @@ const particlesConfig = {
     line_linked: {
       enable: true,
       distance: 150,
-      color: "#ffcc00", // Жёлтые линии
+      color: "#ffcc00",
       opacity: 0.4,
       width: 1,
     },
@@ -614,5 +586,4 @@ const particlesConfig = {
   },
 }
 
-// Инициализация частиц
 particlesJS("particles-js", particlesConfig)
