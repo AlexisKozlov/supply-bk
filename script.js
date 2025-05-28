@@ -1,113 +1,133 @@
 const AppConfig = {
     version: "1.2.1",
     lastUpdate: "26.05.2025",
-    maintenanceMode: false,  // По умолчанию включен режим техработ
+    maintenanceMode: false,
     adminPassword: "157"
 };
 
-let isAdmin = false;
-let maintenanceInterval = null;
-
-// Инициализация приложения
-document.addEventListener("DOMContentLoaded", function() {
-    // Проверяем, есть ли в URL параметр ?admin для быстрого доступа
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('admin')) {
-        document.getElementById('passwordForm').style.display = 'block';
-    }
-    
+// Инициализация приложения после загрузки DOM
+document.addEventListener('DOMContentLoaded', function() {
+    // Всегда показываем дисклеймер при загрузке страницы
     showDisclaimer();
+    
+    // Инициализация остальных элементов
     initApplication();
-    initParticles();
 });
 
 function initApplication() {
-    // Инициализация кнопки админа
-    document.getElementById('adminBtn').addEventListener('click', function() {
-        const form = document.getElementById('passwordForm');
-        form.style.display = form.style.display === 'block' ? 'none' : 'block';
-    });
+    // Инициализация элементов
+    const adminBtn = document.getElementById('adminBtn');
+    const passwordForm = document.getElementById('passwordForm');
     
-    // Инициализация кнопки подтверждения пароля
-    document.querySelector('.submit-button').addEventListener('click', checkPassword);
+    // Администрирование
+    if (adminBtn && passwordForm) {
+        adminBtn.addEventListener('click', function() {
+            // Переключаем видимость формы ввода пароля
+            passwordForm.style.display = passwordForm.style.display === 'block' ? 'none' : 'block';
+        });
+    }
     
-    // Инициализация поиска
-    document.getElementById('searchButton').addEventListener('click', searchCard);
-    document.getElementById('searchInput').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') searchCard();
-    });
-    
+    // Инициализация даты обновления
     updateVersionInfo();
-}
-
-function checkPassword() {
-    const passwordInput = document.getElementById('adminPassword');
-    if (!passwordInput) {
-        showError("Поле для ввода пароля не найдено!");
-        return;
-    }
     
-    if (passwordInput.value === AppConfig.adminPassword) {
-        isAdmin = true;
-        document.getElementById('passwordForm').style.display = 'none';
-        passwordInput.value = '';
-        initMainContent();
-        
-        // Показываем предупреждение для админа, если включены техработы
-        if (AppConfig.maintenanceMode) {
-            document.getElementById('adminWarning').style.display = 'block';
-            showError("Доступ разрешен. Режим техработ активен, но вам доступен полный функционал.");
-        }
-    } else {
-        showError("Неверный пароль!");
+    // Инициализация обработчика для кнопки проверки пароля
+    const submitButton = document.querySelector('.submit-button');
+    if (submitButton) {
+        submitButton.addEventListener('click', checkPassword);
     }
 }
-
 function showDisclaimer() {
     const disclaimerPopup = document.getElementById('disclaimerPopup');
     disclaimerPopup.style.display = 'flex';
-    setTimeout(() => disclaimerPopup.style.opacity = '1', 10);
     
+    // Добавляем анимацию появления
+    setTimeout(() => {
+        disclaimerPopup.style.opacity = '1';
+    }, 10);
+    
+    // Обработчик кнопки принятия
     document.getElementById('acceptDisclaimer').addEventListener('click', function() {
         disclaimerPopup.style.opacity = '0';
+        
+        // После завершения анимации исчезновения скрываем попап
         setTimeout(() => {
             disclaimerPopup.style.display = 'none';
+            // Показываем основной контент в зависимости от режима
             initMainContent();
         }, 300);
     });
 }
 
 function initMainContent() {
-    if (AppConfig.maintenanceMode && !isAdmin) {
-        // Режим техработ для обычных пользователей
+    if (AppConfig.maintenanceMode) {
         document.getElementById('maintenance').style.display = 'block';
         document.getElementById('normalSite').style.display = 'none';
+        
+        // Инициализация анимации техработ
         initMaintenanceAnimation();
     } else {
-        // Обычный режим или админ в режиме техработ
         document.getElementById('maintenance').style.display = 'none';
         document.getElementById('normalSite').style.display = 'block';
         
-        if (maintenanceInterval) {
-            clearInterval(maintenanceInterval);
-            maintenanceInterval = null;
-        }
+        // Инициализация основного функционала
+        initSearchFunctionality();
     }
 }
 
+function updateVersionInfo() {
+    const dateElement = document.getElementById('lastUpdateDate');
+    if (dateElement) {
+        dateElement.textContent = AppConfig.lastUpdate;
+    }
+    document.getElementById('updateInfo').style.display = 'flex';
+}
+
 function initMaintenanceAnimation() {
-    if (maintenanceInterval) clearInterval(maintenanceInterval);
-    
+    // Ваш код анимации для режима техработ
     let progress = 42;
-    maintenanceInterval = setInterval(() => {
+    const progressInterval = setInterval(() => {
         progress = (progress + 1) % 100;
-        document.getElementById('progressValue').textContent = progress;
+        const progressElement = document.getElementById('progressValue');
+        if (progressElement) {
+            progressElement.textContent = progress;
+        }
     }, 3000);
 }
 
-function updateVersionInfo() {
-    document.getElementById('lastUpdateDate').textContent = AppConfig.lastUpdate;
-    document.getElementById('updateInfo').style.display = 'flex';
+function initSearchFunctionality() {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                searchCard();
+            }
+        });
+    }
+}
+
+// Функция для показа красивого попапа с ошибкой
+function showError(message) {
+    const popup = document.getElementById('errorPopup');
+    const errorMessage = document.getElementById('errorMessage');
+    
+    errorMessage.textContent = message;
+    popup.style.display = 'block';
+    document.body.style.overflow = 'hidden'; // Блокируем скроллинг
+    
+    const closePopup = () => {
+        popup.style.display = 'none';
+        document.body.style.overflow = '';
+    };
+    
+    document.querySelector('.error-close-btn').onclick = closePopup;
+    popup.onclick = function(e) {
+        if (e.target === popup) closePopup();
+    };
+    
+    // Закрытие по Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closePopup();
+    });
 }
 
 const cardDatabase = {
@@ -430,124 +450,152 @@ const cardDatabase = {
 }
 
 function searchCard() {
-    const input = document.getElementById('searchInput');
-    const article = input.value.trim();
-    
-    if (!input) return showError("Поле ввода не найдено!");
-    if (article.length < 3) return showError("Введите минимум 3 символа!");
-    
-    const loader = document.getElementById('loader');
-    loader.style.display = 'flex';
-    
-    setTimeout(() => {
-        try {
-            const firstWord = article.split(' ')[0];
-            const resultElement = document.getElementById('result');
-            resultElement.innerHTML = '';
-            
-            // Поиск по базе данных
-            const foundCards = searchInDatabase(firstWord, article);
-            
-            if (foundCards.length > 0) {
-                resultElement.innerHTML = foundCards.map(card => 
-                    `<h3 class="copyable" onclick="copyToClipboard('${card.article} ${card.name}', this)">
-                        ${card.article} ${card.name}
-                    </h3>`
-                ).join('');
-            } else {
-                resultElement.innerHTML = `
-                    <div class="not-found-animation">
-                        <p>Карточка не найдена</p>
-                        <img src="sad.gif" alt="Грустный смайлик" class="sad-gif">
-                    </div>`;
-            }
-        } catch (error) {
-            console.error("Ошибка поиска:", error);
-            showError("Ошибка при поиске карточки");
-        } finally {
-            loader.style.display = 'none';
-        }
-    }, 700);
-}
-
-function searchInDatabase(firstWord, article) {
-    const foundCards = [];
-    const searchTerm = article.toLowerCase();
-    
-    // Проверяем точное совпадение артикула
-    if (cardDatabase[firstWord]) {
-        foundCards.push({ article: firstWord, ...cardDatabase[firstWord] });
+    let inputElement = document.getElementById("searchInput");
+    if (!inputElement) {
+        showError("Поле ввода не найдено!");
+        return;
     }
     
-    // Поиск по аналогам и названию
-    for (const [articleKey, cardData] of Object.entries(cardDatabase)) {
-        // Поиск по аналогам
-        if (cardData.analogs && cardData.analogs.includes(firstWord)) {
-            if (!foundCards.some(c => c.article === articleKey)) {
-                foundCards.push({ article: articleKey, ...cardData });
+    let article = inputElement.value.trim();
+    if (article.length < 3) {
+        showError("Введите минимум 3 символа!");
+        return;
+    }
+    
+    // Показываем loader
+    document.getElementById("loader").style.display = "flex";
+    
+    // Через 1 секунду выполняем поиск и скрываем loader
+    setTimeout(() => {
+        let firstWord = article.split(" ")[0];
+        let resultElement = document.getElementById("result");
+        resultElement.innerHTML = "";
+        let foundCards = [];
+        
+        if (cardDatabase[firstWord]) {
+            foundCards.push({ article: firstWord, ...cardDatabase[firstWord] });
+        }
+        
+        for (let key in cardDatabase) {
+            if (cardDatabase[key].analogs.includes(firstWord)) {
+                foundCards.push({ article: key, ...cardDatabase[key] });
             }
         }
         
-        // Поиск по названию
-        if (cardData.name && cardData.name.toLowerCase().includes(searchTerm)) {
-            if (!foundCards.some(c => c.article === articleKey)) {
-                foundCards.push({ article: articleKey, ...cardData });
+        for (let key in cardDatabase) {
+            if (cardDatabase[key].name.toLowerCase().includes(article.toLowerCase())) {
+                foundCards.push({ article: key, ...cardDatabase[key] });
             }
         }
-    }
-    
-    return foundCards;
+        
+        if (foundCards.length > 0) {
+            let output = foundCards.map(card => {
+                const safeText = `${card.article} ${card.name}`.replace(/"/g, '&quot;');
+                return `<h3 class="copyable" onclick="copyToClipboard('${safeText}', this)">${card.article} ${card.name}</h3>`;
+            }).join("");
+            resultElement.innerHTML = output;
+        } else {
+            resultElement.innerHTML = `
+                <div class="not-found-animation">
+                    <p>Карточка не найдена, возможно она не имеет аналогов или её пока нет в базе данных</p>
+                    <img src="sad.gif" alt="Грустный смайлик" class="sad-gif">
+                </div>
+            `;
+        }
+        
+        document.getElementById("loader").style.display = "none";
+    }, 700);
 }
 
-function showError(message) {
-    const popup = document.getElementById('errorPopup');
-    document.getElementById('errorMessage').textContent = message;
-    popup.style.display = 'block';
+// Проверка пароля (исправленная версия)
+function checkPassword() {
+    const passwordInput = document.getElementById('adminPassword');
+    if (!passwordInput) {
+        showError("Поле для ввода пароля не найдено!");
+        return;
+    }
     
-    const closePopup = () => popup.style.display = 'none';
-    document.querySelector('.error-close-btn').onclick = closePopup;
-    popup.onclick = (e) => { if (e.target === popup) closePopup(); };
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePopup(); });
+    const password = passwordInput.value;
+    if (password === AppConfig.adminPassword) {
+        // Переключаем режим техработ
+        AppConfig.maintenanceMode = !AppConfig.maintenanceMode;
+        
+        if (AppConfig.maintenanceMode) {
+            document.getElementById('maintenance').style.display = 'block';
+            document.getElementById('normalSite').style.display = 'none';
+            initMaintenanceAnimation();
+        } else {
+            document.getElementById('maintenance').style.display = 'none';
+            document.getElementById('normalSite').style.display = 'block';
+        }
+        
+        // Скрываем форму ввода пароля
+        document.getElementById('passwordForm').style.display = 'none';
+        // Очищаем поле ввода
+        passwordInput.value = '';
+    } else {
+        showError('Неверный пароль!');
+    }
 }
 
 function copyToClipboard(text, element) {
-    navigator.clipboard.writeText(text.replace(/&quot;/g, '"'))
-        .then(() => {
+    try {
+        // Декодируем HTML-сущности обратно в символы
+        const decodedText = text.replace(/&quot;/g, '"');
+        navigator.clipboard.writeText(decodedText).then(() => {
             element.style.color = "#d62300";
             setTimeout(() => element.style.color = "", 500);
             
             const notification = document.createElement('div');
             notification.className = 'copy-notification';
-            notification.textContent = `Скопировано: ${text}`;
+            notification.textContent = `Артикул ${decodedText} скопирован!`;
             document.body.appendChild(notification);
+            
             setTimeout(() => notification.remove(), 2000);
-        })
-        .catch(err => showError('Не удалось скопировать'));
+        }).catch(err => {
+            console.error('Ошибка копирования:', err);
+            showError('Не удалось скопировать артикул');
+        });
+    } catch (err) {
+        console.error('Ошибка в copyToClipboard:', err);
+        showError('Произошла ошибка при копировании');
+    }
 }
 
-function initParticles() {
-    particlesJS('particles-js', {
-        particles: {
-            number: { value: 80, density: { enable: true, value_area: 800 } },
-            color: { value: ["#d62300", "#ffcc00", "#12168c"] },
-            shape: { type: "circle" },
-            opacity: { value: 0.5, random: true, anim: { enable: true, speed: 1, opacity_min: 0.1 } },
-            size: { value: 3, random: true, anim: { enable: true, speed: 2, size_min: 0.1 } },
-            line_linked: { enable: true, distance: 150, color: "#d62300", opacity: 0.4, width: 1 },
-            move: { enable: true, speed: 2, direction: "none", random: true, straight: false, out_mode: "out" }
-        },
-        interactivity: {
-            detect_on: "canvas",
-            events: {
-                onhover: { enable: true, mode: "grab" },
-                onclick: { enable: true, mode: "push" },
-                resize: true
-            },
-            modes: {
-                grab: { distance: 140, line_linked: { opacity: 1 } },
-                push: { particles_nb: 4 }
-            }
-        },
-        retina_detect: true
-    });
-}
+// Показать форму для ввода пароля по клику на кнопку
+document.getElementById('adminBtn').addEventListener('click', function() {
+    document.getElementById('passwordForm').style.display = 'block';
+});
+
+// Конфиг частиц (можно менять параметры)
+const particlesConfig = {
+  "particles": {
+    "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+    "color": { "value": "#d62300" }, // Цвет как в Burger King
+    "shape": { "type": "circle" },
+    "opacity": {
+      "value": 0.5,
+      "random": true,
+      "anim": { "enable": true, "speed": 1, "opacity_min": 0.1 }
+    },
+    "size": { "value": 3, "random": true },
+    "line_linked": {
+      "enable": true,
+      "distance": 150,
+      "color": "#ffcc00", // Жёлтые линии
+      "opacity": 0.4,
+      "width": 1
+    },
+    "move": {
+      "enable": true,
+      "speed": 2,
+      "direction": "none",
+      "random": true,
+      "straight": false,
+      "out_mode": "out"
+    }
+  }
+};
+
+// Инициализация частиц
+particlesJS('particles-js', particlesConfig);
