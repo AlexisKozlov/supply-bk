@@ -563,3 +563,28 @@ document.addEventListener('DOMContentLoaded', function() {
     particlesJS('particles-js', particlesConfig);
   }
 });
+
+
+// Показ дисклеймера при загрузке
+document.addEventListener('DOMContentLoaded', function() {
+  // Проверяем, принимал ли пользователь уже дисклеймер
+  if (!localStorage.getItem('disclaimerAccepted')) {
+    const disclaimerPopup = document.getElementById('disclaimerPopup');
+    disclaimerPopup.style.display = 'flex';
+    
+    document.getElementById('acceptDisclaimer').addEventListener('click', function() {
+      localStorage.setItem('disclaimerAccepted', 'true');
+      disclaimerPopup.style.display = 'none';
+      
+      // Показываем основной контент после принятия
+      if (typeof checkMaintenanceMode === 'function') {
+        checkMaintenanceMode();
+      }
+    });
+  } else {
+    // Если уже принимал, сразу проверяем режим техработ
+    if (typeof checkMaintenanceMode === 'function') {
+      checkMaintenanceMode();
+    }
+  }
+});
