@@ -582,21 +582,21 @@ button:hover {
 }
 //////
 
-.disclaimer {
-    margin-top: 25px;
-    padding: 10px 0;
-    border-top: 1px solid rgba(214, 35, 0, 0.2);
+.global-disclaimer {
+    position: fixed;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    padding: 5px 0;
 }
 
-.disclaimer p {
+.global-disclaimer p {
     font-size: 11px;
     color: #666;
-    line-height: 1.4;
     margin: 0;
-    opacity: 0.8;
-    transition: opacity 0.3s;
-}
-
-.disclaimer:hover p {
-    opacity: 1;
+    display: inline-block;
+    padding: 3px 10px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 3px;
 }
