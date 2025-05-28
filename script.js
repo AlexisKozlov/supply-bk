@@ -501,15 +501,32 @@ function searchCard() {
     }, 700);
 }
 
-// Проверка пароля
+// Проверка пароля (исправленная версия)
 function checkPassword() {
-    const password = document.getElementById('adminPassword').value;
-    const correctPassword = '157';
-
-    if (password === correctPassword) {
-        document.getElementById('maintenance').style.display = 'none';
-        document.getElementById('normalSite').style.display = 'block';
-        AppConfig.maintenanceMode = false;
+    const passwordInput = document.getElementById('adminPassword');
+    if (!passwordInput) {
+        showError("Поле для ввода пароля не найдено!");
+        return;
+    }
+    
+    const password = passwordInput.value;
+    if (password === AppConfig.adminPassword) {
+        // Переключаем режим техработ
+        AppConfig.maintenanceMode = !AppConfig.maintenanceMode;
+        
+        if (AppConfig.maintenanceMode) {
+            document.getElementById('maintenance').style.display = 'block';
+            document.getElementById('normalSite').style.display = 'none';
+            initMaintenanceAnimation();
+        } else {
+            document.getElementById('maintenance').style.display = 'none';
+            document.getElementById('normalSite').style.display = 'block';
+        }
+        
+        // Скрываем форму ввода пароля
+        document.getElementById('passwordForm').style.display = 'none';
+        // Очищаем поле ввода
+        passwordInput.value = '';
     } else {
         showError('Неверный пароль!');
     }
