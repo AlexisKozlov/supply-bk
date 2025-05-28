@@ -6,7 +6,8 @@ const AppConfig = {
 };
 // Инициализация приложения после загрузки DOM
 document.addEventListener('DOMContentLoaded', function() {
-    initApplication();
+    // Проверяем, нужно ли показывать дисклеймер (всегда показываем)
+    showDisclaimer();
 });
 
 function initApplication() {
@@ -44,22 +45,25 @@ function initApplication() {
 }
 
 function showDisclaimer() {
-    const disclaimer = document.getElementById('disclaimerPopup');
-    if (disclaimer) {
-        disclaimer.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-    }
-}
-
-function hideDisclaimer() {
-    const disclaimer = document.getElementById('disclaimerPopup');
-    if (disclaimer) {
-        disclaimer.style.opacity = '0';
+    const disclaimerPopup = document.getElementById('disclaimerPopup');
+    disclaimerPopup.style.display = 'flex';
+    
+    // Добавляем анимацию появления
+    setTimeout(() => {
+        disclaimerPopup.style.opacity = '1';
+    }, 10);
+    
+    // Обработчик кнопки принятия
+    document.getElementById('acceptDisclaimer').addEventListener('click', function() {
+        disclaimerPopup.style.opacity = '0';
+        
+        // После завершения анимации исчезновения скрываем попап
         setTimeout(() => {
-            disclaimer.style.display = 'none';
-            document.body.style.overflow = '';
+            disclaimerPopup.style.display = 'none';
+            // Показываем основной контент
+            document.getElementById('normalSite').style.display = 'block';
         }, 300);
-    }
+    });
 }
 
 function initMainContent() {
