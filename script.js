@@ -573,16 +573,29 @@ document.addEventListener('DOMContentLoaded', function() {
   // Проверяем, принимал ли пользователь уже дисклеймер
   if (!localStorage.getItem('disclaimerAccepted')) {
     const disclaimerPopup = document.getElementById('disclaimerPopup');
+    const acceptButton = document.getElementById('acceptDisclaimer');
+    
+    // Показываем попап
     disclaimerPopup.style.display = 'flex';
     
-    document.getElementById('acceptDisclaimer').addEventListener('click', function() {
+    // Блокируем скролл страницы
+    document.body.style.overflow = 'hidden';
+    
+    acceptButton.addEventListener('click', function() {
+      // Сохраняем принятие
       localStorage.setItem('disclaimerAccepted', 'true');
-      disclaimerPopup.style.display = 'none';
       
-      // Показываем основной контент после принятия
-      if (typeof checkMaintenanceMode === 'function') {
-        checkMaintenanceMode();
-      }
+      // Плавно скрываем попап
+      disclaimerPopup.style.opacity = '0';
+      setTimeout(() => {
+        disclaimerPopup.style.display = 'none';
+        document.body.style.overflow = ''; // Восстанавливаем скролл
+        
+        // Показываем основной контент
+        if (typeof checkMaintenanceMode === 'function') {
+          checkMaintenanceMode();
+        }
+      }, 300);
     });
   } else {
     // Если уже принимал, сразу проверяем режим техработ
