@@ -1,123 +1,111 @@
 const AppConfig = {
-  version: "1.2.1",
-  lastUpdate: "26.05.2025",
-  maintenanceMode: false,
-  adminPassword: "157",
-}
+    version: "1.2.1",
+    lastUpdate: "26.05.2025",
+    maintenanceMode: false,
+    adminPassword: "157"
+};
 
-// Загружаем сохранённое значение режима техработ из localStorage (если есть)
-const storedMaintenanceMode = localStorage.getItem("maintenanceMode")
-if (storedMaintenanceMode !== null) {
-  AppConfig.maintenanceMode = storedMaintenanceMode === "true"
-}
+let maintenanceInterval = null;
 
-// Инициализация приложения после загрузки DOM
-document.addEventListener("DOMContentLoaded", function () {
-  // Всегда показываем дисклеймер при загрузке страницы
-  showDisclaimer()
-
-  // Инициализация остальных элементов
-  initApplication()
-})
+// Инициализация приложения
+document.addEventListener("DOMContentLoaded", function() {
+    showDisclaimer();
+    initApplication();
+    
+    // Инициализация частиц
+    particlesJS('particles-js', {
+        particles: {
+            number: { value: 80, density: { enable: true, value_area: 800 } },
+            color: { value: ["#d62300", "#ffcc00", "#12168c"] },
+            shape: { type: "circle" },
+            opacity: { value: 0.5, random: true, anim: { enable: true, speed: 1, opacity_min: 0.1 } },
+            size: { value: 3, random: true, anim: { enable: true, speed: 2, size_min: 0.1 } },
+            line_linked: { enable: true, distance: 150, color: "#d62300", opacity: 0.4, width: 1 },
+            move: { enable: true, speed: 2, direction: "none", random: true, straight: false, out_mode: "out" }
+        },
+        interactivity: {
+            detect_on: "canvas",
+            events: {
+                onhover: { enable: true, mode: "grab" },
+                onclick: { enable: true, mode: "push" },
+                resize: true
+            },
+            modes: {
+                grab: { distance: 140, line_linked: { opacity: 1 } },
+                push: { particles_nb: 4 }
+            }
+        },
+        retina_detect: true
+    });
+});
 
 function initApplication() {
-  const adminBtn = document.getElementById('adminBtn')
-  const passwordForm = document.getElementById('passwordForm')
-
-  if (adminBtn && passwordForm) {
-    adminBtn.addEventListener('click', function () {
-      passwordForm.style.display = passwordForm.style.display === 'block' ? 'none' : 'block'
-    })
-  }
-
-  updateVersionInfo()
-
-  const submitButton = document.querySelector('.submit-button')
-  if (submitButton) {
-    submitButton.addEventListener('click', checkPassword)
-  }
+    // Инициализация элементов управления
+    document.getElementById('adminBtn').addEventListener('click', function() {
+        const form = document.getElementById('passwordForm');
+        form.style.display = form.style.display === 'block' ? 'none' : 'block';
+    });
+    
+    document.querySelector('.submit-button').addEventListener('click', checkPassword);
+    document.getElementById('searchButton').addEventListener('click', searchCard);
+    document.getElementById('searchInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') searchCard();
+    });
+    
+    updateVersionInfo();
 }
 
 function showDisclaimer() {
-  const disclaimerPopup = document.getElementById("disclaimerPopup")
-  disclaimerPopup.style.display = "flex"
-
-  setTimeout(() => {
-    disclaimerPopup.style.opacity = "1"
-  }, 10)
-
-  document.getElementById("acceptDisclaimer").addEventListener("click", function () {
-    disclaimerPopup.style.opacity = "0"
-    setTimeout(() => {
-      disclaimerPopup.style.display = "none"
-      initMainContent()
-    }, 300)
-  })
+    const disclaimerPopup = document.getElementById('disclaimerPopup');
+    disclaimerPopup.style.display = 'flex';
+    setTimeout(() => disclaimerPopup.style.opacity = '1', 10);
+    
+    document.getElementById('acceptDisclaimer').addEventListener('click', function() {
+        disclaimerPopup.style.opacity = '0';
+        setTimeout(() => {
+            disclaimerPopup.style.display = 'none';
+            initMainContent();
+        }, 300);
+    });
 }
 
 function initMainContent() {
-  if (AppConfig.maintenanceMode) {
-    document.getElementById("maintenance").style.display = "block"
-    document.getElementById("normalSite").style.display = "none"
-    initMaintenanceAnimation()
-  } else {
-    document.getElementById("maintenance").style.display = "none"
-    document.getElementById("normalSite").style.display = "block"
-    initSearchFunctionality()
-  }
+    if (AppConfig.maintenanceMode) {
+        document.getElementById('maintenance').style.display = 'block';
+        document.getElementById('normalSite').style.display = 'none';
+        initMaintenanceAnimation();
+    } else {
+        document.getElementById('maintenance').style.display = 'none';
+        document.getElementById('normalSite').style.display = 'block';
+        if (maintenanceInterval) clearInterval(maintenanceInterval);
+    }
 }
 
 function updateVersionInfo() {
-  const dateElement = document.getElementById("lastUpdateDate")
-  if (dateElement) {
-    dateElement.textContent = AppConfig.lastUpdate
-  }
-  document.getElementById("updateInfo").style.display = "flex"
+    document.getElementById('lastUpdateDate').textContent = AppConfig.lastUpdate;
+    document.getElementById('updateInfo').style.display = 'flex';
 }
 
 function initMaintenanceAnimation() {
-  let progress = 42
-  const progressInterval = setInterval(() => {
-    progress = (progress + 1) % 100
-    const progressElement = document.getElementById("progressValue")
-    if (progressElement) {
-      progressElement.textContent = progress
+    if (maintenanceInterval) clearInterval(maintenanceInterval);
+    
+    let progress = 42;
+    maintenanceInterval = setInterval(() => {
+        progress = (progress + 1) % 100;
+        document.getElementById('progressValue').textContent = progress;
+    }, 3000);
+}
+
+function checkPassword() {
+    const password = document.getElementById('adminPassword').value;
+    if (password === AppConfig.adminPassword) {
+        AppConfig.maintenanceMode = !AppConfig.maintenanceMode;
+        document.getElementById('passwordForm').style.display = 'none';
+        document.getElementById('adminPassword').value = '';
+        initMainContent();
+    } else {
+        showError('Неверный пароль!');
     }
-  }, 3000)
-}
-
-function initSearchFunctionality() {
-  const searchInput = document.getElementById("searchInput")
-  if (searchInput) {
-    searchInput.addEventListener("keypress", function (event) {
-      if (event.key === "Enter") {
-        searchCard()
-      }
-    })
-  }
-}
-
-function showError(message) {
-  const popup = document.getElementById("errorPopup")
-  const errorMessage = document.getElementById("errorMessage")
-
-  errorMessage.textContent = message
-  popup.style.display = "block"
-  document.body.style.overflow = "hidden"
-
-  const closePopup = () => {
-    popup.style.display = "none"
-    document.body.style.overflow = ""
-  }
-
-  document.querySelector(".error-close-btn").onclick = closePopup
-  popup.onclick = function (e) {
-    if (e.target === popup) closePopup()
-  }
-
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") closePopup()
-  })
 }
 
 const cardDatabase = {
