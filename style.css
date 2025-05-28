@@ -72,7 +72,7 @@ input {
 
 button {
     margin-top: 20px;
-    background-color: #d62300;
+    background-color: #ff8732;
     color: #fff;
     font-size: 16px;
     font-weight: bold;
@@ -84,7 +84,7 @@ button {
 }
 
 button:hover {
-    background-color: #ffcc00;
+    background-color: #ff8732;
     color: #000;
     transform: scale(1.05);
 }
