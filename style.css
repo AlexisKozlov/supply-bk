@@ -40,7 +40,7 @@ body, html {
     max-width: 500px;
     position: relative;
     z-index: 1;
-    margin: 20px auto; /* Изменим на auto для центрирования */
+    margin: 20px auto;
     box-sizing: border-box;
 }
 
