@@ -440,17 +440,20 @@ function checkPassword() {
 
 // Проверка, должна ли быть показана страница тех работ
 function checkMaintenanceMode() {
-  // Проверяем, принял ли пользователь дисклеймер
-  if (localStorage.getItem('disclaimerAccepted')) {
-    if (isMaintenance) {
-      document.getElementById('maintenance').style.display = 'block';
-      document.getElementById('normalSite').style.display = 'none';
+    // Проверяем, принял ли пользователь дисклеймер
+    if (localStorage.getItem('disclaimerAccepted')) {
+        if (isMaintenance) {
+            document.getElementById('maintenance').style.display = 'block';
+            document.getElementById('normalSite').style.display = 'none';
+        } else {
+            document.getElementById('maintenance').style.display = 'none';
+            document.getElementById('normalSite').style.display = 'block';
+        }
     } else {
-      document.getElementById('maintenance').style.display = 'none';
-      document.getElementById('normalSite').style.display = 'block';
+        // Если дисклеймер не принят, скрываем оба блока
+        document.getElementById('maintenance').style.display = 'none';
+        document.getElementById('normalSite').style.display = 'none';
     }
-  }
-}
 
 // Показать форму для ввода пароля по клику на кнопку
 document.getElementById('adminBtn').addEventListener('click', function() {
