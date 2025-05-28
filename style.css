@@ -1,3 +1,6 @@
+#normalSite {
+    display: none; /* Сначала скрываем */
+}
 
 @font-face {
     font-family: 'Flame';
