@@ -70,7 +70,7 @@ input {
     background-color: rgba(255, 255, 255, 0.8);
 }
 
-/* button {
+ button {
     margin-top: 20px;
     background-color: #ff8732;
     color: #fff;
@@ -88,7 +88,7 @@ button:hover {
     color: #000;
     transform: scale(1.05);
 }
-*/
+
 #result {
     margin-top: 20px;
     font-size: 18px;
