@@ -567,39 +567,3 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-
-// Показ дисклеймера при загрузке
-document.addEventListener('DOMContentLoaded', function() {
-  // Проверяем, принимал ли пользователь уже дисклеймер
-  if (!localStorage.getItem('disclaimerAccepted')) {
-    const disclaimerPopup = document.getElementById('disclaimerPopup');
-    const acceptButton = document.getElementById('acceptDisclaimer');
-    
-    // Показываем попап
-    disclaimerPopup.style.display = 'flex';
-    
-    // Блокируем скролл страницы
-    document.body.style.overflow = 'hidden';
-    
-   acceptButton.addEventListener('click', function() {
-    // Сохраняем принятие
-    localStorage.setItem('disclaimerAccepted', 'true');
-    
-    // Плавно скрываем попап
-    disclaimerPopup.style.opacity = '0';
-    setTimeout(() => {
-        disclaimerPopup.style.display = 'none';
-        document.body.style.overflow = ''; // Восстанавливаем скролл
-        document.body.style.display = 'flex'; // Восстанавливаем flex-расположение
-        document.body.style.justifyContent = 'center';
-        document.body.style.alignItems = 'center';
-        
-        // Показываем основной контент
-        if (typeof checkMaintenanceMode === 'function') {
-            checkMaintenanceMode();
-        }
-        
-        // Принудительное обновление layout
-        document.body.offsetHeight;
-    }, 300);
-});
