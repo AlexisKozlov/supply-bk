@@ -231,7 +231,7 @@ margin: 5px;
     right: 0;
     bottom: 0;
     z-index: 9999;
-    display: flex;
+    display: flex !important;
     justify-content: center;
     align-items: center;
     background: linear-gradient(135deg, #f8d32a 0%, #d62300 100%);
