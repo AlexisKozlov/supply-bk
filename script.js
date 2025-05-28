@@ -26,7 +26,7 @@ function initApplication() {
             passwordForm.style.display = passwordForm.style.display === 'block' ? 'none' : 'block';
         });
     }
-    
+}
     // Инициализация даты обновления
     updateVersionInfo();
     
