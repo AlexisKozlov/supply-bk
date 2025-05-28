@@ -654,3 +654,11 @@ button:hover {
     transform: translateY(0);
   }
 }
+.disclaimer-popup {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.disclaimer-popup[style*="display: flex"] {
+  opacity: 1;
+}
