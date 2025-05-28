@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Переменная для контроля технических работ
-let isMaintenance = true; //
+let isMaintenance = false; //
+
 
 // Функция для показа красивого попапа с ошибкой
 function showError(message) {
