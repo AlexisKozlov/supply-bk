@@ -10,14 +10,13 @@
 body, html {
     margin: 0;
     padding: 0;
-    height: 100%;
+    min-height: 100vh;
     font-family: 'Montserrat', sans-serif;
-    text-align: center;
-    overflow-x: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh; /* Добавляем для надежности */
+    overflow-x: hidden;
+    width: 100%;
 }
 
 
@@ -664,14 +663,4 @@ button:hover {
 }
 
 ///////////////
-body {
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    font-family: 'Montserrat', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow-x: hidden;
-    width: 100%;
-}
+
