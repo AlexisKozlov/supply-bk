@@ -1,15 +1,114 @@
-// В самом начале script.js (ПЕРЕД объявлением cardDatabase)
-const scriptVersion = "1.2.0"; // Увеличивайте это число при обновлениях
-const lastUpdateDate = "26.05.2025"; // Меняйте эту дату вручную
-
-// При загрузке
+const AppConfig = {
+    version: "1.2.1",
+    lastUpdate: "26.05.2025",
+    maintenanceMode: false,
+    adminPassword: "157"
+};
+// Инициализация приложения после загрузки DOM
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('lastUpdateDate').textContent = lastUpdateDate;
-    document.getElementById('updateInfo').style.display = 'flex';
+    initApplication();
 });
 
-// Переменная для контроля технических работ
-let isMaintenance = false; //
+function initApplication() {
+    // Инициализация элементов
+    const disclaimerPopup = document.getElementById('disclaimerPopup');
+    const acceptBtn = document.getElementById('acceptDisclaimer');
+    const adminBtn = document.getElementById('adminBtn');
+    const passwordForm = document.getElementById('passwordForm');
+    
+    // Проверка принятия дисклеймера
+    if (!localStorage.getItem('disclaimerAccepted')) {
+        showDisclaimer();
+    } else {
+        initMainContent();
+    }
+    
+    // Обработчик принятия дисклеймера
+    if (acceptBtn) {
+        acceptBtn.addEventListener('click', function() {
+            localStorage.setItem('disclaimerAccepted', 'true');
+            hideDisclaimer();
+            initMainContent();
+        });
+    }
+    
+    // Администрирование
+    if (adminBtn && passwordForm) {
+        adminBtn.addEventListener('click', function() {
+            passwordForm.style.display = passwordForm.style.display === 'block' ? 'none' : 'block';
+        });
+    }
+    
+    // Инициализация даты обновления
+    updateVersionInfo();
+}
+
+function showDisclaimer() {
+    const disclaimer = document.getElementById('disclaimerPopup');
+    if (disclaimer) {
+        disclaimer.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function hideDisclaimer() {
+    const disclaimer = document.getElementById('disclaimerPopup');
+    if (disclaimer) {
+        disclaimer.style.opacity = '0';
+        setTimeout(() => {
+            disclaimer.style.display = 'none';
+            document.body.style.overflow = '';
+        }, 300);
+    }
+}
+
+function initMainContent() {
+    if (AppConfig.maintenanceMode) {
+        document.getElementById('maintenance').style.display = 'block';
+        document.getElementById('normalSite').style.display = 'none';
+        
+        // Инициализация анимации техработ
+        initMaintenanceAnimation();
+    } else {
+        document.getElementById('maintenance').style.display = 'none';
+        document.getElementById('normalSite').style.display = 'block';
+        
+        // Инициализация основного функционала
+        initSearchFunctionality();
+    }
+}
+
+function updateVersionInfo() {
+    const dateElement = document.getElementById('lastUpdateDate');
+    if (dateElement) {
+        dateElement.textContent = AppConfig.lastUpdate;
+    }
+    document.getElementById('updateInfo').style.display = 'flex';
+}
+
+function initMaintenanceAnimation() {
+    // Ваш код анимации для режима техработ
+    let progress = 42;
+    const progressInterval = setInterval(() => {
+        progress = (progress + 1) % 100;
+        const progressElement = document.getElementById('progressValue');
+        if (progressElement) {
+            progressElement.textContent = progress;
+        }
+    }, 3000);
+}
+
+function initSearchFunctionality() {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                searchCard();
+            }
+        });
+    }
+}
+
 
 
 // Функция для показа красивого попапа с ошибкой
@@ -564,33 +663,4 @@ const particlesConfig = {
   }
 };
 
-// Инициализация
-document.addEventListener('DOMContentLoaded', function() {
-  if (document.getElementById('particles-js')) {
-    particlesJS('particles-js', particlesConfig);
-  }
-});
 
-
-// Показ дисклеймера при загрузке
-document.addEventListener('DOMContentLoaded', function() {
-    // Проверяем, принимал ли пользователь уже дисклеймер
-    if (!localStorage.getItem('disclaimerAccepted')) {
-        const disclaimerPopup = document.getElementById('disclaimerPopup');
-        const acceptButton = document.getElementById('acceptDisclaimer');
-        
-        // Показываем попап
-        disclaimerPopup.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-        
-        acceptButton.addEventListener('click', function() {
-            localStorage.setItem('disclaimerAccepted', 'true');
-            disclaimerPopup.style.opacity = '0';
-            setTimeout(() => {
-                disclaimerPopup.style.display = 'none';
-                document.body.style.overflow = '';
-                checkMaintenanceMode(); // Проверяем режим после принятия дисклеймера
-            }, 300);
-        });
-    }
-});
