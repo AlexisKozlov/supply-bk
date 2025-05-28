@@ -574,23 +574,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Показ дисклеймера при загрузке
 document.addEventListener('DOMContentLoaded', function() {
-  // Проверяем, принимал ли пользователь уже дисклеймер
-  if (!localStorage.getItem('disclaimerAccepted')) {
-    const disclaimerPopup = document.getElementById('disclaimerPopup');
-    const acceptButton = document.getElementById('acceptDisclaimer');
-    
-    // Показываем попап
-    disclaimerPopup.style.display = 'flex';
-    
-    // Блокируем скролл страницы
-    document.body.style.overflow = 'hidden';
-    
-acceptButton.addEventListener('click', function() {
-    localStorage.setItem('disclaimerAccepted', 'true');
-    disclaimerPopup.style.opacity = '0';
-    setTimeout(() => {
-        disclaimerPopup.style.display = 'none';
-        document.body.style.overflow = '';
-        checkMaintenanceMode(); // Важно вызвать эту функцию
-    }, 300);
+    // Проверяем, принимал ли пользователь уже дисклеймер
+    if (!localStorage.getItem('disclaimerAccepted')) {
+        const disclaimerPopup = document.getElementById('disclaimerPopup');
+        const acceptButton = document.getElementById('acceptDisclaimer');
+        
+        // Показываем попап
+        disclaimerPopup.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        
+        acceptButton.addEventListener('click', function() {
+            localStorage.setItem('disclaimerAccepted', 'true');
+            disclaimerPopup.style.opacity = '0';
+            setTimeout(() => {
+                disclaimerPopup.style.display = 'none';
+                document.body.style.overflow = '';
+                checkMaintenanceMode(); // Проверяем режим после принятия дисклеймера
+            }, 300);
+        });
+    }
 });
