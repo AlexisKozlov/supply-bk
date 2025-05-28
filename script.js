@@ -499,31 +499,27 @@ function searchCard() {
   }, 700)
 }
 
-function checkPassword() {
-  const passwordInput = document.getElementById("adminPassword")
+ function checkPassword() {
+  const passwordInput = document.getElementById("adminPassword");
   if (!passwordInput) {
-    showError("Поле для ввода пароля не найдено!")
-    return
+    showError("Поле для ввода пароля не найдено!");
+    return;
   }
 
-  const password = passwordInput.value
+  const password = passwordInput.value;
   if (password === AppConfig.adminPassword) {
-    AppConfig.maintenanceMode = !AppConfig.maintenanceMode
-    localStorage.setItem("maintenanceMode", AppConfig.maintenanceMode)
+    // Переключаем режим техработ
+    AppConfig.maintenanceMode = !AppConfig.maintenanceMode;
 
-    if (AppConfig.maintenanceMode) {
-      document.getElementById("maintenance").style.display = "block"
-      document.getElementById("normalSite").style.display = "none"
-      initMaintenanceAnimation()
-    } else {
-      document.getElementById("maintenance").style.display = "none"
-      document.getElementById("normalSite").style.display = "block"
-    }
-
-    document.getElementById("passwordForm").style.display = "none"
-    passwordInput.value = ""
+    // Обновляем отображение
+    updateMaintenanceMode();
+    
+    // Скрываем форму ввода пароля
+    document.getElementById("passwordForm").style.display = "none";
+    // Очищаем поле ввода
+    passwordInput.value = "";
   } else {
-    showError("Неверный пароль!")
+    showError("Неверный пароль!");
   }
 }
 
