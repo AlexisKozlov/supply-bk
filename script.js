@@ -439,13 +439,16 @@ function checkPassword() {
 
 // Проверка, должна ли быть показана страница тех работ
 function checkMaintenanceMode() {
+  // Проверяем, принял ли пользователь дисклеймер
+  if (localStorage.getItem('disclaimerAccepted')) {
     if (isMaintenance) {
-        document.getElementById('maintenance').style.display = 'block';
-        document.getElementById('normalSite').style.display = 'none';
+      document.getElementById('maintenance').style.display = 'block';
+      document.getElementById('normalSite').style.display = 'none';
     } else {
-        document.getElementById('maintenance').style.display = 'none';
-        document.getElementById('normalSite').style.display = 'block';
+      document.getElementById('maintenance').style.display = 'none';
+      document.getElementById('normalSite').style.display = 'block';
     }
+  }
 }
 
 // Показать форму для ввода пароля по клику на кнопку
