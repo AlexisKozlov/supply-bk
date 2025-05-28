@@ -231,254 +231,189 @@ margin: 5px;
     right: 0;
     bottom: 0;
     z-index: 9999;
-    display: flex !important;
+    display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, #f8d32a 0%, #d62300 100%);
-    font-family: 'Flame', sans-serif;
-    color: white;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
     padding: 20px;
     box-sizing: border-box;
-    overflow: hidden;
 }
 
 .maintenance-container {
     background: rgba(255, 255, 255, 0.95);
     border-radius: 20px;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    padding: 40px;
     width: 100%;
     max-width: 500px;
     text-align: center;
     animation: fadeInUp 0.6s ease-out;
-    position: relative;
-    overflow: hidden;
-    border: 3px solid #ff8732;
+    margin: auto;
 }
 
-.maintenance-header {
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.maintenance-content h1 {
+    color: #d62300;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.subtext {
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 16px;
+}
+
+.animation-container {
+    position: relative;
+    height: 100px;
     margin-bottom: 30px;
 }
 
-.maintenance-logo {
-    width: 80px;
-    height: auto;
-    margin-bottom: 15px;
-    animation: pulse 2s infinite;
-}
-
-.maintenance h1 {
-    color: #d62300;
-    font-size: 28px;
-    margin: 0;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.maintenance-text {
-    color: #333;
-    font-size: 16px;
-    line-height: 1.6;
-    margin-bottom: 25px;
-}
-
-/* Анимация бургера */
-.maintenance-animation {
-    position: relative;
-    height: 180px;
-    margin: 30px auto;
-}
-
-.burger-animation {
+.gear {
     position: absolute;
-    width: 150px;
+    font-size: 40px;
+    animation: rotate linear infinite;
+}
+
+.gear-large {
     left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
-}
-
-.bun-top, .bun-bottom, .lettuce, .tomato, .cheese, .patty {
-    position: absolute;
-    left: 0;
-    width: 100%;
-    height: 15px;
-    border-radius: 15px;
-    animation: burgerBuild 4s infinite;
-}
-
-.bun-top {
-    background: #f8d32a;
     top: 0;
-    animation-delay: 0s;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transform: translateX(-50%);
+    animation-duration: 8s;
 }
 
-.lettuce {
-    background: #8bc34a;
-    top: 20px;
-    animation-delay: 0.2s;
-}
-
-.tomato {
-    background: #f44336;
+.gear-medium {
+    left: 30%;
     top: 40px;
-    animation-delay: 0.4s;
+    animation-duration: 6s;
+    animation-direction: reverse;
 }
 
-.cheese {
-    background: #ffc107;
-    top: 60px;
-    animation-delay: 0.6s;
+.gear-small {
+    right: 30%;
+    top: 50px;
+    animation-duration: 4s;
 }
 
-.patty {
-    background: #5d4037;
-    top: 80px;
-    animation-delay: 0.8s;
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
-.bun-bottom {
-    background: #e6a91a;
-    top: 100px;
-    animation-delay: 1s;
-}
-
-/* Анимация инструментов */
-.tools-animation {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-}
-
-.tool {
-    position: absolute;
-    font-size: 30px;
-    animation: toolMove 4s infinite;
-}
-
-.spatula {
-    left: 20%;
-    top: 30%;
-    animation-delay: 0.5s;
-}
-
-.tongs {
-    right: 20%;
-    top: 60%;
-    animation-delay: 1s;
-}
-
-/* Прогресс-бар */
 .progress-container {
-    margin: 30px 0;
+    margin: 25px 0;
 }
 
 .progress-bar {
-    height: 10px;
-    background: #f0f0f0;
-    border-radius: 5px;
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 4px;
     overflow: hidden;
-    margin-top: 10px;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    position: relative;
 }
 
-.progress-fill {
+.progress-bar::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
     height: 100%;
-    background: linear-gradient(90deg, #d62300, #ff8732);
-    border-radius: 5px;
-    transition: width 0.5s ease;
-    animation: progressPulse 2s infinite;
+    width: 42%;
+    background: linear-gradient(90deg, #d62300, #ffcc00);
+    border-radius: 4px;
+    animation: progressAnimation 2s ease-in-out infinite alternate;
+}
+
+@keyframes progressAnimation {
+    from { width: 42%; }
+    to { width: 45%; }
 }
 
 .progress-text {
-    color: #333;
     font-size: 14px;
-    font-weight: bold;
+    color: #666;
+    margin-top: 5px;
 }
 
-/* Кнопки в стиле Burger King */
-.flame-button {
-    background: linear-gradient(135deg, #d62300, #ff8732);
+.admin-button {
+    background: linear-gradient(135deg, #12168c, #d62300);
     color: white;
     border: none;
     padding: 12px 25px;
-    border-radius: 30px;
-    font-family: 'Flame', sans-serif;
+    border-radius: 50px;
     font-size: 16px;
-    font-weight: bold;
     cursor: pointer;
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    margin: 15px auto;
+    margin: 20px auto;
     transition: all 0.3s;
-    box-shadow: 0 4px 15px rgba(214, 35, 0, 0.3);
-    text-transform: uppercase;
+    box-shadow: 0 4px 15px rgba(18, 22, 140, 0.2);
 }
 
-.flame-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(214, 35, 0, 0.4);
-    background: linear-gradient(135deg, #ff8732, #d62300);
+.admin-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(18, 22, 140, 0.3);
 }
 
-.flame-link {
-    color: #d62300;
+.button-icon {
+    font-size: 18px;
+}
+
+.input-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+#adminPassword {
+    flex: 1;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 50px;
+    font-size: 16px;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.submit-button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #d62300;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.submit-button:hover {
+    background: #12168c;
+    transform: scale(1.05);
+}
+
+.contact-info {
+    margin-top: 30px;
+    font-size: 14px;
+    color: #666;
+}
+
+.contact-link {
+    color: #12168c;
     text-decoration: none;
-    font-weight: bold;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    transition: all 0.3s;
+    display: inline-block;
+    margin-top: 5px;
+    transition: color 0.3s;
 }
 
-.flame-link:hover {
-    color: #ff8732;
-    text-decoration: underline;
-}
-
-/* Анимации */
-@keyframes burgerBuild {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-10px); }
-    50% { transform: translateX(0); }
-    75% { transform: translateX(10px); }
-}
-
-@keyframes toolMove {
-    0%, 100% { transform: translate(0, 0) rotate(0deg); }
-    25% { transform: translate(10px, 5px) rotate(10deg); }
-    50% { transform: translate(-5px, 10px) rotate(-5deg); }
-    75% { transform: translate(5px, -5px) rotate(5deg); }
-}
-
-@keyframes progressPulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.8; }
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
-
-/* Адаптивность */
-@media (max-width: 600px) {
-    .maintenance-container {
-        padding: 20px;
-    }
-    
-    .maintenance h1 {
-        font-size: 24px;
-    }
-    
-    .burger-animation {
-        width: 120px;
-    }
+.contact-link:hover {
+    color: #d62300;
 }
 
 .update-info {
@@ -499,15 +434,48 @@ margin: 5px;
     animation: slideInLeft 0.5s ease-out;
 }
 
-    .update-icon {
+.update-icon {
     font-size: 16px;
     animation: pulse 2s infinite;
-    }
+}
 
- .update-text {
+.update-text {
     color: #555;
-        }
+}
+
+@keyframes slideInLeft {
+    from { transform: translateX(-100px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+@media (max-width: 768px) {
+    .error-report {
+        bottom: 70px;
+        right: 10px;
+        left: auto;
+        padding: 8px 12px;
+        font-size: 13px;
+    }
     
+    .update-info {
+        bottom: 20px;
+        left: 10px;
+        right: 10px;
+        width: auto;
+        justify-content: center;
+    }
+    
+    .contact-info {
+        margin-bottom: 60px;
+    }
+}
+
 button {
     background: none;
     border: 2px solid #ff8732;
@@ -695,6 +663,3 @@ button:hover {
 .disclaimer-popup[style*="display: flex"] {
   opacity: 1;
 }
-
-///////////////
-
