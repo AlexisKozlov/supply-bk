@@ -518,7 +518,6 @@ button:hover {
     max-width: 350px;
     width: 90%;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-    border: 2px solid #d62300;
     z-index: 10002; /* Выше чем фон */
     animation: modalFadeIn 0.3s ease-out;
 }
