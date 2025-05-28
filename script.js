@@ -5,72 +5,67 @@ const AppConfig = {
     adminPassword: "157"
 };
 
-// Инициализация приложения после загрузки DOM
-document.addEventListener('DOMContentLoaded', function() {
-    // Всегда показываем дисклеймер при загрузке страницы
+let isAdmin = false;
+let maintenanceInterval = null;
+
+// Инициализация приложения
+document.addEventListener("DOMContentLoaded", function() {
     showDisclaimer();
-    
-    // Инициализация остальных элементов
     initApplication();
+    initParticles();
 });
 
 function initApplication() {
-    // Инициализация элементов
-    const adminBtn = document.getElementById('adminBtn');
-    const passwordForm = document.getElementById('passwordForm');
-    
-    // Администрирование
-    if (adminBtn && passwordForm) {
-        adminBtn.addEventListener('click', function() {
-            // Переключаем видимость формы ввода пароля
-            passwordForm.style.display = passwordForm.style.display === 'block' ? 'none' : 'block';
-        });
-    }
-    
-    // Инициализация даты обновления
-    updateVersionInfo();
-    
-    // Инициализация обработчика для кнопки проверки пароля
-    const submitButton = document.querySelector('.submit-button');
-    if (submitButton) {
-        submitButton.addEventListener('click', checkPassword);
-    }
-}
-function showDisclaimer() {
-    const disclaimerPopup = document.getElementById('disclaimerPopup');
-    disclaimerPopup.style.display = 'flex';
-    
-    // Добавляем анимацию появления
-    setTimeout(() => {
-        disclaimerPopup.style.opacity = '1';
-    }, 10);
-    
-    // Обработчик кнопки принятия
-    document.getElementById('acceptDisclaimer').addEventListener('click', function() {
-        disclaimerPopup.style.opacity = '0';
-        
-        // После завершения анимации исчезновения скрываем попап
-        setTimeout(() => {
-            disclaimerPopup.style.display = 'none';
-            // Показываем основной контент в зависимости от режима
-            initMainContent();
-        }, 300);
+    // Инициализация кнопки админа
+    document.getElementById('adminBtn').addEventListener('click', function() {
+        const form = document.getElementById('passwordForm');
+        form.style.display = form.style.display === 'block' ? 'none' : 'block';
     });
+    
+    // Инициализация кнопки подтверждения пароля
+    document.querySelector('.submit-button').addEventListener('click', checkPassword);
+    
+    // Инициализация поиска
+    document.getElementById('searchButton').addEventListener('click', searchCard);
+    document.getElementById('searchInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') searchCard();
+    });
+    
+    updateVersionInfo();
+}
+
+function checkPassword() {
+    const passwordInput = document.getElementById('adminPassword');
+    if (!passwordInput) return;
+    
+    if (passwordInput.value === AppConfig.adminPassword) {
+        isAdmin = true;
+        AppConfig.maintenanceMode = false; // Автоматически выключаем техработы для админа
+        document.getElementById('passwordForm').style.display = 'none';
+        passwordInput.value = '';
+        initMainContent();
+        showError("Доступ разрешен. Режим техработ отключен для вас.");
+    } else {
+        showError("Неверный пароль!");
+    }
 }
 
 function initMainContent() {
-    if (AppConfig.maintenanceMode) {
+    if (AppConfig.maintenanceMode && !isAdmin) {
+        // Режим техработ для обычных пользователей
         document.getElementById('maintenance').style.display = 'block';
         document.getElementById('normalSite').style.display = 'none';
-        
-        // Инициализация анимации техработ
         initMaintenanceAnimation();
     } else {
+        // Обычный режим или админ в режиме техработ
         document.getElementById('maintenance').style.display = 'none';
         document.getElementById('normalSite').style.display = 'block';
+        if (maintenanceInterval) clearInterval(maintenanceInterval);
         
-        // Инициализация основного функционала
-        initSearchFunctionality();
+        // Для админа показываем предупреждение о техработах
+        if (AppConfig.maintenanceMode && isAdmin) {
+            showError("Внимание: сервис в режиме техработ, но вам доступен полный функционал");
+        }
     }
 }
 
