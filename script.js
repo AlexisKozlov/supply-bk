@@ -581,26 +581,25 @@ document.addEventListener('DOMContentLoaded', function() {
     // Блокируем скролл страницы
     document.body.style.overflow = 'hidden';
     
-    acceptButton.addEventListener('click', function() {
-      // Сохраняем принятие
-      localStorage.setItem('disclaimerAccepted', 'true');
-      
-      // Плавно скрываем попап
-      disclaimerPopup.style.opacity = '0';
-      setTimeout(() => {
+   acceptButton.addEventListener('click', function() {
+    // Сохраняем принятие
+    localStorage.setItem('disclaimerAccepted', 'true');
+    
+    // Плавно скрываем попап
+    disclaimerPopup.style.opacity = '0';
+    setTimeout(() => {
         disclaimerPopup.style.display = 'none';
         document.body.style.overflow = ''; // Восстанавливаем скролл
+        document.body.style.display = 'flex'; // Восстанавливаем flex-расположение
+        document.body.style.justifyContent = 'center';
+        document.body.style.alignItems = 'center';
         
         // Показываем основной контент
         if (typeof checkMaintenanceMode === 'function') {
-          checkMaintenanceMode();
+            checkMaintenanceMode();
         }
-      }, 300);
-    });
-  } else {
-    // Если уже принимал, сразу проверяем режим техработ
-    if (typeof checkMaintenanceMode === 'function') {
-      checkMaintenanceMode();
-    }
-  }
+        
+        // Принудительное обновление layout
+        document.body.offsetHeight;
+    }, 300);
 });
