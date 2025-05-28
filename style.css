@@ -1,3 +1,4 @@
+
 @font-face {
     font-family: 'Flame';
     src: url('Flame-Regular.otf') format('opentype');
@@ -58,6 +59,7 @@ body, html {
 }
 
 h1 {
+    font-family: 'Flame', sans-serif;
     font-size: 22px;
     font-weight: 700;
     color: #d62300;
