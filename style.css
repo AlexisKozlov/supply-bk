@@ -497,14 +497,17 @@ margin: 5px;
     border: 1px solid rgba(0, 0, 0, 0.05);
     z-index: 100;
     animation: slideInLeft 0.5s ease-out;
-    
+}
+
     .update-icon {
     font-size: 16px;
     animation: pulse 2s infinite;
+    }
 
-        .update-text {
+ .update-text {
     color: #555;
         }
+    
 button {
     background: none;
     border: 2px solid #ff8732;
