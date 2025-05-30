@@ -5,31 +5,6 @@ const AppConfig = {
     adminPassword: "157"
 };
 
-function logSearch(article) {
-    const FORM_ID = '1FAIpQLSdt8PZMjPxBf8w92G4unU7SvuZkHaAX7U2rWMJfwe658IDkLw'; // Ваш ID формы
-    const FIELD_ID = 'entry.267326118'; // Ваш ID поля
-    
-    // Формируем URL
-    const formUrl = `https://docs.google.com/forms/d/e/${1FAIpQLSdt8PZMjPxBf8w92G4unU7SvuZkHaAX7U2rWMJfwe658IDkLw}/formResponse`;
-    
-    // Создаем данные для отправки
-    const formData = new URLSearchParams();
-    formData.append(FIELD_ID, article);
-    
-    // Добавляем метку времени
-    formData.append('entry.267326118_TIMESTAMP', new Date().toISOString());
-    
-    // Отправляем запрос
-    try {
-        fetch(formUrl, {
-            method: 'POST',
-            body: formData,
-            mode: 'no-cors' // Важно для обхода CORS!
-        });
-    } catch (e) {
-        console.log('Ошибка отправки аналитики:', e);
-    }
-}
 
 // Инициализация приложения после загрузки DOM
 document.addEventListener('DOMContentLoaded', function() {
@@ -195,7 +170,6 @@ function searchCard() {
                 foundCards.push({ article: key, ...cardDatabase[key] });
             }
         }
-             logSearch(article.trim());
         if (foundCards.length > 0) {
             let output = foundCards.map(card => {
                 const safeText = `${card.article} ${card.name}`.replace(/"/g, '&quot;');
