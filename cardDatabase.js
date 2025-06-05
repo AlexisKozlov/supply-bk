@@ -100,7 +100,7 @@ var cardDatabase = {
     analogs: ["51210", "51223"],
   },
   76022473: {
-    name: "Соус Parmegiano Heinz дип-пот 125* 25мл",
+    name: "Соус Parmegiano Heinz дип-пот 125* 25мл",
     analogs: ["51290", "76019797", "51212"],
   },
   75980018: {
