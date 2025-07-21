@@ -248,4 +248,3 @@ function copyToClipboard(text, element) {
 document.getElementById('adminBtn').addEventListener('click', function() {
     document.getElementById('passwordForm').style.display = 'block';
 });
-
