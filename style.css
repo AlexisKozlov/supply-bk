@@ -23,8 +23,12 @@ body, html {
     min-height: 100vh; /* Добавляем для надежности */
 }
 body {
-    background: linear-gradient(135deg, #d62300 0%, #ffcc00 50%, #12168c 100%);
-    background-attachment: fixed;
+    background-color: #fff8e1;
+    background-image: 
+        radial-gradient(#ffcc00 1px, transparent 1px),
+        radial-gradient(#ffcc00 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: 0 0, 20px 20px;
 }
 /* Стили для фона с частицами */
 #particles-js {
