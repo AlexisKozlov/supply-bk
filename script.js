@@ -1,6 +1,6 @@
 const AppConfig = {
     version: "1.2.1",
-    lastUpdate: "18.08.2025",
+    lastUpdate: "22.08.2025",
     maintenanceMode: false,
     adminPassword: "157"
 };
