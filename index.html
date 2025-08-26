@@ -57,6 +57,41 @@
                 <h1>Поиск актуальных карточек</h1>
             </div>
 
+<!-- Навигационное меню -->
+<div class="navigation-menu">
+    <div class="menu-button" onclick="toggleMenu()">
+        <span class="menu-icon">🍔</span>
+        <span class="menu-text">Меню</span>
+    </div>
+    
+    <div class="menu-items">
+        <a href="https://docs.google.com/spreadsheets/1" target="_blank" class="menu-item">
+            <span class="item-icon">📊</span>
+            <span class="item-text">База аналогов</span>
+        </a>
+        <a href="https://docs.google.com/spreadsheets/2" target="_blank" class="menu-item">
+            <span class="item-icon">📦</span>
+            <span class="item-text">Остатки</span>
+        </a>
+        <a href="https://docs.google.com/spreadsheets/3" target="_blank" class="menu-item">
+            <span class="item-icon">🥦</span>
+            <span class="item-text">Овощи</span>
+        </a>
+        <a href="https://docs.google.com/spreadsheets/4" target="_blank" class="menu-item">
+            <span class="item-icon">🌍</span>
+            <span class="item-text">Планета ресторанов</span>
+        </a>
+        <a href="#" class="menu-item disabled">
+            <span class="item-icon">🚧</span>
+            <span class="item-text">Заглушка 1</span>
+        </a>
+        <a href="#" class="menu-item disabled">
+            <span class="item-icon">🚧</span>
+            <span class="item-text">Заглушка 2</span>
+        </a>
+    </div>
+</div>
+
             <div class="search-box">
                 <input type="text" id="searchInput" placeholder="Введите артикул...">
                 <button class="glow-on-hover" onclick="searchCard()">Найти</button>
