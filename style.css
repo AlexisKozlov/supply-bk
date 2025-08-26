@@ -8,7 +8,7 @@
     font-weight: normal;
     font-style: normal;
     font-display: swap; /* Оптимизация загрузки */
-}
+}F
 /* Основные стили */
 body, html {
     margin: 0;
@@ -23,7 +23,7 @@ body, html {
     min-height: 100vh; /* Добавляем для надежности */
 }
 body {
-    background: linear-gradient(135deg, #d62300 0%, #ffcc00 50%, #12168c 100%);
+    background: #ffcc00;
     background-attachment: fixed;
 }
 /* Стили для фона с частицами */
