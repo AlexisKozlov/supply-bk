@@ -248,3 +248,16 @@ function copyToClipboard(text, element) {
 document.getElementById('adminBtn').addEventListener('click', function() {
     document.getElementById('passwordForm').style.display = 'block';
 });
+
+
+// Плавная прокрутка для меню на мобильных
+document.addEventListener('DOMContentLoaded', function() {
+    const topMenu = document.querySelector('.top-menu');
+    
+    if (topMenu && window.innerWidth <= 768) {
+        topMenu.addEventListener('wheel', function(e) {
+            e.preventDefault();
+            topMenu.scrollLeft += e.deltaY;
+        }, { passive: false });
+    }
+});
