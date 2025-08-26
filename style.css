@@ -715,165 +715,193 @@ margin: 5px;
 }
 
 
-
-/* Стили для навигационного меню */
-.navigation-menu {
-    position: relative;
-    margin: 20px 0;
-}
-
-.menu-button {
-    background: linear-gradient(135deg, #d62300, #ff8732);
-    color: white;
-    padding: 12px 20px;
-    border-radius: 25px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(214, 35, 0, 0.3);
-    border: 2px solid #ffcc00;
-}
-
-.menu-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(214, 35, 0, 0.4);
-    background: linear-gradient(135deg, #ff8732, #d62300);
-}
-
-.menu-icon {
-    font-size: 20px;
-}
-
-.menu-text {
-    font-weight: bold;
-    font-family: 'Flame', sans-serif;
-}
-
-.menu-items {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
-    border-radius: 15px;
-    padding: 15px;
-    margin-top: 10px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    border: 2px solid #ffcc00;
-}
-
-.menu-items.show {
-    display: grid;
-    animation: slideDown 0.3s ease-out;
-}
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.menu-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 15px 10px;
-    background: linear-gradient(135deg, #f8f8f8, #ffffff);
-    border-radius: 10px;
-    text-decoration: none;
-    color: #333;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-}
-
-.menu-item:hover {
-    background: linear-gradient(135deg, #ffcc00, #ff8732);
-    color: white;
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(214, 35, 0, 0.3);
-    border-color: #d62300;
-}
-
-.menu-item.disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    background: linear-gradient(135deg, #e0e0e0, #f5f5f5);
-}
-
-.menu-item.disabled:hover {
-    background: linear-gradient(135deg, #e0e0e0, #f5f5f5);
-    color: #333;
-    transform: none;
-    box-shadow: none;
-    border-color: transparent;
-}
-
-.item-icon {
-    font-size: 24px;
-    margin-bottom: 8px;
-}
-
-.item-text {
-    font-size: 12px;
-    font-weight: 600;
-    text-align: center;
-    font-family: 'Montserrat', sans-serif;
-}
-
-/* Адаптивность для мобильных устройств */
-@media (max-width: 768px) {
-    .menu-items {
-        grid-template-columns: 1fr;
-        position: fixed;
-        left: 10px;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        max-height: 70vh;
-        overflow-y: auto;
-    }
-    
-    .menu-item {
-        flex-direction: row;
-        justify-content: flex-start;
-        padding: 12px 15px;
-        gap: 10px;
-    }
-    
-    .item-icon {
-        margin-bottom: 0;
-        font-size: 20px;
-    }
-    
-    .item-text {
-        font-size: 14px;
-        text-align: left;
-    }
-}
-
-/* Затемнение фона при открытом меню на мобильных */
-.menu-overlay {
-    display: none;
+/* НАВИГАЦИЯ NEW */
+/* Стили для верхнего меню */
+.top-menu {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
+    background: linear-gradient(135deg, #d62300, #ff8732);
+    padding: 15px 0;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    border-bottom: 3px solid #ffcc00;
 }
 
-.menu-overlay.show {
-    display: block;
+.menu-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 0 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.menu-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 15px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    text-decoration: none;
+    color: #d62300;
+    transition: all 0.3s ease;
+    border: 2px solid #ffcc00;
+    min-width: 80px;
+    box-shadow: 0 3px 10px rgba(214, 35, 0, 0.2);
+}
+
+.menu-btn:hover {
+    background: linear-gradient(135deg, #ffcc00, #ff8732);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(214, 35, 0, 0.4);
+    border-color: #ffffff;
+}
+
+.menu-btn.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+    border-color: #cccccc;
+}
+
+.menu-btn.disabled:hover {
+    background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+    color: #d62300;
+    transform: none;
+    box-shadow: 0 3px 10px rgba(214, 35, 0, 0.2);
+    border-color: #cccccc;
+}
+
+.btn-icon {
+    font-size: 20px;
+    margin-bottom: 5px;
+    transition: transform 0.3s ease;
+}
+
+.menu-btn:hover .btn-icon {
+    transform: scale(1.2);
+}
+
+.btn-text {
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.2;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 1024px) {
+    .menu-container {
+        gap: 8px;
+        padding: 0 15px;
+    }
+    
+    .menu-btn {
+        padding: 10px 12px;
+        min-width: 70px;
+    }
+    
+    .btn-icon {
+        font-size: 18px;
+    }
+    
+    .btn-text {
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .top-menu {
+        padding: 12px 0;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .menu-container {
+        justify-content: flex-start;
+        padding: 0 10px;
+        flex-wrap: nowrap;
+        width: max-content;
+    }
+    
+    .menu-btn {
+        padding: 8px 10px;
+        min-width: 65px;
+        flex-shrink: 0;
+    }
+    
+    .btn-icon {
+        font-size: 16px;
+        margin-bottom: 3px;
+    }
+    
+    .btn-text {
+        font-size: 9px;
+    }
+}
+
+@media (max-width: 480px) {
+    .menu-btn {
+        padding: 6px 8px;
+        min-width: 60px;
+    }
+    
+    .btn-icon {
+        font-size: 14px;
+    }
+    
+    .btn-text {
+        font-size: 8px;
+    }
+}
+
+/* Сдвигаем основной контент вниз, чтобы не перекрывался меню */
+body {
+    padding-top: 90px; /* Высота меню + отступ */
+    background: #ffcc00;
+    background-attachment: fixed;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding-top: 80px;
+    }
+}
+
+/* Обновляем контейнер для учета верхнего меню */
+.container {
+    text-align: center;
+    padding: 25px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    z-index: 1;
+    margin: 20px auto;
+    box-sizing: border-box;
+    border: 2px solid #ffcc00;
+}
+
+/* Обновляем позиционирование других элементов */
+.error-report {
+    bottom: 20px;
+    right: 20px;
+}
+
+.update-info {
+    bottom: 20px;
+    left: 20px;
+}
+
+/* Прячем меню на странице техработ */
+#maintenance .top-menu {
+    display: none;
 }
