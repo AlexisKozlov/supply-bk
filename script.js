@@ -5,14 +5,10 @@ const AppConfig = {
     adminPassword: "157"
 };
 
-
 // Инициализация приложения после загрузки DOM
 document.addEventListener('DOMContentLoaded', function() {
     // Всегда показываем дисклеймер при загрузке страницы
     showDisclaimer();
-    
-    // Инициализация остальных элементов
-    initApplication();
 });
 
 function initApplication() {
@@ -36,7 +32,11 @@ function initApplication() {
     if (submitButton) {
         submitButton.addEventListener('click', checkPassword);
     }
+    
+    // Инициализация уведомлений для скачивания
+    setupDownloadNotifications();
 }
+
 function showDisclaimer() {
     const disclaimerPopup = document.getElementById('disclaimerPopup');
     disclaimerPopup.style.display = 'flex';
@@ -72,6 +72,7 @@ function initMainContent() {
         
         // Инициализация основного функционала
         initSearchFunctionality();
+        initApplication(); // ← ВАЖНО: вызываем initApplication здесь
     }
 }
 
@@ -147,7 +148,6 @@ function searchCard() {
     // Показываем loader
     document.getElementById("loader").style.display = "flex";
 
-    
     // Через 1 секунду выполняем поиск и скрываем loader
     setTimeout(() => {
         let firstWord = article.split(" ")[0];
@@ -249,7 +249,6 @@ document.getElementById('adminBtn').addEventListener('click', function() {
     document.getElementById('passwordForm').style.display = 'block';
 });
 
-
 // Плавная прокрутка для меню на мобильных
 document.addEventListener('DOMContentLoaded', function() {
     const topMenu = document.querySelector('.top-menu');
@@ -261,7 +260,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }, { passive: false });
     }
 });
-
 
 // Функция для показа уведомления о скачивании
 function setupDownloadNotifications() {
@@ -275,19 +273,39 @@ function setupDownloadNotifications() {
             // Показываем уведомление через 500ms
             setTimeout(() => {
                 showDownloadNotification();
-                
-                // Скрываем loader через 2 секунды
-                setTimeout(() => {
-                    document.getElementById("loader").style.display = "none";
-                }, 2000);
-                
             }, 500);
+            
+            // Скрываем loader через 2 секунды (автоматически)
+            setTimeout(() => {
+                document.getElementById("loader").style.display = "none";
+            }, 2000);
         });
     });
 }
 
-// Добавьте вызов функции в initApplication
-function initApplication() {
-    // ... существующий код ...
-    setupDownloadNotifications();
+// Функция для показа уведомления
+function showDownloadNotification() {
+    const notification = document.createElement('div');
+    notification.className = 'download-notification';
+    notification.innerHTML = `
+        <span class="notification-icon">✅</span>
+        <span class="notification-text">Файл заказа скачивается</span>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Анимация появления
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 10);
+    
+    // Автоматическое скрытие через 3 секунды
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+            if (document.body.contains(notification)) {
+                document.body.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
 }
