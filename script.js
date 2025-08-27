@@ -1,6 +1,6 @@
 const AppConfig = {
     version: "1.2.1",
-    lastUpdate: "27.08.2025",
+    lastUpdate: "26.08.2025",
     maintenanceMode: false,
     adminPassword: "157"
 };
@@ -248,46 +248,3 @@ function copyToClipboard(text, element) {
 document.getElementById('adminBtn').addEventListener('click', function() {
     document.getElementById('passwordForm').style.display = 'block';
 });
-
-
-// Плавная прокрутка для меню на мобильных
-document.addEventListener('DOMContentLoaded', function() {
-    const topMenu = document.querySelector('.top-menu');
-    
-    if (topMenu && window.innerWidth <= 768) {
-        topMenu.addEventListener('wheel', function(e) {
-            e.preventDefault();
-            topMenu.scrollLeft += e.deltaY;
-        }, { passive: false });
-    }
-});
-
-
-// Функция для показа уведомления о скачивании
-function setupDownloadNotifications() {
-    const downloadLinks = document.querySelectorAll('a[download]');
-    
-    downloadLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            // Показываем loader
-            document.getElementById("loader").style.display = "flex";
-            
-            // Показываем уведомление через 500ms
-            setTimeout(() => {
-                showDownloadNotification();
-                
-                // Скрываем loader через 2 секунды
-                setTimeout(() => {
-                    document.getElementById("loader").style.display = "none";
-                }, 2000);
-                
-            }, 500);
-        });
-    });
-}
-
-// Добавьте вызов функции в initApplication
-function initApplication() {
-    // ... существующий код ...
-    setupDownloadNotifications();
-}
