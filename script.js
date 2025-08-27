@@ -1,3 +1,8 @@
+// В начале файла script.js
+if (typeof cardDatabase === 'undefined') {
+    console.error('cardDatabase не загружен!');
+    showError('База данных не загружена. Пожалуйста, обновите страницу.');
+}
 const AppConfig = {
     version: "1.2.1",
     lastUpdate: "27.08.2025",
@@ -54,7 +59,7 @@ function showDisclaimer() {
         setTimeout(() => {
             disclaimerPopup.style.display = 'none';
             // Показываем основной контент в зависимости от режима
-            initMainContent();
+            initMainContent(); // ← ЭТА СТРОКА ДОЛЖНА БЫТЬ ВЫЗВАНА
         }, 300);
     });
 }
@@ -71,8 +76,26 @@ function initMainContent() {
         document.getElementById('normalSite').style.display = 'block';
         
         // Инициализация основного функционала
-        initSearchFunctionality();
-        initApplication(); // ← ВАЖНО: вызываем initApplication здесь
+        initSearchFunctionality(); // ← Эта строка должна быть вызвана
+        initApplication();
+    }
+}
+
+function initSearchFunctionality() {
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.querySelector('.glow-on-hover'); // Добавьте эту строку
+    
+    if (searchInput) {
+        searchInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                searchCard();
+            }
+        });
+    }
+    
+    // Добавьте этот блок для обработки клика по кнопке
+    if (searchButton) {
+        searchButton.addEventListener('click', searchCard);
     }
 }
 
@@ -144,6 +167,13 @@ function searchCard() {
         showError("Введите минимум 3 символа!");
         return;
     }
+    
+    // Проверяем существование лоадера перед показом
+    const loader = document.getElementById("loader");
+    if (loader) {
+        loader.style.display = "flex";
+    }
+    
     
     // Показываем loader
     document.getElementById("loader").style.display = "flex";
