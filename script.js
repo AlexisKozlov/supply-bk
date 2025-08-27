@@ -309,3 +309,43 @@ function showDownloadNotification() {
         }, 300);
     }, 3000);
 }
+
+
+
+// Функция для показа Google Form
+function showGoogleForm() {
+    const modal = document.getElementById('googleFormModal');
+    const iframe = document.getElementById('googleFormFrame');
+    
+    // Замените URL на ваш реальный URL Google Form
+    // Получите его: Форма → Отправить → HTML
+    iframe.src = "https://docs.google.com/forms/d/e/1FAIpQLSfick6AUSCsKKQZJ0odbymaM0-pB9c_jX_BbndSqSJypjBxLA/viewform?embedded=true";
+    
+    modal.style.display = "block";
+    document.body.style.overflow = "hidden"; // Блокируем скроллинг
+}
+
+// Функция для закрытия Google Form
+function closeGoogleForm() {
+    const modal = document.getElementById('googleFormModal');
+    const iframe = document.getElementById('googleFormFrame');
+    
+    modal.style.display = "none";
+    iframe.src = ""; // Останавливаем загрузку
+    document.body.style.overflow = ""; // Разблокируем скроллинг
+}
+
+// Закрытие по клику вне области
+window.onclick = function(event) {
+    const modal = document.getElementById('googleFormModal');
+    if (event.target == modal) {
+        closeGoogleForm();
+    }
+}
+
+// Закрытие по ESC
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeGoogleForm();
+    }
+});
