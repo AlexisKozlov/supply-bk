@@ -1,7 +1,7 @@
 const AppConfig = {
     version: "1.2.1",
     lastUpdate: "27.08.2025",
-    maintenanceMode: true,
+    maintenanceMode: false,
     adminPassword: "157"
 };
 
@@ -261,3 +261,33 @@ document.addEventListener('DOMContentLoaded', function() {
         }, { passive: false });
     }
 });
+
+
+// Функция для показа уведомления о скачивании
+function setupDownloadNotifications() {
+    const downloadLinks = document.querySelectorAll('a[download]');
+    
+    downloadLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            // Показываем loader
+            document.getElementById("loader").style.display = "flex";
+            
+            // Показываем уведомление через 500ms
+            setTimeout(() => {
+                showDownloadNotification();
+                
+                // Скрываем loader через 2 секунды
+                setTimeout(() => {
+                    document.getElementById("loader").style.display = "none";
+                }, 2000);
+                
+            }, 500);
+        });
+    });
+}
+
+// Добавьте вызов функции в initApplication
+function initApplication() {
+    // ... существующий код ...
+    setupDownloadNotifications();
+}
