@@ -9,26 +9,7 @@ const AppConfig = {
 document.addEventListener('DOMContentLoaded', function() {
     // Всегда показываем дисклеймер при загрузке страницы
     showDisclaimer();
-    
-    // Инициализация обработчиков, которые нужны сразу
-    initEventListeners();
 });
-
-function initEventListeners() {
-    // Обработчик для кнопки принятия дисклеймера
-    const acceptBtn = document.getElementById('acceptDisclaimer');
-    if (acceptBtn) {
-        acceptBtn.addEventListener('click', function() {
-            const disclaimerPopup = document.getElementById('disclaimerPopup');
-            disclaimerPopup.style.opacity = '0';
-            
-            setTimeout(() => {
-                disclaimerPopup.style.display = 'none';
-                initMainContent();
-            }, 300);
-        });
-    }
-}
 
 function initApplication() {
     // Инициализация элементов
@@ -54,21 +35,28 @@ function initApplication() {
     
     // Инициализация уведомлений для скачивания
     setupDownloadNotifications();
-    
-    // Инициализация поиска
-    initSearchFunctionality();
 }
 
 function showDisclaimer() {
     const disclaimerPopup = document.getElementById('disclaimerPopup');
-    if (disclaimerPopup) {
-        disclaimerPopup.style.display = 'flex';
+    disclaimerPopup.style.display = 'flex';
+    
+    // Добавляем анимацию появления
+    setTimeout(() => {
+        disclaimerPopup.style.opacity = '1';
+    }, 10);
+    
+    // Обработчик кнопки принятия
+    document.getElementById('acceptDisclaimer').addEventListener('click', function() {
+        disclaimerPopup.style.opacity = '0';
         
-        // Добавляем анимацию появления
+        // После завершения анимации исчезновения скрываем попап
         setTimeout(() => {
-            disclaimerPopup.style.opacity = '1';
-        }, 10);
-    }
+            disclaimerPopup.style.display = 'none';
+            // Показываем основной контент в зависимости от режима
+            initMainContent();
+        }, 300);
+    });
 }
 
 function initMainContent() {
@@ -83,7 +71,8 @@ function initMainContent() {
         document.getElementById('normalSite').style.display = 'block';
         
         // Инициализация основного функционала
-        initApplication();
+        initSearchFunctionality();
+        initApplication(); // ← ВАЖНО: вызываем initApplication здесь
     }
 }
 
@@ -147,14 +136,12 @@ function searchCard() {
     let inputElement = document.getElementById("searchInput");
     if (!inputElement) {
         showError("Поле ввода не найдено!");
-        hideLoader();
         return;
     }
     
     let article = inputElement.value.trim();
     if (article.length < 3) {
         showError("Введите минимум 3 символа!");
-        hideLoader();
         return;
     }
     
@@ -163,72 +150,224 @@ function searchCard() {
 
     // Через 1 секунду выполняем поиск и скрываем loader
     setTimeout(() => {
-        try {
-            let firstWord = article.split(" ")[0];
-            let resultElement = document.getElementById("result");
-            resultElement.innerHTML = "";
-            let foundCards = [];
-            
-            // Проверяем, существует ли база данных карточек
-            if (typeof cardDatabase === 'undefined') {
-                showError("База данных карточек не загружена!");
-                hideLoader();
-                return;
-            }
-            
-            if (cardDatabase[firstWord]) {
-                foundCards.push({ article: firstWord, ...cardDatabase[firstWord] });
-            }
-            
-            for (let key in cardDatabase) {
-                if (cardDatabase[key].analogs && cardDatabase[key].analogs.includes(firstWord)) {
-                    foundCards.push({ article: key, ...cardDatabase[key] });
-                }
-            }
-            
-            for (let key in cardDatabase) {
-                if (cardDatabase[key].name && cardDatabase[key].name.toLowerCase().includes(article.toLowerCase())) {
-                    // Проверяем, нет ли уже этой карточки в результатах
-                    if (!foundCards.some(card => card.article === key)) {
-                        foundCards.push({ article: key, ...cardDatabase[key] });
-                    }
-                }
-            }
-            
-            if (foundCards.length > 0) {
-                let output = foundCards.map(card => {
-                    const safeText = `${card.article} ${card.name}`.replace(/"/g, '&quot;');
-                    return `<h3 class="copyable" onclick="copyToClipboard('${safeText}', this)">${card.article} ${card.name}</h3>`;
-                }).join("");
-                resultElement.innerHTML = output;
-            } else {
-                resultElement.innerHTML = `
-                    <div class="not-found-animation">
-                        <p>Карточка не найдена, возможно она не имеет аналогов или её пока нет в базе данных</p>
-                        <img src="sad.gif" alt="Грустный смайлик" class="sad-gif">
-                    </div>
-                `;
-            }
-        } catch (error) {
-            console.error("Ошибка при поиске:", error);
-            showError("Произошла ошибка при поиске карточки");
-        } finally {
-            // Всегда скрываем loader
-            hideLoader();
+        let firstWord = article.split(" ")[0];
+        let resultElement = document.getElementById("result");
+        resultElement.innerHTML = "";
+        let foundCards = [];
+        
+        if (cardDatabase[firstWord]) {
+            foundCards.push({ article: firstWord, ...cardDatabase[firstWord] });
         }
+        
+        for (let key in cardDatabase) {
+            if (cardDatabase[key].analogs.includes(firstWord)) {
+                foundCards.push({ article: key, ...cardDatabase[key] });
+            }
+        }
+        
+        for (let key in cardDatabase) {
+            if (cardDatabase[key].name.toLowerCase().includes(article.toLowerCase())) {
+                foundCards.push({ article: key, ...cardDatabase[key] });
+            }
+        }
+        if (foundCards.length > 0) {
+            let output = foundCards.map(card => {
+                const safeText = `${card.article} ${card.name}`.replace(/"/g, '&quot;');
+                return `<h3 class="copyable" onclick="copyToClipboard('${safeText}', this)">${card.article} ${card.name}</h3>`;
+            }).join("");
+            resultElement.innerHTML = output;
+        } else {
+            resultElement.innerHTML = `
+                <div class="not-found-animation">
+                    <p>Карточка не найдена, возможно она не имеет аналогов или её пока нет в базе данных</p>
+                    <img src="sad.gif" alt="Грустный смайлик" class="sad-gif">
+                </div>
+            `;
+        }
+        
+        // ВАЖНО: Убеждаемся, что loader скрывается
+        setTimeout(() => {
+            document.getElementById("loader").style.display = "none";
+        }, 100);
+        
     }, 700);
 }
 
-// Добавляем глобальную функцию для скрытия loader
-function hideLoader() {
-    const loader = document.getElementById("loader");
-    if (loader) {
-        loader.style.display = "none";
+// Проверка пароля (исправленная версия)
+function checkPassword() {
+    const passwordInput = document.getElementById('adminPassword');
+    if (!passwordInput) {
+        showError("Поле для ввода пароля не найдено!");
+        return;
+    }
+    
+    const password = passwordInput.value;
+    if (password === AppConfig.adminPassword) {
+        // Переключаем режим техработ
+        AppConfig.maintenanceMode = !AppConfig.maintenanceMode;
+        
+        if (AppConfig.maintenanceMode) {
+            document.getElementById('maintenance').style.display = 'block';
+            document.getElementById('normalSite').style.display = 'none';
+            initMaintenanceAnimation();
+        } else {
+            document.getElementById('maintenance').style.display = 'none';
+            document.getElementById('normalSite').style.display = 'block';
+        }
+        
+        // Скрываем форму ввода пароля
+        document.getElementById('passwordForm').style.display = 'none';
+        // Очищаем поле ввода
+        passwordInput.value = '';
+    } else {
+        showError('Неверный пароль!');
     }
 }
 
-// Добавляем обработчик ошибок
-window.addEventListener('error', function(e) {
-    console.error("Global error:", e.error);
+function copyToClipboard(text, element) {
+    try {
+        // Декодируем HTML-сущности обратно в символы
+        const decodedText = text.replace(/&quot;/g, '"');
+        navigator.clipboard.writeText(decodedText).then(() => {
+            element.style.color = "#d62300";
+            setTimeout(() => element.style.color = "", 500);
+            
+            const notification = document.createElement('div');
+            notification.className = 'copy-notification';
+            notification.textContent = `Артикул ${decodedText} скопирован!`;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.remove(), 2000);
+        }).catch(err => {
+            console.error('Ошибка копирования:', err);
+            showError('Не удалось скопировать артикул');
+        });
+    } catch (err) {
+        console.error('Ошибка в copyToClipboard:', err);
+        showError('Произошла ошибка при копировании');
+    }
+}
+
+// Показать форму для ввода пароля по клику на кнопку
+document.getElementById('adminBtn').addEventListener('click', function() {
+    document.getElementById('passwordForm').style.display = 'block';
+});
+
+// Плавная прокрутка для меню на мобильных
+document.addEventListener('DOMContentLoaded', function() {
+    const topMenu = document.querySelector('.top-menu');
+    
+    if (topMenu && window.innerWidth <= 768) {
+        topMenu.addEventListener('wheel', function(e) {
+            e.preventDefault();
+            topMenu.scrollLeft += e.deltaY;
+        }, { passive: false });
+    }
+});
+
+// Функция для показа уведомления о скачивании
+function setupDownloadNotifications() {
+    const downloadLinks = document.querySelectorAll('a[download]');
+    
+    downloadLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            // Показываем loader
+            document.getElementById("loader").style.display = "flex";
+            
+            // Показываем уведомление через 500ms
+            setTimeout(() => {
+                showDownloadNotification();
+            }, 500);
+            
+            // Скрываем loader через 2 секунды (автоматически)
+            setTimeout(() => {
+                document.getElementById("loader").style.display = "none";
+            }, 2000);
+        });
+    });
+}
+
+// Функция для показа уведомления
+function showDownloadNotification() {
+    const notification = document.createElement('div');
+    notification.className = 'download-notification';
+    notification.innerHTML = `
+        <span class="notification-icon">✅</span>
+        <span class="notification-text">Файл заказа скачивается</span>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Анимация появления
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 10);
+    
+    // Автоматическое скрытие через 3 секунды
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+            if (document.body.contains(notification)) {
+                document.body.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
+}
+
+// Функция для показа Google Form
+function showGoogleForm() {
+    const modal = document.getElementById('googleFormModal');
+    const iframe = document.getElementById('googleFormFrame');
+    
+    // URL с параметрами для лучшей читаемости
+    iframe.src = "https://docs.google.com/forms/d/e/1FAIpQLSfick6AUSCsKKQZJ0odbymaM0-pB9c_jX_BbndSqSJypjBxLA/viewform?embedded=true&headers=false&margin=20&padding=20";
+    
+    modal.style.display = "block";
+    document.body.style.overflow = "hidden";
+    
+    // Показываем loader
+    document.getElementById("loader").style.display = "flex";
+    
+    iframe.onload = function() {
+        document.getElementById("loader").style.display = "none";
+    };
+    
+    setTimeout(() => {
+        document.getElementById("loader").style.display = "none";
+    }, 4000);
+}
+
+// Функция для закрытия Google Form
+function closeGoogleForm() {
+    const modal = document.getElementById('googleFormModal');
+    const iframe = document.getElementById('googleFormFrame');
+    
+    modal.style.display = "none";
+    iframe.src = ""; // Останавливаем загрузку
+    document.body.style.overflow = ""; // Разблокируем скроллинг
+}
+
+// Закрытие по клику вне области
+window.onclick = function(event) {
+    const modal = document.getElementById('googleFormModal');
+    if (event.target == modal) {
+        closeGoogleForm();
+    }
+}
+
+// Закрытие по ESC
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeGoogleForm();
+    }
+});
+
+// Дополнительная защита: глобальная функция для скрытия loader
+function hideLoader() {
+    document.getElementById("loader").style.display = "none";
+}
+
+// Обработчик ошибок для дополнительной надежности
+window.addEventListener('error', function() {
     hideLoader();
 });
