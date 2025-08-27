@@ -185,7 +185,11 @@ function searchCard() {
             `;
         }
         
-        document.getElementById("loader").style.display = "none";
+        // ВАЖНО: Убеждаемся, что loader скрывается
+        setTimeout(() => {
+            document.getElementById("loader").style.display = "none";
+        }, 100);
+        
     }, 700);
 }
 
@@ -310,22 +314,13 @@ function showDownloadNotification() {
     }, 3000);
 }
 
-
-
 // Функция для показа Google Form
 function showGoogleForm() {
     const modal = document.getElementById('googleFormModal');
     const iframe = document.getElementById('googleFormFrame');
     
     // URL с параметрами для лучшей читаемости
-    iframe.src = "https://docs.google.com/forms/d/e/1FAIpQLSfick6AUSCsKKQZJ0odbymaM0-pB9c_jX_BbndSqSJypjBxLA/viewform?embedded=true" +
-                 "embedded=true&" +
-                 "headers=false&" +
-                 "margin=20&" +          // Добавляем немного отступов
-                 "padding=20&" +         // Добавляем padding
-                 "width=700&" +          // Оптимальная ширина
-                 "height=600&" +         // Оптимальная высота
-                 "fontSize=14px";        // Размер шрифта
+    iframe.src = "https://docs.google.com/forms/d/e/1FAIpQLSfick6AUSCsKKQZJ0odbymaM0-pB9c_jX_BbndSqSJypjBxLA/viewform?embedded=true&headers=false&margin=20&padding=20";
     
     modal.style.display = "block";
     document.body.style.overflow = "hidden";
@@ -335,33 +330,13 @@ function showGoogleForm() {
     
     iframe.onload = function() {
         document.getElementById("loader").style.display = "none";
-        
-        // Пытаемся улучшить читаемость внутри iframe
-        try {
-            // Добавляем стили для лучшей читаемости
-            const style = iframe.contentDocument.createElement('style');
-            style.textContent = `
-                body {
-                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-                    font-size: 14px !important;
-                    line-height: 1.4 !important;
-                    color: #333 !important;
-                }
-                input, textarea, select {
-                    font-size: 14px !important;
-                }
-            `;
-            iframe.contentDocument.head.appendChild(style);
-        } catch (e) {
-            // Ошибка из-за политики безопасности - это нормально
-            console.log("Не удалось применить стили к iframe");
-        }
     };
     
     setTimeout(() => {
         document.getElementById("loader").style.display = "none";
     }, 4000);
 }
+
 // Функция для закрытия Google Form
 function closeGoogleForm() {
     const modal = document.getElementById('googleFormModal');
@@ -385,4 +360,14 @@ document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') {
         closeGoogleForm();
     }
+});
+
+// Дополнительная защита: глобальная функция для скрытия loader
+function hideLoader() {
+    document.getElementById("loader").style.display = "none";
+}
+
+// Обработчик ошибок для дополнительной надежности
+window.addEventListener('error', function() {
+    hideLoader();
 });
