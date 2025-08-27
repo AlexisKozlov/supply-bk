@@ -318,7 +318,7 @@ function showGoogleForm() {
     const iframe = document.getElementById('googleFormFrame');
     
     // URL с параметрами для лучшей читаемости
-    iframe.src = "https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?" +
+    iframe.src = "https://docs.google.com/forms/d/e/1FAIpQLSfick6AUSCsKKQZJ0odbymaM0-pB9c_jX_BbndSqSJypjBxLA/viewform?embedded=true" +
                  "embedded=true&" +
                  "headers=false&" +
                  "margin=20&" +          // Добавляем немного отступов
