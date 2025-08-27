@@ -904,3 +904,49 @@ body {
 #maintenance .top-menu {
     display: none;
 }
+
+/* Стили для уведомления о скачивании */
+.download-notification {
+    position: fixed;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    background: rgba(76, 175, 80, 0.95);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 1001;
+    opacity: 0;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.download-notification.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.notification-icon {
+    font-size: 18px;
+}
+
+.notification-text {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Адаптивность для уведомления */
+@media (max-width: 768px) {
+    .download-notification {
+        top: 50px;
+        padding: 10px 16px;
+    }
+    
+    .notification-text {
+        font-size: 12px;
+    }
+}
