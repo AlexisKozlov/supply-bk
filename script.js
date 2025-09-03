@@ -1,16 +1,15 @@
 // Проверка загрузки базы данных
 if (typeof cardDatabase === 'undefined') {
     console.error('cardDatabase не загружен!');
-    showError('База данных не загружена. Пожалуйста, обновите страницу.');
     
     // Создаем пустой объект, чтобы избежать ошибок
     window.cardDatabase = {};
 }
 
 const AppConfig = {
-    version: "1.0.0",
+    version: "1.2.1",
     lastUpdate: "03.09.2025",
-    maintenanceMode: true,
+    maintenanceMode: false,
     adminPassword: "157"
 };
 
@@ -31,8 +30,13 @@ document.addEventListener('DOMContentLoaded', function() {
         AppConfig.maintenanceMode = savedMaintenanceMode === 'true';
     }
     
-    // Всегда показываем дисклеймер при загрузке страницы
-    showDisclaimer();
+    // Показываем дисклеймер только если не режим техработ
+    if (!AppConfig.maintenanceMode) {
+        showDisclaimer();
+    } else {
+        // Если режим техработ - сразу инициализируем контент
+        initMainContent();
+    }
     
     // Инициализация частиц
     if (typeof particlesJS !== 'undefined') {
@@ -125,7 +129,33 @@ document.addEventListener('DOMContentLoaded', function() {
             retina_detect: true
         });
     }
+    
+    // Инициализация для мобильных устройств
+    initMobileFeatures();
 });
+
+// Инициализация мобильных функций
+function initMobileFeatures() {
+    // Предотвращение масштабирования при двойном тапе
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function(event) {
+        const now = (new Date()).getTime();
+        if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+        }
+        lastTouchEnd = now;
+    }, false);
+    
+    // Фикс для 100vh на мобильных
+    function setRealViewportHeight() {
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+    
+    setRealViewportHeight();
+    window.addEventListener('resize', setRealViewportHeight);
+    window.addEventListener('orientationchange', setRealViewportHeight);
+}
 
 function initApplication() {
     // Инициализация даты обновления
@@ -150,6 +180,29 @@ function initApplication() {
             e.preventDefault();
             topMenu.scrollLeft += e.deltaY;
         }, { passive: false });
+        
+        // Добавляем touch-скролл для мобильных
+        let isDragging = false;
+        let startX;
+        let scrollLeft;
+        
+        topMenu.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            startX = e.touches[0].pageX - topMenu.offsetLeft;
+            scrollLeft = topMenu.scrollLeft;
+        }, { passive: true });
+        
+        topMenu.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const x = e.touches[0].pageX - topMenu.offsetLeft;
+            const walk = (x - startX) * 2;
+            topMenu.scrollLeft = scrollLeft - walk;
+        }, { passive: false });
+        
+        topMenu.addEventListener('touchend', () => {
+            isDragging = false;
+        }, { passive: true });
     }
 }
 
@@ -194,7 +247,7 @@ function initMainContent() {
     }
 }
 
-// Новая функция для обновления видимости контента
+// Функция для обновления видимости контента
 function updateContentVisibility() {
     const maintenanceElement = document.getElementById('maintenance');
     const normalSiteElement = document.getElementById('normalSite');
@@ -223,10 +276,24 @@ function initSearchFunctionality() {
                 searchCard();
             }
         });
+        
+        // Для мобильных - скрываем клавиатуру после поиска
+        searchInput.addEventListener('search', function() {
+            if (window.innerWidth <= 768) {
+                this.blur();
+            }
+        });
     }
     
     if (searchButton) {
         searchButton.addEventListener('click', searchCard);
+        
+        // Вибрация на мобильных при клике
+        searchButton.addEventListener('touchstart', function() {
+            if (navigator.vibrate) {
+                navigator.vibrate(10);
+            }
+        }, { passive: true });
     }
 }
 
@@ -321,6 +388,11 @@ function searchCard() {
         return;
     }
     
+    // Скрываем клавиатуру на мобильных
+    if (window.innerWidth <= 768) {
+        inputElement.blur();
+    }
+    
     // Показываем loader
     const loader = document.getElementById("loader");
     if (loader) {
@@ -382,7 +454,6 @@ function searchCard() {
 
 // Проверка пароля (исправленная версия)
 function checkPassword(event) {
-    // Предотвращаем поведение по умолчанию (отправку формы)
     if (event) {
         event.preventDefault();
     }
@@ -415,39 +486,30 @@ function checkPassword(event) {
                 
                 setTimeout(() => {
                     if (AppConfig.maintenanceMode) {
-                        // Показываем сообщение о успешном включении техработ
                         showMaintenanceMessage('Режим техработ включен', 'success');
                     } else {
-                        // Показываем сообщение о выключении техработ
                         showMaintenanceMessage('Режим техработ выключен', 'success');
-                        // Перезагружаем страницу через 2 секунды
                         setTimeout(() => {
                             window.location.reload();
                         }, 2000);
                     }
                     
-                    // Скрываем форму ввода пароля
                     const passwordForm = document.getElementById('passwordForm');
                     if (passwordForm) {
                         passwordForm.style.display = 'none';
                     }
                     
-                    // Очищаем поле ввода
                     passwordInput.value = '';
                     
-                    // Восстанавливаем кнопку
                     setTimeout(() => {
                         submitBtn.innerHTML = originalHtml;
                         submitBtn.disabled = false;
-                        
-                        // Обновляем отображение контента
                         updateContentVisibility();
                     }, 1000);
                     
                 }, 1000);
                 
             } else {
-                // Неверный пароль
                 submitBtn.innerHTML = '<span class="submit-icon">❌</span>';
                 
                 setTimeout(() => {
