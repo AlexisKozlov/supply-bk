@@ -51,26 +51,18 @@ function showDisclaimer() {
         disclaimerPopup.style.opacity = '1';
     }, 10);
     
-// Обновляем обработчик кнопки админа
-document.getElementById('adminBtn').addEventListener('click', function() {
-    const passwordForm = document.getElementById('passwordForm');
-    const isVisible = passwordForm.style.display === 'block';
-    
-    passwordForm.style.display = isVisible ? 'none' : 'block';
-    
-    // Анимация стрелки
-    const arrow = this.querySelector('.btn-arrow');
-    arrow.style.transform = isVisible ? 'rotate(0deg)' : 'rotate(180deg)';
-});
-
-// Добавляем обработчик Enter в поле пароля
-document.getElementById('adminPassword').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        checkPassword();
-    }
-});
-
-
+    // Обработчик кнопки принятия
+    document.getElementById('acceptDisclaimer').addEventListener('click', function() {
+        disclaimerPopup.style.opacity = '0';
+        
+        // После завершения анимации исчезновения скрываем попап
+        setTimeout(() => {
+            disclaimerPopup.style.display = 'none';
+            // Показываем основной контент в зависимости от режима
+            initMainContent(); // ← ЭТА СТРОКА ДОЛЖНА БЫТЬ ВЫЗВАНА
+        }, 300);
+    });
+}
 
 function initMainContent() {
     if (AppConfig.maintenanceMode) {
@@ -115,36 +107,16 @@ function updateVersionInfo() {
     document.getElementById('updateInfo').style.display = 'flex';
 }
 
-// Обновленная функция для техработ
 function initMaintenanceAnimation() {
+    // Ваш код анимации для режима техработ
     let progress = 42;
-    const progressFill = document.getElementById('progressFill');
-    const progressPercent = document.getElementById('progressPercent');
-    const versionNumber = document.getElementById('versionNumber');
-    
-    // Устанавливаем версию
-    versionNumber.textContent = AppConfig.version;
-    
     const progressInterval = setInterval(() => {
-        progress = (progress + Math.floor(Math.random() * 3) + 1) % 100;
-        
-        // Обновляем прогресс бар
-        progressFill.style.width = progress + '%';
-        progressPercent.textContent = progress + '%';
-        
-        // Меняем статус сообщения
-        const statusMessages = [
-            'Обновление базы данных',
-            'Оптимизация поиска',
-            'Проверка аналогов',
-            'Синхронизация с сервером',
-            'Тестирование системы'
-        ];
-        
-        const randomMessage = statusMessages[Math.floor(Math.random() * statusMessages.length)];
-        document.querySelector('.status-message span').textContent = randomMessage;
-        
-    }, 2500);
+        progress = (progress + 1) % 100;
+        const progressElement = document.getElementById('progressValue');
+        if (progressElement) {
+            progressElement.textContent = progress;
+        }
+    }, 3000);
 }
 
 function initSearchFunctionality() {
@@ -247,71 +219,35 @@ function searchCard() {
     }, 700);
 }
 
-// Обновленная функция проверки пароля
+// Проверка пароля (исправленная версия)
 function checkPassword() {
     const passwordInput = document.getElementById('adminPassword');
-    const adminBtn = document.getElementById('adminBtn');
-    
     if (!passwordInput) {
         showError("Поле для ввода пароля не найдено!");
         return;
     }
     
     const password = passwordInput.value;
-    
-    // Простая анимация загрузки
-    const submitBtn = document.querySelector('.password-submit');
-    const originalHtml = submitBtn.innerHTML;
-    submitBtn.innerHTML = '<span class="submit-icon">⏳</span>';
-    submitBtn.disabled = true;
-    
-    setTimeout(() => {
-        if (password === AppConfig.adminPassword) {
-            // Успешный вход
-            submitBtn.innerHTML = '<span class="submit-icon">✅</span>';
-            
-            // Переключаем режим техработ
-            AppConfig.maintenanceMode = !AppConfig.maintenanceMode;
-            
-            setTimeout(() => {
-                if (AppConfig.maintenanceMode) {
-                    // Показываем сообщение о успешном включении техработ
-                    showMaintenanceMessage('Режим техработ включен', 'success');
-                } else {
-                    // Показываем сообщение о выключении техработ
-                    showMaintenanceMessage('Режим техработ выключен', 'success');
-                    // Перезагружаем страницу через 2 секунды
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 2000);
-                }
-                
-                // Скрываем форму ввода пароля
-                document.getElementById('passwordForm').style.display = 'none';
-                // Очищаем поле ввода
-                passwordInput.value = '';
-                
-                // Восстанавливаем кнопку
-                setTimeout(() => {
-                    submitBtn.innerHTML = originalHtml;
-                    submitBtn.disabled = false;
-                }, 1000);
-                
-            }, 1000);
-            
+    if (password === AppConfig.adminPassword) {
+        // Переключаем режим техработ
+        AppConfig.maintenanceMode = !AppConfig.maintenanceMode;
+        
+        if (AppConfig.maintenanceMode) {
+            document.getElementById('maintenance').style.display = 'block';
+            document.getElementById('normalSite').style.display = 'none';
+            initMaintenanceAnimation();
         } else {
-            // Неверный пароль
-            submitBtn.innerHTML = '<span class="submit-icon">❌</span>';
-            
-            setTimeout(() => {
-                showError('Неверный пароль!');
-                submitBtn.innerHTML = originalHtml;
-                submitBtn.disabled = false;
-                passwordInput.value = '';
-                passwordInput.focus();
-            }, 1000);
+            document.getElementById('maintenance').style.display = 'none';
+            document.getElementById('normalSite').style.display = 'block';
         }
-    }, 1000);
+        
+        // Скрываем форму ввода пароля
+        document.getElementById('passwordForm').style.display = 'none';
+        // Очищаем поле ввода
+        passwordInput.value = '';
+    } else {
+        showError('Неверный пароль!');
+    }
 }
 
 function copyToClipboard(text, element) {
@@ -480,25 +416,3 @@ document.addEventListener('keydown', function(event) {
         closeGoogleForm();
     }
 });
-
-
-// Функция для показа сообщений в режиме техработ
-function showMaintenanceMessage(message, type = 'info') {
-    // Создаем элемент сообщения
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `maintenance-message maintenance-message-${type}`;
-    messageDiv.innerHTML = `
-        <span class="message-icon">${type === 'success' ? '✅' : 'ℹ️'}</span>
-        <span class="message-text">${message}</span>
-    `;
-    
-    // Добавляем в контейнер
-    const container = document.querySelector('.maintenance-content');
-    container.appendChild(messageDiv);
-    
-    // Автоматическое скрытие через 5 секунд
-    setTimeout(() => {
-        messageDiv.remove();
-    }, 5000);
-}
-
