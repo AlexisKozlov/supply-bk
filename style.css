@@ -1,6 +1,113 @@
 #normalSite {
     display: none; /* Сначала скрываем */
 }
+/* Базовые стили для мобильных */
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Фикс для мобильного viewport */
+@viewport {
+    width: device-width;
+    initial-scale: 1.0;
+}
+
+/* Улучшения для мобильных */
+@media (max-width: 768px) {
+    body {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+    
+    .container {
+        width: 95% !important;
+        margin: 10px auto !important;
+        padding: 15px !important;
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .top-menu {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 1000;
+        padding: 10px 0 !important;
+    }
+    
+    .menu-container {
+        padding: 0 10px !important;
+        gap: 5px !important;
+    }
+    
+    .menu-btn {
+        padding: 8px 10px !important;
+        min-width: 60px !important;
+        font-size: 10px !important;
+    }
+    
+    .btn-icon img {
+        width: 18px !important;
+        height: 18px !important;
+    }
+    
+    .logo {
+        width: 80px !important;
+    }
+    
+    h1 {
+        font-size: 18px !important;
+        margin: 10px 0 !important;
+    }
+    
+    .search-box {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    #searchInput {
+        width: 100% !important;
+        font-size: 16px !important; /* Увеличиваем для iOS */
+    }
+    
+    .glow-on-hover {
+        width: 100% !important;
+        height: 45px !important;
+    }
+    
+    /* Фикс для iOS input zoom */
+    @media (max-width: 480px) {
+        input, select, textarea {
+            font-size: 16px !important; /* Предотвращает zoom в iOS */
+        }
+    }
+}
+
+/* Специальные стили для очень маленьких экранов */
+@media (max-width: 320px) {
+    .menu-btn {
+        padding: 6px 8px !important;
+        min-width: 50px !important;
+    }
+    
+    .btn-text {
+        font-size: 8px !important;
+    }
+}
 
 @font-face {
     font-family: 'Flame';
