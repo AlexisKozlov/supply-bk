@@ -1505,3 +1505,38 @@ body {
         padding: 15px;
     }
 }
+
+
+.maintenance-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 10001;
+    animation: slideInRight 0.3s ease;
+}
+
+.maintenance-message-success {
+    border-left: 4px solid #27ae60;
+}
+
+.maintenance-message-info {
+    border-left: 4px solid #3498db;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
