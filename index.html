@@ -9,45 +9,92 @@
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 </head>
 <body>
-    <!-- Страница тех работ -->
-    <div id="maintenance" class="maintenance" style="display: none;">
-        <div class="maintenance-container">
-            <div class="maintenance-content">
-                <div class="animation-container">
-                    <div class="gear gear-large">⚙️</div>
-                    <div class="gear gear-medium">⚙️</div>
-                    <div class="gear gear-small">⚙️</div>
-                </div>
-                <h1>Идут технические работы</h1>
-                <p class="subtext">Мы обновляем систему для вашего удобства</p>
-                <div class="progress-container">
-                    <div class="progress-bar"></div>
-                    <div class="progress-text">Завершено: <span id="progressValue">42</span>%</div>
+<!-- Страница тех работ - ПОЛНОЭКРАННАЯ ВЕРСИЯ -->
+<div id="maintenance" class="maintenance-fullscreen" style="display: none;">
+    <div class="maintenance-bg"></div>
+    
+    <div class="maintenance-container">
+        <div class="maintenance-header">
+            <div class="logo-maintenance">
+                <img src="burger-king-logo.png" alt="Burger King" class="logo-img">
+                <h1>Burger King</h1>
+            </div>
+        </div>
+
+        <div class="maintenance-content">
+            <div class="animation-section">
+                <div class="gears-container">
+                    <div class="gear gear-1">⚙️</div>
+                    <div class="gear gear-2">⚙️</div>
+                    <div class="gear gear-3">⚙️</div>
                 </div>
                 
-                <div class="admin-section">
-                    <button id="adminBtn" class="admin-button">
-                        <span class="button-icon">🔒</span>
-                        <span class="button-text">Доступ для отдела закупок</span>
-                    </button>
-                    
-                    <div id="passwordForm" class="password-form" style="display: none;">
-                        <div class="input-group">
-                            <input type="password" id="adminPassword" placeholder="Введите пароль">
-                            <button onclick="checkPassword()" class="submit-button">
-                                <span class="button-icon">→</span>
-                            </button>
-                        </div>
+                <div class="main-text">
+                    <h2>Идут технические работы</h2>
+                    <p class="subtitle">Мы улучшаем систему для вашего удобства</p>
+                </div>
+            </div>
+
+            <div class="progress-section">
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span class="progress-percent" id="progressPercent">42%</span>
+                        <span class="progress-label">Завершено</span>
                     </div>
                 </div>
                 
-                <div class="contact-info">
-                    <p>По срочным вопросам:</p>
-                    <a href="https://t.me/alexiskozlov" class="contact-link" target="_blank">Связаться</a>
+                <div class="status-message">
+                    <div class="status-dot"></div>
+                    <span>Обновление базы данных</span>
                 </div>
+            </div>
+
+            <div class="admin-section">
+                <div class="admin-card">
+                    <h3>Доступ для администратора</h3>
+                    
+                    <button id="adminBtn" class="admin-toggle-btn">
+                        <span class="btn-icon">🔒</span>
+                        <span class="btn-text">Войти как администратор</span>
+                        <span class="btn-arrow">▼</span>
+                    </button>
+
+                    <div id="passwordForm" class="password-form" style="display: none;">
+                        <div class="form-group">
+                            <label for="adminPassword">Пароль доступа:</label>
+                            <div class="input-with-button">
+                                <input type="password" id="adminPassword" placeholder="Введите пароль" class="password-input">
+                                <button onclick="checkPassword()" class="password-submit">
+                                    <span class="submit-icon">→</span>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="form-hint">Только для отдела закупок</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-section">
+                <div class="contact-card">
+                    <h4>По срочным вопросам:</h4>
+                    <a href="https://t.me/alexiskozlov" class="contact-link" target="_blank">
+                        <span class="contact-icon">📱</span>
+                        <span>Связаться с поддержкой</span>
+                    </a>
+                    <p class="contact-info">Работаем круглосуточно</p>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <p class="version-info">Версия системы: <span id="versionNumber">1.2.1</span></p>
+                <p class="copyright">© 2024 Burger King. Все права защищены.</p>
             </div>
         </div>
     </div>
+</div>
 
     <!-- Верхнее меню -->
 <div class="top-menu">
