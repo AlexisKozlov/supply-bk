@@ -1,4 +1,4 @@
-// В начале файла script.js
+// Проверка загрузки базы данных
 if (typeof cardDatabase === 'undefined') {
     console.error('cardDatabase не загружен!');
     showError('База данных не загружена. Пожалуйста, обновите страницу.');
@@ -10,104 +10,121 @@ if (typeof cardDatabase === 'undefined') {
 const AppConfig = {
     version: "1.2.1",
     lastUpdate: "03.09.2025",
-    maintenanceMode: true,
+    maintenanceMode: false,
     adminPassword: "157"
 };
 
 // Инициализация приложения после загрузки DOM
 document.addEventListener('DOMContentLoaded', function() {
+    // Предотвращаем отправку всех форм
+    const forms = document.querySelectorAll('form');
+    forms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            return false;
+        });
+    });
+    
+    // Загружаем сохраненное состояние техработ
+    const savedMaintenanceMode = localStorage.getItem('maintenanceMode');
+    if (savedMaintenanceMode) {
+        AppConfig.maintenanceMode = savedMaintenanceMode === 'true';
+    }
+    
     // Всегда показываем дисклеймер при загрузке страницы
     showDisclaimer();
     
     // Инициализация частиц
-    particlesJS('particles-js', {
-        particles: {
-            number: { 
-                value: 80,
-                density: {
-                    enable: true,
-                    value_area: 800
-                }
-            },
-            color: { 
-                value: ["#d62300", "#ffcc00", "#12168c"] 
-            },
-            shape: { 
-                type: "circle",
-                stroke: {
-                    width: 0,
-                    color: "#000000"
-                }
-            },
-            opacity: {
-                value: 0.5,
-                random: true,
-                anim: {
-                    enable: true,
-                    speed: 1,
-                    opacity_min: 0.1,
-                    sync: false
-                }
-            },
-            size: {
-                value: 3,
-                random: true,
-                anim: {
-                    enable: true,
-                    speed: 2,
-                    size_min: 0.1,
-                    sync: false
-                }
-            },
-            line_linked: {
-                enable: true,
-                distance: 150,
-                color: "#d62300",
-                opacity: 0.4,
-                width: 1
-            },
-            move: {
-                enable: true,
-                speed: 2,
-                direction: "none",
-                random: true,
-                straight: false,
-                out_mode: "out",
-                bounce: false,
-                attract: {
-                    enable: true,
-                    rotateX: 600,
-                    rotateY: 1200
-                }
-            }
-        },
-        interactivity: {
-            detect_on: "canvas",
-            events: {
-                onhover: {
-                    enable: true,
-                    mode: "grab"
-                },
-                onclick: {
-                    enable: true,
-                    mode: "push"
-                },
-                resize: true
-            },
-            modes: {
-                grab: {
-                    distance: 140,
-                    line_linked: {
-                        opacity: 1
+    if (typeof particlesJS !== 'undefined') {
+        particlesJS('particles-js', {
+            particles: {
+                number: { 
+                    value: 80,
+                    density: {
+                        enable: true,
+                        value_area: 800
                     }
                 },
-                push: {
-                    particles_nb: 4
+                color: { 
+                    value: ["#d62300", "#ffcc00", "#12168c"] 
+                },
+                shape: { 
+                    type: "circle",
+                    stroke: {
+                        width: 0,
+                        color: "#000000"
+                    }
+                },
+                opacity: {
+                    value: 0.5,
+                    random: true,
+                    anim: {
+                        enable: true,
+                        speed: 1,
+                        opacity_min: 0.1,
+                        sync: false
+                    }
+                },
+                size: {
+                    value: 3,
+                    random: true,
+                    anim: {
+                        enable: true,
+                        speed: 2,
+                        size_min: 0.1,
+                        sync: false
+                    }
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#d62300",
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: "none",
+                    random: true,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false,
+                    attract: {
+                        enable: true,
+                        rotateX: 600,
+                        rotateY: 1200
+                    }
                 }
-            }
-        },
-        retina_detect: true
-    });
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: "grab"
+                    },
+                    onclick: {
+                        enable: true,
+                        mode: "push"
+                    },
+                    resize: true
+                },
+                modes: {
+                    grab: {
+                        distance: 140,
+                        line_linked: {
+                            opacity: 1
+                        }
+                    },
+                    push: {
+                        particles_nb: 4
+                    }
+                }
+            },
+            retina_detect: true
+        });
+    }
 });
 
 function initApplication() {
@@ -117,7 +134,10 @@ function initApplication() {
     // Инициализация обработчика для кнопки проверки пароля
     const submitButton = document.querySelector('.submit-button');
     if (submitButton) {
-        submitButton.addEventListener('click', checkPassword);
+        submitButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            checkPassword(e);
+        });
     }
     
     // Инициализация уведомлений для скачивания
@@ -135,7 +155,11 @@ function initApplication() {
 
 function showDisclaimer() {
     const disclaimerPopup = document.getElementById('disclaimerPopup');
-    if (!disclaimerPopup) return;
+    if (!disclaimerPopup) {
+        // Если дисклеймера нет, сразу инициализируем контент
+        initMainContent();
+        return;
+    }
     
     disclaimerPopup.style.display = 'flex';
     
@@ -161,11 +185,22 @@ function showDisclaimer() {
 }
 
 function initMainContent() {
+    updateContentVisibility();
+    
+    if (!AppConfig.maintenanceMode) {
+        // Инициализация основного функционала только если не режим техработ
+        initSearchFunctionality();
+        initApplication();
+    }
+}
+
+// Новая функция для обновления видимости контента
+function updateContentVisibility() {
+    const maintenanceElement = document.getElementById('maintenance');
+    const normalSiteElement = document.getElementById('normalSite');
+    
     if (AppConfig.maintenanceMode) {
         // Показываем полноэкранную страницу техработ
-        const maintenanceElement = document.getElementById('maintenance');
-        const normalSiteElement = document.getElementById('normalSite');
-        
         if (maintenanceElement) maintenanceElement.style.display = 'block';
         if (normalSiteElement) normalSiteElement.style.display = 'none';
         
@@ -173,15 +208,8 @@ function initMainContent() {
         initMaintenanceAnimation();
     } else {
         // Показываем основной сайт
-        const maintenanceElement = document.getElementById('maintenance');
-        const normalSiteElement = document.getElementById('normalSite');
-        
         if (maintenanceElement) maintenanceElement.style.display = 'none';
         if (normalSiteElement) normalSiteElement.style.display = 'block';
-        
-        // Инициализация основного функционала
-        initSearchFunctionality();
-        initApplication();
     }
 }
 
@@ -215,6 +243,11 @@ function updateVersionInfo() {
 }
 
 function initMaintenanceAnimation() {
+    // Очищаем предыдущий интервал если есть
+    if (window.maintenanceInterval) {
+        clearInterval(window.maintenanceInterval);
+    }
+    
     let progress = 42;
     const progressFill = document.getElementById('progressFill');
     const progressPercent = document.getElementById('progressPercent');
@@ -225,7 +258,11 @@ function initMaintenanceAnimation() {
         versionNumber.textContent = AppConfig.version;
     }
     
-    const progressInterval = setInterval(() => {
+    // Устанавливаем начальное значение прогресса
+    if (progressFill) progressFill.style.width = progress + '%';
+    if (progressPercent) progressPercent.textContent = progress + '%';
+    
+    window.maintenanceInterval = setInterval(() => {
         progress = (progress + Math.floor(Math.random() * 3) + 1) % 100;
         
         // Обновляем прогресс бар
@@ -233,9 +270,6 @@ function initMaintenanceAnimation() {
         if (progressPercent) progressPercent.textContent = progress + '%';
         
     }, 2500);
-    
-    // Сохраняем ID интервала для возможной очистки
-    window.maintenanceInterval = progressInterval;
 }
 
 // Функция для показа красивого попапа с ошибкой
@@ -346,12 +380,17 @@ function searchCard() {
     }, 700);
 }
 
-// Проверка пароля (обновленная версия)
-function checkPassword() {
+// Проверка пароля (исправленная версия)
+function checkPassword(event) {
+    // Предотвращаем поведение по умолчанию (отправку формы)
+    if (event) {
+        event.preventDefault();
+    }
+    
     const passwordInput = document.getElementById('adminPassword');
     if (!passwordInput) {
         showError("Поле для ввода пароля не найдено!");
-        return;
+        return false;
     }
     
     const password = passwordInput.value;
@@ -370,6 +409,9 @@ function checkPassword() {
                 
                 // Переключаем режим техработ
                 AppConfig.maintenanceMode = !AppConfig.maintenanceMode;
+                
+                // Сохраняем состояние в localStorage
+                localStorage.setItem('maintenanceMode', AppConfig.maintenanceMode.toString());
                 
                 setTimeout(() => {
                     if (AppConfig.maintenanceMode) {
@@ -397,6 +439,9 @@ function checkPassword() {
                     setTimeout(() => {
                         submitBtn.innerHTML = originalHtml;
                         submitBtn.disabled = false;
+                        
+                        // Обновляем отображение контента
+                        updateContentVisibility();
                     }, 1000);
                     
                 }, 1000);
@@ -415,6 +460,8 @@ function checkPassword() {
             }
         }, 1000);
     }
+    
+    return false;
 }
 
 // Функция для показа сообщений в режиме техработ
@@ -471,10 +518,12 @@ function copyToClipboard(text, element) {
     }
 }
 
-// Обработчик кнопки админа для новой версии
+// Обработчик кнопки админа
 const adminBtn = document.getElementById('adminBtn');
 if (adminBtn) {
-    adminBtn.addEventListener('click', function() {
+    adminBtn.addEventListener('click', function(event) {
+        event.preventDefault();
+        
         const passwordForm = document.getElementById('passwordForm');
         if (!passwordForm) return;
         
@@ -494,7 +543,8 @@ const adminPasswordInput = document.getElementById('adminPassword');
 if (adminPasswordInput) {
     adminPasswordInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
-            checkPassword();
+            e.preventDefault();
+            checkPassword(e);
         }
     });
 }
