@@ -8,9 +8,9 @@ if (typeof cardDatabase === 'undefined') {
 }
 
 const AppConfig = {
-    version: "1.2.1",
+    version: "1.0.0",
     lastUpdate: "03.09.2025",
-    maintenanceMode: true,
+    maintenanceMode: false,
     adminPassword: "157"
 };
 
