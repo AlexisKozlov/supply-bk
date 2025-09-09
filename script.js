@@ -845,6 +845,119 @@ document.querySelectorAll('.dropdown-menu').forEach(menu => {
     });
 });
 
+// Добавьте этот код в script.js
+
+// Функция для мобильного выпадающего меню
+function initMobileDropdowns() {
+    const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+    
+    dropdownToggles.forEach(toggle => {
+        // Обработчик клика для мобильных
+        toggle.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const dropdown = this.closest('.dropdown');
+                const isActive = dropdown.classList.contains('active');
+                
+                // Закрываем все другие dropdown
+                document.querySelectorAll('.dropdown').forEach(item => {
+                    if (item !== dropdown) {
+                        item.classList.remove('active');
+                    }
+                });
+                
+                // Переключаем текущий dropdown
+                if (isActive) {
+                    dropdown.classList.remove('active');
+                } else {
+                    dropdown.classList.add('active');
+                }
+            }
+        });
+        
+        // Обработчик для десктопной версии (предотвращаем клик на мобильных)
+        toggle.addEventListener('touchstart', function(e) {
+            if (window.innerWidth > 768) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+    });
+    
+    // Закрытие меню при клике вне области
+    document.addEventListener('click', function(e) {
+        if (window.innerWidth <= 768) {
+            if (!e.target.closest('.dropdown')) {
+                document.querySelectorAll('.dropdown').forEach(dropdown => {
+                    dropdown.classList.remove('active');
+                });
+            }
+        }
+    });
+    
+    // Закрытие меню при скролле на мобильных
+    window.addEventListener('scroll', function() {
+        if (window.innerWidth <= 768) {
+            document.querySelectorAll('.dropdown').forEach(dropdown => {
+                dropdown.classList.remove('active');
+            });
+        }
+    });
+}
+
+// Обновите функцию initApplication()
+function initApplication() {
+    // Инициализация даты обновления
+    updateVersionInfo();
+    
+    // Инициализация обработчика для кнопки проверки пароля
+    const submitButton = document.querySelector('.submit-button');
+    if (submitButton) {
+        submitButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            checkPassword(e);
+        });
+    }
+    
+    // Инициализация уведомлений для скачивания
+    setupDownloadNotifications();
+    
+    // Инициализация выпадающего меню для мобильных
+    initMobileDropdowns();
+    
+    // Плавная прокрутка для меню на мобильных
+    const topMenu = document.querySelector('.top-menu');
+    if (topMenu && window.innerWidth <= 768) {
+        topMenu.addEventListener('wheel', function(e) {
+            e.preventDefault();
+            topMenu.scrollLeft += e.deltaY;
+        }, { passive: false });
+        
+        // Добавляем touch-скролл для мобильных
+        let isDragging = false;
+        let startX;
+        let scrollLeft;
+        
+        topMenu.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            startX = e.touches[0].pageX - topMenu.offsetLeft;
+            scrollLeft = topMenu.scrollLeft;
+        }, { passive: true });
+        
+        topMenu.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const x = e.touches[0].pageX - topMenu.offsetLeft;
+            const walk = (x - startX) * 2;
+            topMenu.scrollLeft = scrollLeft - walk;
+        }, { passive: false });
+        
+        topMenu.addEventListener('touchend', () => {
+            isDragging = false;
+        }, { passive: true });
+    }
+}
 
 // Глобальные функции для HTML
 window.searchCard = searchCard;
