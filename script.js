@@ -160,7 +160,11 @@ function initMobileFeatures() {
 function initApplication() {
     // Инициализация даты обновления
     updateVersionInfo();
+     // Инициализация выпадающего меню
+    setupDropdownBackdrop();
     
+    // Закрытие меню при клике вне его
+    document.addEventListener('click', closeDropdownOnClickOutside);
     // Инициализация обработчика для кнопки проверки пароля
     const submitButton = document.querySelector('.submit-button');
     if (submitButton) {
@@ -731,11 +735,88 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
+// Функция для переключения выпадающего меню
+function toggleDropdown(event) {
+    event.stopPropagation();
+    const dropdown = event.currentTarget.closest('.dropdown');
+    const menu = dropdown.querySelector('.dropdown-menu');
+    const arrow = dropdown.querySelector('.dropdown-arrow');
+    const backdrop = document.getElementById('dropdownBackdrop');
+    
+    const isVisible = menu.classList.contains('show');
+    
+    // Закрываем все другие открытые меню
+    document.querySelectorAll('.dropdown-menu.show').forEach(otherMenu => {
+        if (otherMenu !== menu) {
+            otherMenu.classList.remove('show');
+            otherMenu.closest('.dropdown').querySelector('.dropdown-toggle').classList.remove('active');
+        }
+    });
+    
+    if (isVisible) {
+        // Закрываем меню
+        menu.classList.remove('show');
+        dropdown.querySelector('.dropdown-toggle').classList.remove('active');
+        if (backdrop) backdrop.classList.remove('show');
+    } else {
+        // Открываем меню
+        menu.classList.add('show');
+        dropdown.querySelector('.dropdown-toggle').classList.add('active');
+        if (backdrop) backdrop.classList.add('show');
+    }
+}
+
+// Закрытие меню по клику вне области
+function closeDropdownOnClickOutside(event) {
+    const dropdowns = document.querySelectorAll('.dropdown');
+    let isClickInside = false;
+    
+    dropdowns.forEach(dropdown => {
+        if (dropdown.contains(event.target)) {
+            isClickInside = true;
+        }
+    });
+    
+    if (!isClickInside) {
+        closeAllDropdowns();
+    }
+}
+
+// Закрытие всех выпадающих меню
+function closeAllDropdowns() {
+    document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+        menu.classList.remove('show');
+    });
+    
+    document.querySelectorAll('.dropdown-toggle.active').forEach(toggle => {
+        toggle.classList.remove('active');
+    });
+    
+    const backdrop = document.getElementById('dropdownBackdrop');
+    if (backdrop) backdrop.classList.remove('show');
+}
+
+// Закрытие по ESC
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeAllDropdowns();
+    }
+});
+
+// Закрытие при клике на бэкдроп
+function setupDropdownBackdrop() {
+    const backdrop = document.getElementById('dropdownBackdrop');
+    if (backdrop) {
+        backdrop.addEventListener('click', closeAllDropdowns);
+    }
+}
+
 // Глобальные функции для HTML
 window.searchCard = searchCard;
 window.checkPassword = checkPassword;
 window.copyToClipboard = copyToClipboard;
 window.showGoogleForm = showGoogleForm;
 window.closeGoogleForm = closeGoogleForm;
+window.toggleDropdown = toggleDropdown;
 
 
