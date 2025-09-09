@@ -1808,3 +1808,25 @@ body {
         min-height: 50px; /* Для маленьких экранов */
     }
 }
+
+/* Добавьте в конец CSS файла */
+.menu-btn {
+    min-height: 60px; /* Одинаковая высота для всех кнопок */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Для мобильных */
+@media (max-width: 768px) {
+    .menu-btn {
+        min-height: 55px;
+    }
+}
+
+@media (max-width: 480px) {
+    .menu-btn {
+        min-height: 50px;
+    }
+}
