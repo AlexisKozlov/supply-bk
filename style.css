@@ -1796,3 +1796,69 @@ body {
     display: none !important;
 }
 
+/* Мобильная версия выпадающего меню */
+@media (max-width: 768px) {
+    .dropdown {
+        position: relative;
+    }
+    
+    .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        width: auto;
+        max-height: 50vh;
+        overflow-y: auto;
+        display: none;
+        opacity: 1;
+        transform: none;
+        z-index: 1001;
+    }
+    
+    /* Показываем меню при активном классе */
+    .dropdown.active .dropdown-menu {
+        display: block;
+    }
+    
+    /* Убираем hover эффекты для мобильных */
+    .dropdown:hover .dropdown-menu {
+        display: none;
+    }
+    
+    .dropdown:hover .dropdown-arrow {
+        transform: none;
+    }
+    
+    /* Увеличиваем область клика для мобильных */
+    .dropdown-toggle {
+        min-height: 65px;
+        padding: 15px;
+    }
+    
+    .dropdown-item {
+        padding: 16px 20px;
+        font-size: 15px;
+    }
+}
+
+/* Для очень маленьких экранов */
+@media (max-width: 480px) {
+    .dropdown-menu {
+        max-height: 45vh;
+    }
+    
+    .dropdown-toggle {
+        min-height: 60px;
+        padding: 12px;
+    }
+    
+    .dropdown-item {
+        padding: 14px 18px;
+        font-size: 14px;
+    }
+    
+    .btn-text {
+        font-size: 9px;
+    }
+}
