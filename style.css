@@ -1669,6 +1669,8 @@ body {
     transition: all 0.3s ease;
     border: 2px solid #ffcc00;
     min-width: 80px;
+    height: auto; /* Добавлено */
+    min-height: 60px; /* Добавлено */
     box-shadow: 0 3px 10px rgba(214, 35, 0, 0.2);
     position: relative;
 }
@@ -1718,6 +1720,7 @@ body {
     text-decoration: none;
     transition: all 0.3s ease;
     border-bottom: 1px solid #f0f0f0;
+    cursor: pointer; /* Добавлено */
 }
 
 .dropdown-item:last-child {
@@ -1740,6 +1743,27 @@ body {
     transform: rotate(180deg);
 }
 
+/* Убедитесь, что бэкдроп не перекрывает меню */
+.dropdown-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000; /* Уменьшено с 1000 */
+    display: none;
+}
+
+.dropdown-backdrop.show {
+    display: block;
+}
+
+/* Важно: увеличиваем z-index меню */
+.dropdown-menu {
+    z-index: 1002; /* Выше чем бэкдроп */
+}
+
 /* Адаптивность для выпадающего меню */
 @media (max-width: 768px) {
     .dropdown {
@@ -1756,37 +1780,31 @@ body {
         max-height: 60vh;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        z-index: 1002; /* Для мобильных тоже */
     }
     
     .dropdown-item {
         padding: 15px 20px;
         font-size: 14px;
     }
+    
+    .dropdown-toggle {
+        min-height: 55px; /* Для мобильных */
+    }
 }
 
 @media (max-width: 480px) {
     .dropdown-menu {
         bottom: 60px;
+        z-index: 1002;
     }
     
     .dropdown-item {
         padding: 12px 15px;
         font-size: 13px;
     }
-}
-
-/* Затемнение фона при открытом меню на мобильных */
-.dropdown-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    display: none;
-}
-
-.dropdown-backdrop.show {
-    display: block;
+    
+    .dropdown-toggle {
+        min-height: 50px; /* Для маленьких экранов */
+    }
 }
