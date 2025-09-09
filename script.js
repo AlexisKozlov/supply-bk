@@ -735,6 +735,7 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
+
 // Функция для переключения выпадающего меню
 function toggleDropdown(event) {
     event.stopPropagation();
@@ -758,21 +759,38 @@ function toggleDropdown(event) {
         menu.classList.remove('show');
         dropdown.querySelector('.dropdown-toggle').classList.remove('active');
         if (backdrop) backdrop.classList.remove('show');
+        
+        // Удаляем обработчик
+        document.removeEventListener('click', closeDropdownOnClickOutside);
     } else {
         // Открываем меню
         menu.classList.add('show');
         dropdown.querySelector('.dropdown-toggle').classList.add('active');
         if (backdrop) backdrop.classList.add('show');
+        
+        // Добавляем обработчик для закрытия по клику вне меню
+        setTimeout(() => {
+            document.addEventListener('click', closeDropdownOnClickOutside);
+        }, 0);
     }
 }
 
 // Закрытие меню по клику вне области
 function closeDropdownOnClickOutside(event) {
     const dropdowns = document.querySelectorAll('.dropdown');
+    const dropdownMenus = document.querySelectorAll('.dropdown-menu');
     let isClickInside = false;
     
+    // Проверяем, был ли клик внутри любого dropdown меню
+    dropdownMenus.forEach(menu => {
+        if (menu.contains(event.target)) {
+            isClickInside = true;
+        }
+    });
+    
+    // Проверяем, был ли клик на кнопке toggle
     dropdowns.forEach(dropdown => {
-        if (dropdown.contains(event.target)) {
+        if (dropdown.querySelector('.dropdown-toggle').contains(event.target)) {
             isClickInside = true;
         }
     });
@@ -794,6 +812,9 @@ function closeAllDropdowns() {
     
     const backdrop = document.getElementById('dropdownBackdrop');
     if (backdrop) backdrop.classList.remove('show');
+    
+    // Удаляем обработчик
+    document.removeEventListener('click', closeDropdownOnClickOutside);
 }
 
 // Закрытие по ESC
@@ -807,10 +828,21 @@ document.addEventListener('keydown', function(event) {
 function setupDropdownBackdrop() {
     const backdrop = document.getElementById('dropdownBackdrop');
     if (backdrop) {
-        backdrop.addEventListener('click', closeAllDropdowns);
+        backdrop.addEventListener('click', function(e) {
+            // Проверяем, что клик именно на бэкдропе, а не на его детях
+            if (e.target === backdrop) {
+                closeAllDropdowns();
+            }
+        });
     }
 }
 
+// Предотвращаем закрытие при клике внутри меню
+document.querySelectorAll('.dropdown-menu').forEach(menu => {
+    menu.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+});
 // Глобальные функции для HTML
 window.searchCard = searchCard;
 window.checkPassword = checkPassword;
