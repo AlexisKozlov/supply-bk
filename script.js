@@ -162,6 +162,7 @@ function initApplication() {
     updateVersionInfo();
      // Инициализация выпадающего меню
     setupDropdownBackdrop();
+      initMobileDropdowns();
     
     // Закрытие меню при клике вне его
     document.addEventListener('click', closeDropdownOnClickOutside);
@@ -843,6 +844,8 @@ document.querySelectorAll('.dropdown-menu').forEach(menu => {
         e.stopPropagation();
     });
 });
+
+
 // Глобальные функции для HTML
 window.searchCard = searchCard;
 window.checkPassword = checkPassword;
