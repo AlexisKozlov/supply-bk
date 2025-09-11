@@ -673,7 +673,7 @@ function showGoogleForm() {
     if (!modal || !iframe) return;
     
     // URL с параметрами для лучшей читаемости
-    iframe.src = "https://docs.google.com/forms/d/e/1FAIpQLSfick6AUSCsKKQZJ0odbymaM0-pB9c_jX_BbndSqSJypjBxLA/viewform?embedded=true";
+    iframe.src = "https://docs.google.com/forms/d/e/1FAIpQLSeBAriiKfofclBy12DGjWXL223yCoDvYxcp0xF4C79RQ8Psjw/viewform?usp=preview";
     
     modal.style.display = "block";
     document.body.style.overflow = "hidden";
