@@ -391,6 +391,10 @@ var cardDatabase = {
   277503508: {
     name: 'Кофе FACE to FACE «CREMA» 1000г',
     analogs: ["886886", "Кофе FACE to FACE «CREMA» 1000г", "Кофе FACE to FACE «CLASSIC» 1000г"],
+   },
+  51607: {
+    name: 'Брауни шоколадный с шоколадом, 24шт*кор',
+    analogs: ["51611"],
  },
   211106: {
     name: 'Полуфабрикаты "Куриные котлеты", 15,360 кг',
