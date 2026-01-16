@@ -725,17 +725,20 @@ function updateCard(event) {
     searchCardsForEdit();
 }
 
-// Загружаем кастомные карточки из localStorage (только для сессии админа)
-function loadCustomCards() {
-    if (isAdminLoggedIn) {
-        const customCards = JSON.parse(localStorage.getItem('customCards') || '{}');
-        // Добавляем только те, которых нет в основной базе
-        for (const [key, value] of Object.entries(customCards)) {
-            if (!cardDatabase[key]) {
-                cardDatabase[key] = value;
-            }
+function clearLocalStorage() {
+    const customCards = JSON.parse(localStorage.getItem('customCards') || '{}');
+    
+    // Удаляем кастомные карточки из cardDatabase
+    for (const key of Object.keys(customCards)) {
+        if (cardDatabase[key]) {
+            delete cardDatabase[key];
         }
     }
+    
+    // Очищаем localStorage
+    localStorage.removeItem('customCards');
+    
+    showAdminMessage('localStorage очищен! Тестовые карточки удалены.', 'success');
 }
 
 // Инициализация приложения после загрузки DOM
@@ -1018,6 +1021,7 @@ window.closeGoogleForm = closeGoogleForm;
 window.loginAdmin = loginAdmin;
 window.hideAdminLogin = hideAdminLogin;
 window.exportDatabase = exportDatabase;
+window.clearLocalStorage = clearLocalStorage;
 window.addCard = addCard;
 window.showTab = showTab;
 window.searchCardsForEdit = searchCardsForEdit;
