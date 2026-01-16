@@ -959,15 +959,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    const addForm = document.getElementById('addCardForm');
-    if (addForm) {
-        addForm.addEventListener('submit', addCard);
-    }
+    // Убираем addEventListener для форм, поскольку onsubmit уже обрабатывает
+    // const addForm = document.getElementById('addCardForm');
+    // if (addForm) {
+    //     addForm.addEventListener('submit', addCard);
+    // }
     
-    const updateForm = document.getElementById('updateCardForm');
-    if (updateForm) {
-        updateForm.addEventListener('submit', updateCard);
-    }
+    // const updateForm = document.getElementById('updateCardForm');
+    // if (updateForm) {
+    //     updateForm.addEventListener('submit', updateCard);
+    // }
 });
 
 // Закрытие по ESC
