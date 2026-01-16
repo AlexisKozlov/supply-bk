@@ -857,10 +857,13 @@ function cancelEdit() {
 
 function updateCard(event) {
     event.preventDefault();
+    console.log('updateCard called');
     
     const key = document.getElementById('editCardKey').value;
     const name = document.getElementById('editCardName').value.trim();
     const analogsStr = document.getElementById('editCardAnalogs').value.trim();
+    
+    console.log('Key:', key, 'Name:', name, 'Analogs:', analogsStr);
     
     if (!name) {
         showAdminMessage('Название товара обязательно!', 'error');
@@ -873,6 +876,8 @@ function updateCard(event) {
         name: name,
         analogs: analogs
     };
+    
+    console.log('Updated cardDatabase:', cardDatabase[key]);
     
     // Обновляем localStorage
     const customCards = JSON.parse(localStorage.getItem('customCards') || '{}');

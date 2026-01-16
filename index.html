@@ -147,9 +147,6 @@
         </div>
     </div>
     
-    <!-- Основной контент -->
- <div id="normalSite" style="display: none;">
-
     <!-- Админ панель для добавления карточек -->
     <div id="adminPanel" class="admin-panel" style="display: none;">
         <h2>Управление базой данных</h2>
@@ -223,6 +220,18 @@
     
     <!-- Основной контент -->
  <div id="normalSite" style="display: none;">
+    <div class="container">
+            <div class="logo-container">
+                <img src="burger-king-logo.png" alt="Burger King Logo" class="logo">
+                <h1>Поиск актуальных карточек</h1>
+            </div>
+
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Введите артикул...">
+                <button class="glow-on-hover" onclick="searchCard()">Найти</button>
+            </div>
+            
+            <div id="result"></div>
 
         </div>
     </div>
