@@ -2,26 +2,6 @@
     display: none; /* Сначала скрываем */
 }
 /* Базовые стили для мобильных */
-:root {
-    --bg-color: #ffffff;
-    --text-color: #333333;
-    --border-color: #dddddd;
-    --button-bg: #f8f9fa;
-    --button-hover: #e9ecef;
-    --accent-color: #007bff;
-    --shadow: rgba(0, 0, 0, 0.1);
-}
-
-.dark-theme {
-    --bg-color: #1a1a1a;
-    --text-color: #ffffff;
-    --border-color: #404040;
-    --button-bg: #2d2d2d;
-    --button-hover: #404040;
-    --accent-color: #4dabf7;
-    --shadow: rgba(255, 255, 255, 0.1);
-}
-
 * {
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
@@ -30,13 +10,18 @@
 body, html {
     margin: 0;
     padding: 0;
-    width: 100%;
     height: 100%;
-    overflow-x: hidden;
     font-family: 'Montserrat', sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    transition: background-color 0.3s ease, color 0.3s ease;
+    text-align: center;
+    overflow-x: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Добавляем для надежности */
+}
+body {
+    background: #ffcc00;
+    background-attachment: fixed;
 }
 
 /* Фикс для мобильного viewport */
@@ -170,16 +155,16 @@ body {
 .container {
     text-align: center;
     padding: 20px;
-    background-color: var(--bg-color);
+    background-color: rgba(255, 255, 255, 0.9);
     border-radius: 15px;
-    box-shadow: 0 4px 15px var(--shadow);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     width: 90%;
     max-width: 500px;
     position: relative;
     z-index: 1;
     margin: 20px auto;
     box-sizing: border-box;
-    transition: left 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    transition: left 0.3s ease;
 }
 
 /* Остальные стили без изменений */
@@ -897,12 +882,11 @@ margin: 5px;
     top: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(135deg, var(--accent-color), #ff8732);
+    background: linear-gradient(135deg, #d62300, #ff8732);
     padding: 15px 0;
     z-index: 1000;
-    box-shadow: 0 4px 20px var(--shadow);
-    border-bottom: 3px solid var(--border-color);
-    transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    border-bottom: 3px solid #ffcc00;
 }
 
 .menu-container {
@@ -951,21 +935,6 @@ margin: 5px;
     transform: none;
     box-shadow: 0 3px 10px rgba(214, 35, 0, 0.2);
     border-color: #cccccc;
-}
-
-/* Стили для кнопки темы в меню */
-.theme-toggle-menu {
-    background: var(--button-bg) !important;
-    color: var(--text-color) !important;
-    border-color: var(--border-color) !important;
-    box-shadow: 0 3px 10px var(--shadow) !important;
-}
-
-.theme-toggle-menu:hover {
-    background: var(--button-hover) !important;
-    color: var(--text-color) !important;
-    border-color: var(--accent-color) !important;
-    box-shadow: 0 6px 20px var(--shadow) !important;
 }
 
 .btn-icon {

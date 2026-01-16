@@ -51,9 +51,6 @@ function showDisclaimer() {
 function initMainContent() {
     updateContentVisibility();
     
-    // Инициализация темы
-    initTheme();
-    
     if (!AppConfig.maintenanceMode) {
         // Инициализация основного функционала только если не режим техработ
         initSearchFunctionality();
@@ -960,48 +957,6 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
-function initTheme() {
-    const savedTheme = localStorage.getItem('theme');
-    const body = document.body;
-    const themeToggle = document.getElementById('themeToggle');
-    
-    if (savedTheme === 'dark') {
-        body.classList.add('dark-theme');
-        if (themeToggle) {
-            const themeIcon = themeToggle.querySelector('.theme-icon');
-            const themeText = themeToggle.querySelector('.theme-text');
-            if (themeIcon) themeIcon.textContent = '☀️';
-            if (themeText) themeText.textContent = 'Светлая тема';
-        }
-    } else {
-        if (themeToggle) {
-            const themeIcon = themeToggle.querySelector('.theme-icon');
-            const themeText = themeToggle.querySelector('.theme-text');
-            if (themeIcon) themeIcon.textContent = '🌙';
-            if (themeText) themeText.textContent = 'Тёмная тема';
-        }
-    }
-}
-
-function toggleTheme() {
-    const body = document.body;
-    const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = themeToggle.querySelector('.theme-icon');
-    const themeText = themeToggle.querySelector('.theme-text');
-    
-    body.classList.toggle('dark-theme');
-    
-    if (body.classList.contains('dark-theme')) {
-        themeIcon.textContent = '☀️';
-        themeText.textContent = 'Светлая тема';
-        localStorage.setItem('theme', 'dark');
-    } else {
-        themeIcon.textContent = '🌙';
-        themeText.textContent = 'Тёмная тема';
-        localStorage.setItem('theme', 'light');
-    }
-}
-
 function clearSearch() {
     document.getElementById('searchInput').value = '';
     document.getElementById('result').innerHTML = '';
@@ -1010,7 +965,6 @@ function clearSearch() {
 
 // Экспорт функций для глобального доступа
 window.clearSearch = clearSearch;
-window.toggleTheme = toggleTheme;
 window.checkPassword = checkPassword;
 window.copyToClipboard = copyToClipboard;
 window.showGoogleForm = showGoogleForm;
@@ -1027,6 +981,5 @@ window.editCard = editCard;
 window.cancelEdit = cancelEdit;
 window.updateCard = updateCard;
 window.closeAdminPanel = closeAdminPanel;
-window.clearSearch = clearSearch;
 
 
