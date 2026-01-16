@@ -140,83 +140,6 @@ function initMaintenanceAnimation() {
     if (progressFill) progressFill.style.width = progress + '%';
     if (progressPercent) progressPercent.textContent = progress + '%';
     
-    // Инициализация частиц для maintenance
-    if (typeof particlesJS !== 'undefined') {
-        particlesJS('particles-js-maintenance', {
-            particles: {
-                number: { 
-                    value: 50,
-                    density: {
-                        enable: true,
-                        value_area: 800
-                    }
-                },
-                color: { 
-                    value: ["#d62300", "#ffcc00", "#12168c"] 
-                },
-                shape: { 
-                    type: "circle",
-                    stroke: {
-                        width: 0,
-                        color: "#000000"
-                    }
-                },
-                opacity: {
-                    value: 0.4,
-                    random: true,
-                    anim: {
-                        enable: true,
-                        speed: 1,
-                        opacity_min: 0.1,
-                        sync: false
-                    }
-                },
-                size: {
-                    value: 2,
-                    random: true,
-                    anim: {
-                        enable: true,
-                        speed: 1,
-                        size_min: 0.1,
-                        sync: false
-                    }
-                },
-                line_linked: {
-                    enable: true,
-                    distance: 120,
-                    color: "#d62300",
-                    opacity: 0.3,
-                    width: 1
-                },
-                move: {
-                    enable: true,
-                    speed: 1,
-                    direction: "none",
-                    random: true,
-                    straight: false,
-                    out_mode: "out",
-                    bounce: false,
-                    attract: {
-                        enable: false
-                    }
-                }
-            },
-            interactivity: {
-                detect_on: "canvas",
-                events: {
-                    onhover: {
-                        enable: false
-                    },
-                    onclick: {
-                        enable: false
-                    },
-                    resize: true
-                }
-            },
-            retina_detect: true
-        });
-    }
-    
     window.maintenanceInterval = setInterval(() => {
         progress = (progress + Math.floor(Math.random() * 3) + 1) % 100;
         
@@ -622,10 +545,16 @@ function loginAdmin() {
         document.getElementById('adminAccessBtn').style.display = 'none';
         // Смещаем основной контент влево
         const container = document.querySelector('.container');
-        if (container) container.style.marginLeft = '-400px';
+        if (container) {
+            container.style.position = 'relative';
+            container.style.left = '-400px';
+        }
         // Смещаем дисклеймер
         const disclaimer = document.querySelector('.disclaimer-content');
-        if (disclaimer) disclaimer.style.marginLeft = '-400px';
+        if (disclaimer) {
+            disclaimer.style.position = 'relative';
+            disclaimer.style.left = '-400px';
+        }
         showAdminMessage('Добро пожаловать в админ панель!', 'success');
     } else {
         showAdminMessage('Неверный пароль!', 'error');
@@ -639,10 +568,16 @@ function closeAdminPanel() {
     document.getElementById('adminAccessBtn').style.display = 'inline-block';
     // Возвращаем основной контент в центр
     const container = document.querySelector('.container');
-    if (container) container.style.marginLeft = '0';
+    if (container) {
+        container.style.position = '';
+        container.style.left = '';
+    }
     // Возвращаем дисклеймер
     const disclaimer = document.querySelector('.disclaimer-content');
-    if (disclaimer) disclaimer.style.marginLeft = '0';
+    if (disclaimer) {
+        disclaimer.style.position = '';
+        disclaimer.style.left = '';
+    }
     isAdminLoggedIn = false;
 }
 
@@ -859,98 +794,6 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         // Если режим техработ - сразу инициализируем контент
         initMainContent();
-    }
-    
-    // Инициализация частиц
-    if (typeof particlesJS !== 'undefined') {
-        particlesJS('particles-js', {
-            particles: {
-                number: { 
-                    value: 80,
-                    density: {
-                        enable: true,
-                        value_area: 800
-                    }
-                },
-                color: { 
-                    value: ["#d62300", "#ffcc00", "#12168c"] 
-                },
-                shape: { 
-                    type: "circle",
-                    stroke: {
-                        width: 0,
-                        color: "#000000"
-                    }
-                },
-                opacity: {
-                    value: 0.5,
-                    random: true,
-                    anim: {
-                        enable: true,
-                        speed: 1,
-                        opacity_min: 0.1,
-                        sync: false
-                    }
-                },
-                size: {
-                    value: 3,
-                    random: true,
-                    anim: {
-                        enable: true,
-                        speed: 2,
-                        size_min: 0.1,
-                        sync: false
-                    }
-                },
-                line_linked: {
-                    enable: true,
-                    distance: 150,
-                    color: "#d62300",
-                    opacity: 0.4,
-                    width: 1
-                },
-                move: {
-                    enable: true,
-                    speed: 2,
-                    direction: "none",
-                    random: true,
-                    straight: false,
-                    out_mode: "out",
-                    bounce: false,
-                    attract: {
-                        enable: true,
-                        rotateX: 600,
-                        rotateY: 1200
-                    }
-                }
-            },
-            interactivity: {
-                detect_on: "canvas",
-                events: {
-                    onhover: {
-                        enable: true,
-                        mode: "grab"
-                    },
-                    onclick: {
-                        enable: true,
-                        mode: "push"
-                    },
-                    resize: true
-                },
-                modes: {
-                    grab: {
-                        distance: 140,
-                        line_linked: {
-                            opacity: 1
-                        }
-                    },
-                    push: {
-                        particles_nb: 4
-                    }
-                }
-            },
-            retina_detect: true
-        });
     }
     
     // Инициализация для мобильных устройств

@@ -153,7 +153,7 @@ body {
     z-index: 1;
     margin: 20px auto;
     box-sizing: border-box;
-    transition: margin-left 0.3s ease;
+    transition: left 0.3s ease;
 }
 
 /* Остальные стили без изменений */
@@ -766,7 +766,7 @@ margin: 5px;
   overflow-y: auto;
   border: 2px solid #d62300;
   margin: 20px auto;
-  transition: margin-left 0.3s ease;
+  transition: left 0.3s ease;
 }
 
 .disclaimer-text {
@@ -1283,18 +1283,43 @@ body {
 .maintenance-message {
     text-align: center;
     margin-bottom: 20px;
+    padding: 20px;
+    background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+    border-radius: 15px;
+    border: 2px solid #d62300;
+}
+
+.maintenance-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    animation: pulse 2s infinite;
 }
 
 .maintenance-message h2 {
     color: #d62300;
-    font-size: 1.5rem;
-    margin-bottom: 10px;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    font-weight: bold;
 }
 
 .maintenance-message p {
     color: #333;
-    font-size: 0.9rem;
-    line-height: 1.4;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.maintenance-timer {
+    margin-top: 15px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    border: 1px solid #ffcc00;
+}
+
+.maintenance-timer span {
+    color: #d62300;
+    font-weight: bold;
 }
 
 @keyframes pulse {
