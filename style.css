@@ -15,7 +15,7 @@
 .dark-theme {
     --bg-color: #1a1a1a;
     --text-color: #ffffff;
-    --border-color: #333333;
+    --border-color: #404040;
     --button-bg: #2d2d2d;
     --button-hover: #404040;
     --accent-color: #4dabf7;
@@ -151,9 +151,12 @@ body, html {
     justify-content: center;
     align-items: center;
     min-height: 100vh; /* Добавляем для надежности */
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 body {
-    background: #ffcc00;
+    background: var(--bg-color);
     background-attachment: fixed;
 }
 /* Стили для фона с частицами */
@@ -894,11 +897,12 @@ margin: 5px;
     top: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(135deg, #d62300, #ff8732);
+    background: linear-gradient(135deg, var(--accent-color), #ff8732);
     padding: 15px 0;
     z-index: 1000;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    border-bottom: 3px solid #ffcc00;
+    box-shadow: 0 4px 20px var(--shadow);
+    border-bottom: 3px solid var(--border-color);
+    transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .menu-container {
@@ -947,6 +951,21 @@ margin: 5px;
     transform: none;
     box-shadow: 0 3px 10px rgba(214, 35, 0, 0.2);
     border-color: #cccccc;
+}
+
+/* Стили для кнопки темы в меню */
+.theme-toggle-menu {
+    background: var(--button-bg) !important;
+    color: var(--text-color) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: 0 3px 10px var(--shadow) !important;
+}
+
+.theme-toggle-menu:hover {
+    background: var(--button-hover) !important;
+    color: var(--text-color) !important;
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 6px 20px var(--shadow) !important;
 }
 
 .btn-icon {

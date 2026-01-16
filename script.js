@@ -1002,6 +1002,12 @@ function toggleTheme() {
     }
 }
 
+function clearSearch() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('result').innerHTML = '';
+    document.getElementById('searchInput').focus();
+}
+
 // Экспорт функций для глобального доступа
 window.clearSearch = clearSearch;
 window.toggleTheme = toggleTheme;
