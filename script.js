@@ -733,12 +733,20 @@ function loginAdmin() {
         loadCustomCards(); // Загружаем кастомные карточки для админа
         document.getElementById('adminLoginForm').style.display = 'none';
         document.getElementById('adminPanel').style.display = 'block';
+        document.getElementById('adminOverlay').style.display = 'block';
         document.getElementById('adminAccessBtn').style.display = 'none';
         showAdminMessage('Добро пожаловать в админ панель!', 'success');
     } else {
         showAdminMessage('Неверный пароль!', 'error');
     }
     document.getElementById('adminLoginPassword').value = '';
+}
+
+function closeAdminPanel() {
+    document.getElementById('adminPanel').style.display = 'none';
+    document.getElementById('adminOverlay').style.display = 'none';
+    document.getElementById('adminAccessBtn').style.display = 'inline-block';
+    isAdminLoggedIn = false;
 }
 
 function showAdminMessage(message, type) {
@@ -926,8 +934,9 @@ document.addEventListener('keydown', function(event) {
             document.body.style.overflow = '';
         }
         
-        // Закрываем админ логин
+        // Закрываем админ логин и панель
         hideAdminLogin();
+        closeAdminPanel();
     }
 });
 
@@ -946,5 +955,6 @@ window.searchCardsForEdit = searchCardsForEdit;
 window.editCard = editCard;
 window.cancelEdit = cancelEdit;
 window.updateCard = updateCard;
+window.closeAdminPanel = closeAdminPanel;
 
 

@@ -134,101 +134,95 @@
     </div>
 </div>
     
+    <!-- Админ доступ -->
+    <div class="admin-access-fixed">
+        <button id="adminAccessBtn" class="admin-access-btn">
+            <span class="btn-icon">🔧</span>
+            <span class="btn-text">Админ</span>
+        </button>
+        <div id="adminLoginForm" class="admin-login-form" style="display: none;">
+            <input type="password" id="adminLoginPassword" placeholder="Пароль">
+            <button onclick="loginAdmin()">Войти</button>
+            <button onclick="hideAdminLogin()">Отмена</button>
+        </div>
+    </div>
+    
     <!-- Основной контент -->
  <div id="normalSite" style="display: none;">
-    <div class="container">
-            <div class="logo-container">
-                <img src="burger-king-logo.png" alt="Burger King Logo" class="logo">
-                <h1>Поиск актуальных карточек</h1>
-            </div>
 
-            <!-- Админ доступ -->
-            <div class="admin-access-fixed">
-                <button id="adminAccessBtn" class="admin-access-btn">
-                    <span class="btn-icon">🔧</span>
-                    <span class="btn-text">Админ</span>
-                </button>
-                <div id="adminLoginForm" class="admin-login-form" style="display: none;">
-                    <input type="password" id="adminLoginPassword" placeholder="Пароль">
-                    <button onclick="loginAdmin()">Войти</button>
-                    <button onclick="hideAdminLogin()">Отмена</button>
+    <!-- Админ панель для добавления карточек -->
+    <div id="adminPanel" class="admin-panel" style="display: none;">
+        <h2>Управление базой данных</h2>
+        
+        <!-- Вкладки -->
+        <div class="admin-tabs">
+            <button class="tab-btn active" onclick="showTab('add')">Добавить</button>
+            <button class="tab-btn" onclick="showTab('edit')">Редактировать</button>
+        </div>
+        
+        <!-- Вкладка добавления -->
+        <div id="addTab" class="tab-content">
+            <h3>Добавить новую карточку товара</h3>
+            <form id="addCardForm">
+                <div class="form-group">
+                    <label for="cardId">Артикул/ID товара:</label>
+                    <input type="text" id="cardId" required placeholder="Например: 123456">
                 </div>
+                <div class="form-group">
+                    <label for="cardName">Название товара:</label>
+                    <input type="text" id="cardName" required placeholder="Например: Куриные наггетсы">
+                </div>
+                <div class="form-group">
+                    <label for="cardAnalogs">Аналоги (через запятую):</label>
+                    <input type="text" id="cardAnalogs" placeholder="Например: наггетсы, курица, 654321">
+                </div>
+                <button type="submit" class="glow-on-hover">Добавить карточку</button>
+            </form>
+        </div>
+        
+        <!-- Вкладка редактирования -->
+        <div id="editTab" class="tab-content" style="display: none;">
+            <h3>Редактировать существующие карточки</h3>
+            <div class="search-edit">
+                <input type="text" id="editSearch" placeholder="Поиск карточки по ID или названию">
+                <button onclick="searchCardsForEdit()">Найти</button>
             </div>
-
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Введите артикул...">
-                <button class="glow-on-hover" onclick="searchCard()">Найти</button>
-            </div>
-
-            <!-- Админ панель для добавления карточек -->
-            <div id="adminPanel" class="admin-panel" style="display: none;">
-                <h2>Управление базой данных</h2>
-                
-                <!-- Вкладки -->
-                <div class="admin-tabs">
-                    <button class="tab-btn active" onclick="showTab('add')">Добавить</button>
-                    <button class="tab-btn" onclick="showTab('edit')">Редактировать</button>
-                </div>
-                
-                <!-- Вкладка добавления -->
-                <div id="addTab" class="tab-content">
-                    <h3>Добавить новую карточку товара</h3>
-                    <form id="addCardForm">
-                        <div class="form-group">
-                            <label for="cardId">Артикул/ID товара:</label>
-                            <input type="text" id="cardId" required placeholder="Например: 123456">
-                        </div>
-                        <div class="form-group">
-                            <label for="cardName">Название товара:</label>
-                            <input type="text" id="cardName" required placeholder="Например: Куриные наггетсы">
-                        </div>
-                        <div class="form-group">
-                            <label for="cardAnalogs">Аналоги (через запятую):</label>
-                            <input type="text" id="cardAnalogs" placeholder="Например: наггетсы, курица, 654321">
-                        </div>
-                        <button type="submit" class="glow-on-hover">Добавить карточку</button>
-                    </form>
-                </div>
-                
-                <!-- Вкладка редактирования -->
-                <div id="editTab" class="tab-content" style="display: none;">
-                    <h3>Редактировать существующие карточки</h3>
-                    <div class="search-edit">
-                        <input type="text" id="editSearch" placeholder="Поиск карточки по ID или названию">
-                        <button onclick="searchCardsForEdit()">Найти</button>
+            <div id="editCardList"></div>
+            <div id="editForm" style="display: none;">
+                <h4>Редактировать карточку</h4>
+                <form id="updateCardForm">
+                    <input type="hidden" id="editCardKey">
+                    <div class="form-group">
+                        <label for="editCardId">Артикул/ID товара:</label>
+                        <input type="text" id="editCardId" readonly>
                     </div>
-                    <div id="editCardList"></div>
-                    <div id="editForm" style="display: none;">
-                        <h4>Редактировать карточку</h4>
-                        <form id="updateCardForm">
-                            <input type="hidden" id="editCardKey">
-                            <div class="form-group">
-                                <label for="editCardId">Артикул/ID товара:</label>
-                                <input type="text" id="editCardId" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label for="editCardName">Название товара:</label>
-                                <input type="text" id="editCardName" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="editCardAnalogs">Аналоги (через запятую):</label>
-                                <input type="text" id="editCardAnalogs">
-                            </div>
-                            <button type="submit" class="glow-on-hover">Сохранить изменения</button>
-                            <button type="button" onclick="cancelEdit()">Отмена</button>
-                        </form>
+                    <div class="form-group">
+                        <label for="editCardName">Название товара:</label>
+                        <input type="text" id="editCardName" required>
                     </div>
-                </div>
-                
-                <div class="export-section">
-                    <h3>Экспорт базы данных</h3>
-                    <p>После изменений скачайте обновленный файл cardDatabase.js и замените им существующий на сервере.</p>
-                    <button onclick="exportDatabase()" class="glow-on-hover">Скачать cardDatabase.js</button>
-                </div>
-                <div id="adminMessage"></div>
+                    <div class="form-group">
+                        <label for="editCardAnalogs">Аналоги (через запятую):</label>
+                        <input type="text" id="editCardAnalogs">
+                    </div>
+                    <button type="submit" class="glow-on-hover">Сохранить изменения</button>
+                    <button type="button" onclick="cancelEdit()">Отмена</button>
+                </form>
             </div>
-            
-            <div id="result"></div>
+        </div>
+        
+        <div class="export-section">
+            <h3>Экспорт базы данных</h3>
+            <p>После изменений скачайте обновленный файл cardDatabase.js и замените им существующий на сервере.</p>
+            <button onclick="exportDatabase()" class="glow-on-hover">Скачать cardDatabase.js</button>
+        </div>
+        <div id="adminMessage"></div>
+    </div>
+    
+    <!-- Overlay для админ панели -->
+    <div id="adminOverlay" class="admin-overlay" style="display: none;" onclick="closeAdminPanel()"></div>
+    
+    <!-- Основной контент -->
+ <div id="normalSite" style="display: none;">
 
         </div>
     </div>
