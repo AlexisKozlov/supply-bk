@@ -721,11 +721,6 @@ window.onclick = function(event) {
 }
 
 // Админ функции
-function showAdminAccess() {
-    const btn = document.getElementById('adminAccessBtn');
-    if (btn) btn.style.display = 'inline-block';
-}
-
 function hideAdminLogin() {
     const form = document.getElementById('adminLoginForm');
     if (form) form.style.display = 'none';
@@ -788,6 +783,46 @@ function exportDatabase() {
     showAdminMessage('Файл cardDatabase.js скачан!', 'success');
 }
 
+function addCard(event) {
+    event.preventDefault();
+    console.log('addCard called');
+    
+    const id = document.getElementById('cardId').value.trim();
+    const name = document.getElementById('cardName').value.trim();
+    const analogsStr = document.getElementById('cardAnalogs').value.trim();
+    
+    console.log('ID:', id, 'Name:', name, 'Analogs:', analogsStr);
+    
+    if (!id || !name) {
+        showAdminMessage('Заполните обязательные поля!', 'error');
+        return;
+    }
+    
+    if (cardDatabase[id]) {
+        showAdminMessage('Карточка с таким ID уже существует!', 'error');
+        return;
+    }
+    
+    const analogs = analogsStr ? analogsStr.split(',').map(a => a.trim()).filter(a => a) : [];
+    
+    cardDatabase[id] = {
+        name: name,
+        analogs: analogs
+    };
+    
+    console.log('Added to cardDatabase:', cardDatabase[id]);
+    
+    // Сохраняем в localStorage для persistence
+    const customCards = JSON.parse(localStorage.getItem('customCards') || '{}');
+    customCards[id] = cardDatabase[id];
+    localStorage.setItem('customCards', JSON.stringify(customCards));
+    
+    showAdminMessage('Карточка успешно добавлена!', 'success');
+    
+    // Очищаем форму
+    document.getElementById('addCardForm').reset();
+}
+
 // Загружаем кастомные карточки из localStorage (только для сессии админа)
 function loadCustomCards() {
     if (isAdminLoggedIn) {
@@ -803,8 +838,6 @@ function loadCustomCards() {
 
 // Инициализация админ доступа
 document.addEventListener('DOMContentLoaded', function() {
-    showAdminAccess();
-    
     // Обработчики для админ кнопок
     const adminBtn = document.getElementById('adminAccessBtn');
     if (adminBtn) {
@@ -845,5 +878,6 @@ window.closeGoogleForm = closeGoogleForm;
 window.loginAdmin = loginAdmin;
 window.hideAdminLogin = hideAdminLogin;
 window.exportDatabase = exportDatabase;
+window.addCard = addCard;
 
 

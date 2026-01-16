@@ -1649,16 +1649,18 @@ body {
 }
 
 /* Админ панель */
-.admin-access {
-    text-align: center;
-    margin: 10px 0;
+.admin-access-fixed {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
 }
 
 .admin-access-btn {
     background: linear-gradient(135deg, #d62300, #ff6b35);
     color: white;
     border: none;
-    padding: 8px 16px;
+    padding: 10px 15px;
     border-radius: 20px;
     cursor: pointer;
     font-size: 14px;
@@ -1666,6 +1668,7 @@ body {
     align-items: center;
     gap: 5px;
     transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(214, 35, 0, 0.3);
 }
 
 .admin-access-btn:hover {
@@ -1674,18 +1677,26 @@ body {
 }
 
 .admin-login-form {
-    margin-top: 10px;
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     display: flex;
     gap: 10px;
     justify-content: center;
     align-items: center;
+    z-index: 1001;
 }
 
 .admin-login-form input {
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    width: 150px;
+    width: 120px;
 }
 
 .admin-login-form button {
@@ -1695,6 +1706,10 @@ body {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.admin-login-form button:hover {
+    background: #b01e00;
 }
 
 .admin-panel {
