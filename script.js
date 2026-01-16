@@ -13,6 +13,9 @@ const AppConfig = {
     adminPassword: "157"
 };
 
+// Глобальные переменные
+let isAdminLoggedIn = false;
+
 // Инициализация приложения после загрузки DOM
 document.addEventListener('DOMContentLoaded', function() {
     // Предотвращаем отправку всех форм
@@ -717,6 +720,105 @@ window.onclick = function(event) {
     }
 }
 
+// Админ функции
+function showAdminAccess() {
+    const btn = document.getElementById('adminAccessBtn');
+    if (btn) btn.style.display = 'inline-block';
+}
+
+function hideAdminLogin() {
+    const form = document.getElementById('adminLoginForm');
+    if (form) form.style.display = 'none';
+}
+
+function loginAdmin() {
+    const password = document.getElementById('adminLoginPassword').value;
+    if (password === AppConfig.adminPassword) {
+        isAdminLoggedIn = true;
+        loadCustomCards(); // Загружаем кастомные карточки для админа
+        document.getElementById('adminLoginForm').style.display = 'none';
+        document.getElementById('adminPanel').style.display = 'block';
+        document.getElementById('adminAccessBtn').style.display = 'none';
+        showAdminMessage('Добро пожаловать в админ панель!', 'success');
+    } else {
+        showAdminMessage('Неверный пароль!', 'error');
+    }
+    document.getElementById('adminLoginPassword').value = '';
+}
+
+function showAdminMessage(message, type) {
+    const msgDiv = document.getElementById('adminMessage');
+    if (msgDiv) {
+        msgDiv.textContent = message;
+        msgDiv.className = type;
+        setTimeout(() => {
+            msgDiv.textContent = '';
+            msgDiv.className = '';
+        }, 3000);
+    }
+}
+
+function exportDatabase() {
+    // Создаем строку с обновленной базой данных
+    let dbString = 'var cardDatabase = {\n';
+    
+    for (const [key, value] of Object.entries(cardDatabase)) {
+        dbString += `  ${JSON.stringify(key)}: {\n`;
+        dbString += `    name: ${JSON.stringify(value.name)},\n`;
+        dbString += `    analogs: ${JSON.stringify(value.analogs)}\n`;
+        dbString += '  },\n';
+    }
+    
+    // Убираем последнюю запятую
+    dbString = dbString.slice(0, -2) + '\n';
+    dbString += '};\n';
+    
+    // Создаем blob и скачиваем
+    const blob = new Blob([dbString], { type: 'text/javascript' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'cardDatabase.js';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    showAdminMessage('Файл cardDatabase.js скачан!', 'success');
+}
+
+// Загружаем кастомные карточки из localStorage (только для сессии админа)
+function loadCustomCards() {
+    if (isAdminLoggedIn) {
+        const customCards = JSON.parse(localStorage.getItem('customCards') || '{}');
+        // Добавляем только те, которых нет в основной базе
+        for (const [key, value] of Object.entries(customCards)) {
+            if (!cardDatabase[key]) {
+                cardDatabase[key] = value;
+            }
+        }
+    }
+}
+
+// Инициализация админ доступа
+document.addEventListener('DOMContentLoaded', function() {
+    showAdminAccess();
+    
+    // Обработчики для админ кнопок
+    const adminBtn = document.getElementById('adminAccessBtn');
+    if (adminBtn) {
+        adminBtn.addEventListener('click', function() {
+            document.getElementById('adminLoginForm').style.display = 'flex';
+        });
+    }
+    
+    const addForm = document.getElementById('addCardForm');
+    if (addForm) {
+        addForm.addEventListener('submit', addCard);
+    }
+});
+
 // Закрытие по ESC
 document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') {
@@ -728,6 +830,9 @@ document.addEventListener('keydown', function(event) {
             errorPopup.style.display = 'none';
             document.body.style.overflow = '';
         }
+        
+        // Закрываем админ логин
+        hideAdminLogin();
     }
 });
 
@@ -737,5 +842,8 @@ window.checkPassword = checkPassword;
 window.copyToClipboard = copyToClipboard;
 window.showGoogleForm = showGoogleForm;
 window.closeGoogleForm = closeGoogleForm;
+window.loginAdmin = loginAdmin;
+window.hideAdminLogin = hideAdminLogin;
+window.exportDatabase = exportDatabase;
 
 

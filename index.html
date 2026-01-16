@@ -142,9 +142,51 @@
                 <h1>Поиск актуальных карточек</h1>
             </div>
 
+            <!-- Админ доступ -->
+            <div class="admin-access">
+                <button id="adminAccessBtn" class="admin-access-btn" style="display: none;">
+                    <span class="btn-icon">🔧</span>
+                    <span class="btn-text">Админ панель</span>
+                </button>
+                <div id="adminLoginForm" class="admin-login-form" style="display: none;">
+                    <input type="password" id="adminLoginPassword" placeholder="Пароль">
+                    <button onclick="loginAdmin()">Войти</button>
+                    <button onclick="hideAdminLogin()">Отмена</button>
+                </div>
+            </div>
+
             <div class="search-box">
                 <input type="text" id="searchInput" placeholder="Введите артикул...">
                 <button class="glow-on-hover" onclick="searchCard()">Найти</button>
+            </div>
+
+            <!-- Админ панель для добавления карточек -->
+            <div id="adminPanel" class="admin-panel" style="display: none;">
+                <h2>Управление базой данных</h2>
+                <div class="add-card-form">
+                    <h3>Добавить новую карточку товара</h3>
+                    <form id="addCardForm">
+                        <div class="form-group">
+                            <label for="cardId">Артикул/ID товара:</label>
+                            <input type="text" id="cardId" required placeholder="Например: 123456">
+                        </div>
+                        <div class="form-group">
+                            <label for="cardName">Название товара:</label>
+                            <input type="text" id="cardName" required placeholder="Например: Куриные наггетсы">
+                        </div>
+                        <div class="form-group">
+                            <label for="cardAnalogs">Аналоги (через запятую):</label>
+                            <input type="text" id="cardAnalogs" placeholder="Например: наггетсы, курица, 654321">
+                        </div>
+                        <button type="submit" class="glow-on-hover">Добавить карточку</button>
+                    </form>
+                </div>
+                <div class="export-section">
+                    <h3>Экспорт базы данных</h3>
+                    <p>После добавления карточек скачайте обновленный файл cardDatabase.js и замените им существующий на сервере.</p>
+                    <button onclick="exportDatabase()" class="glow-on-hover">Скачать cardDatabase.js</button>
+                </div>
+                <div id="adminMessage"></div>
             </div>
             
             <div id="result"></div>
