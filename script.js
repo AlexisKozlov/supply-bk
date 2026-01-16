@@ -16,192 +16,7 @@ const AppConfig = {
 // Глобальные переменные
 let isAdminLoggedIn = false;
 
-// Инициализация приложения после загрузки DOM
-document.addEventListener('DOMContentLoaded', function() {
-    // Не предотвращаем отправку форм - обрабатываем в отдельных функциях
-    
-    // Загружаем сохраненное состояние техработ
-    const savedMaintenanceMode = localStorage.getItem('maintenanceMode');
-    if (savedMaintenanceMode) {
-        AppConfig.maintenanceMode = savedMaintenanceMode === 'true';
-    }
-    
-    // Показываем дисклеймер только если не режим техработ
-    if (!AppConfig.maintenanceMode) {
-        showDisclaimer();
-    } else {
-        // Если режим техработ - сразу инициализируем контент
-        initMainContent();
-    }
-    
-    // Инициализация частиц
-    if (typeof particlesJS !== 'undefined') {
-        particlesJS('particles-js', {
-            particles: {
-                number: { 
-                    value: 80,
-                    density: {
-                        enable: true,
-                        value_area: 800
-                    }
-                },
-                color: { 
-                    value: ["#d62300", "#ffcc00", "#12168c"] 
-                },
-                shape: { 
-                    type: "circle",
-                    stroke: {
-                        width: 0,
-                        color: "#000000"
-                    }
-                },
-                opacity: {
-                    value: 0.5,
-                    random: true,
-                    anim: {
-                        enable: true,
-                        speed: 1,
-                        opacity_min: 0.1,
-                        sync: false
-                    }
-                },
-                size: {
-                    value: 3,
-                    random: true,
-                    anim: {
-                        enable: true,
-                        speed: 2,
-                        size_min: 0.1,
-                        sync: false
-                    }
-                },
-                line_linked: {
-                    enable: true,
-                    distance: 150,
-                    color: "#d62300",
-                    opacity: 0.4,
-                    width: 1
-                },
-                move: {
-                    enable: true,
-                    speed: 2,
-                    direction: "none",
-                    random: true,
-                    straight: false,
-                    out_mode: "out",
-                    bounce: false,
-                    attract: {
-                        enable: true,
-                        rotateX: 600,
-                        rotateY: 1200
-                    }
-                }
-            },
-            interactivity: {
-                detect_on: "canvas",
-                events: {
-                    onhover: {
-                        enable: true,
-                        mode: "grab"
-                    },
-                    onclick: {
-                        enable: true,
-                        mode: "push"
-                    },
-                    resize: true
-                },
-                modes: {
-                    grab: {
-                        distance: 140,
-                        line_linked: {
-                            opacity: 1
-                        }
-                    },
-                    push: {
-                        particles_nb: 4
-                    }
-                }
-            },
-            retina_detect: true
-        });
-    }
-    
-    // Инициализация для мобильных устройств
-    initMobileFeatures();
-});
-
-// Инициализация мобильных функций
-function initMobileFeatures() {
-    // Предотвращение масштабирования при двойном тапе
-    let lastTouchEnd = 0;
-    document.addEventListener('touchend', function(event) {
-        const now = (new Date()).getTime();
-        if (now - lastTouchEnd <= 300) {
-            event.preventDefault();
-        }
-        lastTouchEnd = now;
-    }, false);
-    
-    // Фикс для 100vh на мобильных
-    function setRealViewportHeight() {
-        const vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
-    }
-    
-    setRealViewportHeight();
-    window.addEventListener('resize', setRealViewportHeight);
-    window.addEventListener('orientationchange', setRealViewportHeight);
-}
-
-function initApplication() {
-    // Инициализация даты обновления
-    updateVersionInfo();
-    
-    // Инициализация обработчика для кнопки проверки пароля
-    const submitButton = document.querySelector('.submit-button');
-    if (submitButton) {
-        submitButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            checkPassword(e);
-        });
-    }
-    
-    // Инициализация уведомлений для скачивания
-    setupDownloadNotifications();
-    
-    // Плавная прокрутка для меню на мобильных
-    const topMenu = document.querySelector('.top-menu');
-    if (topMenu && window.innerWidth <= 768) {
-        topMenu.addEventListener('wheel', function(e) {
-            e.preventDefault();
-            topMenu.scrollLeft += e.deltaY;
-        }, { passive: false });
-        
-        // Добавляем touch-скролл для мобильных
-        let isDragging = false;
-        let startX;
-        let scrollLeft;
-        
-        topMenu.addEventListener('touchstart', (e) => {
-            isDragging = true;
-            startX = e.touches[0].pageX - topMenu.offsetLeft;
-            scrollLeft = topMenu.scrollLeft;
-        }, { passive: true });
-        
-        topMenu.addEventListener('touchmove', (e) => {
-            if (!isDragging) return;
-            e.preventDefault();
-            const x = e.touches[0].pageX - topMenu.offsetLeft;
-            const walk = (x - startX) * 2;
-            topMenu.scrollLeft = scrollLeft - walk;
-        }, { passive: false });
-        
-        topMenu.addEventListener('touchend', () => {
-            isDragging = false;
-        }, { passive: true });
-    }
-}
-
+// Функции
 function showDisclaimer() {
     const disclaimerPopup = document.getElementById('disclaimerPopup');
     if (!disclaimerPopup) {
@@ -901,6 +716,232 @@ function loadCustomCards() {
             }
         }
     }
+}
+
+// Инициализация приложения после загрузки DOM
+document.addEventListener('DOMContentLoaded', function() {
+    // Не предотвращаем отправку форм - обрабатываем в отдельных функциях
+    
+    // Загружаем сохраненное состояние техработ
+    const savedMaintenanceMode = localStorage.getItem('maintenanceMode');
+    if (savedMaintenanceMode) {
+        AppConfig.maintenanceMode = savedMaintenanceMode === 'true';
+    }
+    
+    // Показываем дисклеймер только если не режим техработ
+    if (!AppConfig.maintenanceMode) {
+        showDisclaimer();
+    } else {
+        // Если режим техработ - сразу инициализируем контент
+        initMainContent();
+    }
+    
+    // Инициализация частиц
+    if (typeof particlesJS !== 'undefined') {
+        particlesJS('particles-js', {
+            particles: {
+                number: { 
+                    value: 80,
+                    density: {
+                        enable: true,
+                        value_area: 800
+                    }
+                },
+                color: { 
+                    value: ["#d62300", "#ffcc00", "#12168c"] 
+                },
+                shape: { 
+                    type: "circle",
+                    stroke: {
+                        width: 0,
+                        color: "#000000"
+                    }
+                },
+                opacity: {
+                    value: 0.5,
+                    random: true,
+                    anim: {
+                        enable: true,
+                        speed: 1,
+                        opacity_min: 0.1,
+                        sync: false
+                    }
+                },
+                size: {
+                    value: 3,
+                    random: true,
+                    anim: {
+                        enable: true,
+                        speed: 2,
+                        size_min: 0.1,
+                        sync: false
+                    }
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#d62300",
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: "none",
+                    random: true,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false,
+                    attract: {
+                        enable: true,
+                        rotateX: 600,
+                        rotateY: 1200
+                    }
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: "grab"
+                    },
+                    onclick: {
+                        enable: true,
+                        mode: "push"
+                    },
+                    resize: true
+                },
+                modes: {
+                    grab: {
+                        distance: 140,
+                        line_linked: {
+                            opacity: 1
+                        }
+                    },
+                    push: {
+                        particles_nb: 4
+                    }
+                }
+            },
+            retina_detect: true
+        });
+    }
+    
+    // Инициализация для мобильных устройств
+    initMobileFeatures();
+});
+
+// Инициализация мобильных функций
+function initMobileFeatures() {
+    // Предотвращение масштабирования при двойном тапе
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function(event) {
+        const now = (new Date()).getTime();
+        if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+        }
+        lastTouchEnd = now;
+    }, false);
+    
+    // Фикс для 100vh на мобильных
+    function setRealViewportHeight() {
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+    
+    setRealViewportHeight();
+    window.addEventListener('resize', setRealViewportHeight);
+    window.addEventListener('orientationchange', setRealViewportHeight);
+}
+
+function initApplication() {
+    // Инициализация даты обновления
+    updateVersionInfo();
+    
+    // Инициализация обработчика для кнопки проверки пароля
+    const submitButton = document.querySelector('.submit-button');
+    if (submitButton) {
+        submitButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            checkPassword(e);
+        });
+    }
+    
+    // Инициализация уведомлений для скачивания
+    setupDownloadNotifications();
+    
+    // Плавная прокрутка для меню на мобильных
+    const topMenu = document.querySelector('.top-menu');
+    if (topMenu && window.innerWidth <= 768) {
+        topMenu.addEventListener('wheel', function(e) {
+            e.preventDefault();
+            topMenu.scrollLeft += e.deltaY;
+        }, { passive: false });
+        
+        // Добавляем touch-скролл для мобильных
+        let isDragging = false;
+        let startX;
+        let scrollLeft;
+        
+        topMenu.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            startX = e.touches[0].pageX - topMenu.offsetLeft;
+            scrollLeft = topMenu.scrollLeft;
+        }, { passive: true });
+        
+        topMenu.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const x = e.touches[0].pageX - topMenu.offsetLeft;
+            const walk = (x - startX) * 2;
+            topMenu.scrollLeft = scrollLeft - walk;
+        }, { passive: false });
+        
+        topMenu.addEventListener('touchend', () => {
+            isDragging = false;
+        }, { passive: true });
+    }
+}
+
+function addCard(event) {
+    event.preventDefault();
+    console.log('addCard called');
+    
+    const id = document.getElementById('cardId').value.trim();
+    const name = document.getElementById('cardName').value.trim();
+    const analogsStr = document.getElementById('cardAnalogs').value.trim();
+    
+    console.log('ID:', id, 'Name:', name, 'Analogs:', analogsStr);
+    
+    if (!id || !name) {
+        showAdminMessage('Заполните обязательные поля!', 'error');
+        return;
+    }
+    
+    if (cardDatabase[id]) {
+        showAdminMessage('Карточка с таким ID уже существует!', 'error');
+        return;
+    }
+    
+    const analogs = analogsStr ? analogsStr.split(',').map(a => a.trim()).filter(a => a) : [];
+    
+    cardDatabase[id] = {
+        name: name,
+        analogs: analogs
+    };
+    
+    console.log('Added to cardDatabase:', cardDatabase[id]);
+    
+    // Сохраняем в localStorage для persistence
+    const customCards = JSON.parse(localStorage.getItem('customCards') || '{}');
+    customCards[id] = cardDatabase[id];
+    localStorage.setItem('customCards', JSON.stringify(customCards));
+    
+    showAdminMessage('Карточка успешно добавлена!', 'success');
+    
+    // Очищаем форму
+    document.getElementById('addCardForm').reset();
 }
 
 // Инициализация админ доступа
