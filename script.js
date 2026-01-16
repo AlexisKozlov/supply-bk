@@ -622,10 +622,10 @@ function loginAdmin() {
         document.getElementById('adminAccessBtn').style.display = 'none';
         // Смещаем основной контент влево
         const container = document.querySelector('.container');
-        if (container) container.style.marginRight = '400px';
+        if (container) container.style.marginLeft = '-400px';
         // Смещаем дисклеймер
         const disclaimer = document.querySelector('.disclaimer-content');
-        if (disclaimer) disclaimer.style.marginRight = '400px';
+        if (disclaimer) disclaimer.style.marginLeft = '-400px';
         showAdminMessage('Добро пожаловать в админ панель!', 'success');
     } else {
         showAdminMessage('Неверный пароль!', 'error');
@@ -639,10 +639,10 @@ function closeAdminPanel() {
     document.getElementById('adminAccessBtn').style.display = 'inline-block';
     // Возвращаем основной контент в центр
     const container = document.querySelector('.container');
-    if (container) container.style.marginRight = '0';
+    if (container) container.style.marginLeft = '0';
     // Возвращаем дисклеймер
     const disclaimer = document.querySelector('.disclaimer-content');
-    if (disclaimer) disclaimer.style.marginRight = '0';
+    if (disclaimer) disclaimer.style.marginLeft = '0';
     isAdminLoggedIn = false;
 }
 

@@ -153,7 +153,7 @@ body {
     z-index: 1;
     margin: 20px auto;
     box-sizing: border-box;
-    transition: margin-right 0.3s ease;
+    transition: margin-left 0.3s ease;
 }
 
 /* Остальные стили без изменений */
@@ -766,7 +766,7 @@ margin: 5px;
   overflow-y: auto;
   border: 2px solid #d62300;
   margin: 20px auto;
-  transition: margin-right 0.3s ease;
+  transition: margin-left 0.3s ease;
 }
 
 .disclaimer-text {
@@ -1243,17 +1243,15 @@ body {
 }
 
 .maintenance-container {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    padding: 30px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 20px;
     max-width: 500px;
     width: 90%;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     position: relative;
     z-index: 2;
-    margin: 0 auto;
+    margin: 20px auto;
 }
 
 /* Шапка */
@@ -1282,114 +1280,21 @@ body {
     margin: 0;
 }
 
-/* Hero секция */
-.hero-section {
+.maintenance-message {
     text-align: center;
-    margin-bottom: 40px;
-}
-
-.burger-animation {
-    margin-bottom: 30px;
-}
-
-.burger-stack {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 2rem;
-    animation: bounce 2s infinite;
-}
-
-.burger-stack div {
-    animation: slideIn 1s ease-out;
-}
-
-.bun.top {
-    animation-delay: 0.1s;
-}
-
-.patty {
-    animation-delay: 0.2s;
-}
-
-.cheese {
-    animation-delay: 0.3s;
-}
-
-.lettuce {
-    animation-delay: 0.4s;
-}
-
-.bun.bottom {
-    animation-delay: 0.5s;
-}
-
-@keyframes bounce {
-    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-    40% { transform: translateY(-10px); }
-    60% { transform: translateY(-5px); }
-}
-
-@keyframes slideIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.hero-text h2 {
-    color: #d62300;
-    font-size: 2rem;
-    margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-}
-
-.hero-subtitle {
-    color: #ffcc00;
-    font-size: 1rem;
-    margin-bottom: 8px;
-    font-weight: 500;
-}
-
-.hero-description {
-    color: #ffffff;
-    font-size: 0.9rem;
     margin-bottom: 20px;
 }
 
-.progress-hero {
-    margin-top: 30px;
-}
-
-.progress-bar-hero {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 25px;
-    height: 8px;
-    overflow: hidden;
-    margin-bottom: 15px;
-}
-
-.progress-fill-hero {
-    height: 100%;
-    background: linear-gradient(90deg, #d62300, #ffcc00);
-    border-radius: 25px;
-    transition: width 0.5s ease;
-}
-
-.progress-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #ffffff;
-}
-
-.progress-percent {
+.maintenance-message h2 {
+    color: #d62300;
     font-size: 1.5rem;
-    font-weight: bold;
-    color: #ffcc00;
+    margin-bottom: 10px;
 }
 
-.progress-label {
+.maintenance-message p {
+    color: #333;
     font-size: 0.9rem;
-    opacity: 0.8;
+    line-height: 1.4;
 }
 
 @keyframes pulse {
