@@ -919,6 +919,11 @@ function addCard(event) {
         return;
     }
     
+    if (id.length < 3) {
+        showAdminMessage('Артикул должен содержать минимум 3 символа!', 'error');
+        return;
+    }
+    
     if (cardDatabase[id]) {
         showAdminMessage('Карточка с таким ID уже существует!', 'error');
         return;

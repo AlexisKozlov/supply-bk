@@ -10,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 </head>
 <body>
+<div id="particles-js"></div>
 <!-- Страница тех работ - ПОЛНОЭКРАННАЯ ВЕРСИЯ -->
 <div id="maintenance" class="maintenance-fullscreen" style="display: none;">
     <div class="maintenance-bg"></div>
@@ -160,7 +161,7 @@
         <!-- Вкладка добавления -->
         <div id="addTab" class="tab-content">
             <h3>Добавить новую карточку товара</h3>
-            <form id="addCardForm">
+            <form id="addCardForm" onsubmit="addCard(event); return false;">
                 <div class="form-group">
                     <label for="cardId">Артикул/ID товара:</label>
                     <input type="text" id="cardId" required placeholder="Например: 123456">
@@ -187,7 +188,7 @@
             <div id="editCardList"></div>
             <div id="editForm" style="display: none;">
                 <h4>Редактировать карточку</h4>
-                <form id="updateCardForm">
+                <form id="updateCardForm" onsubmit="updateCard(event); return false;">
                     <input type="hidden" id="editCardKey">
                     <div class="form-group">
                         <label for="editCardId">Артикул/ID товара:</label>
