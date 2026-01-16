@@ -620,6 +620,9 @@ function loginAdmin() {
         document.getElementById('adminPanel').style.display = 'block';
         document.getElementById('adminOverlay').style.display = 'block';
         document.getElementById('adminAccessBtn').style.display = 'none';
+        // Смещаем основной контент влево
+        const container = document.querySelector('.container');
+        if (container) container.style.marginRight = '400px';
         showAdminMessage('Добро пожаловать в админ панель!', 'success');
     } else {
         showAdminMessage('Неверный пароль!', 'error');
@@ -631,6 +634,9 @@ function closeAdminPanel() {
     document.getElementById('adminPanel').style.display = 'none';
     document.getElementById('adminOverlay').style.display = 'none';
     document.getElementById('adminAccessBtn').style.display = 'inline-block';
+    // Возвращаем основной контент в центр
+    const container = document.querySelector('.container');
+    if (container) container.style.marginRight = '0';
     isAdminLoggedIn = false;
 }
 

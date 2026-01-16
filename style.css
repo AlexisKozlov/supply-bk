@@ -1278,125 +1278,114 @@ body {
     margin: 0;
 }
 
-/* Анимация шестеренок */
-.animation-section {
+/* Hero секция */
+.hero-section {
     text-align: center;
+    margin-bottom: 40px;
+}
+
+.burger-animation {
     margin-bottom: 30px;
 }
 
-.gears-container {
-    position: relative;
-    height: 100px;
-    margin-bottom: 20px;
+.burger-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 3rem;
+    animation: bounce 2s infinite;
 }
 
-.gear {
-    position: absolute;
-    font-size: 40px;
-    animation: rotate linear infinite;
+.burger-stack div {
+    animation: slideIn 1s ease-out;
 }
 
-.gear-1 {
-    left: 50%;
-    top: 0;
-    transform: translateX(-50%);
-    animation-duration: 8s;
+.bun.top {
+    animation-delay: 0.1s;
+}
+
+.patty {
+    animation-delay: 0.2s;
+}
+
+.cheese {
+    animation-delay: 0.3s;
+}
+
+.lettuce {
+    animation-delay: 0.4s;
+}
+
+.bun.bottom {
+    animation-delay: 0.5s;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-text h2 {
     color: #d62300;
-}
-
-.gear-2 {
-    left: 30%;
-    top: 40px;
-    animation-duration: 6s;
-    animation-direction: reverse;
-    color: #ffcc00;
-}
-
-.gear-3 {
-    right: 30%;
-    top: 50px;
-    animation-duration: 4s;
-    color: #12168c;
-}
-
-@keyframes rotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-.main-text h2 {
-    color: #d62300;
-    font-size: 28px;
-    margin-bottom: 10px;
-    font-weight: bold;
+    font-size: 2.5rem;
+    margin-bottom: 15px;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
-.subtitle {
+.hero-subtitle {
     color: #ffcc00;
-    font-size: 18px;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
     font-weight: 500;
 }
 
-/* Прогресс бар */
-.progress-section {
+.hero-description {
+    color: #ffffff;
+    font-size: 1rem;
     margin-bottom: 30px;
 }
 
-.progress-container {
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 15px;
-    border: 2px solid #e9ecef;
+.progress-hero {
+    margin-top: 30px;
 }
 
-.progress-bar {
-    height: 12px;
-    background: #e9ecef;
-    border-radius: 6px;
+.progress-bar-hero {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+    height: 8px;
     overflow: hidden;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
-.progress-fill {
+.progress-fill-hero {
     height: 100%;
     background: linear-gradient(90deg, #d62300, #ffcc00);
-    border-radius: 6px;
-    width: 42%;
-    transition: width 2s ease-in-out;
+    border-radius: 25px;
+    transition: width 0.5s ease;
 }
 
-.progress-text {
+.progress-info {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    color: #ffffff;
 }
 
 .progress-percent {
-    font-size: 18px;
-    font-weight: 700;
-    color: #d62300;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffcc00;
 }
 
 .progress-label {
-    color: #7f8c8d;
-    font-size: 14px;
-}
-
-.status-message {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 15px;
-    color: #7f8c8d;
-}
-
-.status-dot {
-    width: 8px;
-    height: 8px;
-    background: #27ae60;
-    border-radius: 50%;
-    animation: pulse 2s infinite;
+    font-size: 0.9rem;
+    opacity: 0.8;
 }
 
 @keyframes pulse {
