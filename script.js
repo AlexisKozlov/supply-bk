@@ -18,14 +18,7 @@ let isAdminLoggedIn = false;
 
 // Инициализация приложения после загрузки DOM
 document.addEventListener('DOMContentLoaded', function() {
-    // Предотвращаем отправку всех форм
-    const forms = document.querySelectorAll('form');
-    forms.forEach(form => {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            return false;
-        });
-    });
+    // Не предотвращаем отправку форм - обрабатываем в отдельных функциях
     
     // Загружаем сохраненное состояние техработ
     const savedMaintenanceMode = localStorage.getItem('maintenanceMode');
@@ -762,6 +755,8 @@ function showAdminMessage(message, type) {
 }
 
 function exportDatabase() {
+    console.log('Exporting database, total cards:', Object.keys(cardDatabase).length);
+    
     // Создаем строку с обновленной базой данных
     let dbString = 'var cardDatabase = {\n';
     
@@ -775,6 +770,8 @@ function exportDatabase() {
     // Убираем последнюю запятую
     dbString = dbString.slice(0, -2) + '\n';
     dbString += '};\n';
+    
+    console.log('Generated dbString length:', dbString.length);
     
     // Создаем blob и скачиваем
     const blob = new Blob([dbString], { type: 'text/javascript' });
