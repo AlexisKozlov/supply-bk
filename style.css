@@ -2,6 +2,26 @@
     display: none; /* Сначала скрываем */
 }
 /* Базовые стили для мобильных */
+:root {
+    --bg-color: #ffffff;
+    --text-color: #333333;
+    --border-color: #dddddd;
+    --button-bg: #f8f9fa;
+    --button-hover: #e9ecef;
+    --accent-color: #007bff;
+    --shadow: rgba(0, 0, 0, 0.1);
+}
+
+.dark-theme {
+    --bg-color: #1a1a1a;
+    --text-color: #ffffff;
+    --border-color: #333333;
+    --button-bg: #2d2d2d;
+    --button-hover: #404040;
+    --accent-color: #4dabf7;
+    --shadow: rgba(255, 255, 255, 0.1);
+}
+
 * {
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
@@ -14,6 +34,9 @@ body, html {
     height: 100%;
     overflow-x: hidden;
     font-family: 'Montserrat', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Фикс для мобильного viewport */
@@ -144,16 +167,16 @@ body {
 .container {
     text-align: center;
     padding: 20px;
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: var(--bg-color);
     border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 15px var(--shadow);
     width: 90%;
     max-width: 500px;
     position: relative;
     z-index: 1;
     margin: 20px auto;
     box-sizing: border-box;
-    transition: left 0.3s ease;
+    transition: left 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Остальные стили без изменений */
@@ -177,17 +200,58 @@ h1 {
     margin-top: 10px;
 }
 .search-box {
-    margin-top: 5px;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
 }
 
-input {
-    width: 70%;
-    padding: 10px;
-    border: 2px solid #ff8732;
-    border-radius: 5px;
+.search-box input {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
     font-size: 16px;
-    text-align: center;
-    background-color: rgba(255, 255, 255, 0.8);
+    transition: border-color 0.3s ease;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: #d62300;
+}
+
+.search-box .glow-on-hover {
+    padding: 12px 20px;
+    background: linear-gradient(45deg, #d62300, #ffcc00);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.search-box .glow-on-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(214, 35, 0, 0.4);
+}
+
+.clear-btn {
+    padding: 12px;
+    background: #f8f9fa;
+    color: #6c757d;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.clear-btn:hover {
+    background: #e9ecef;
+    color: #495057;
+    transform: scale(1.05);
+}
 }
 
  button {
@@ -213,7 +277,8 @@ button:hover {
     margin-top: 20px;
     font-size: 18px;
     font-weight: bold;
-    color: #12168c;
+    color: var(--text-color);
+    animation: fadeIn 0.5s ease-in-out;
 }
 
 .not-found-animation {
