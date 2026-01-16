@@ -1653,7 +1653,7 @@ body {
     position: fixed;
     top: 20px;
     right: 20px;
-    z-index: 1000;
+    z-index: 1001;
 }
 
 .admin-access-btn {
@@ -1820,5 +1820,87 @@ body {
 .export-section button:hover {
     transform: scale(1.05);
     box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+
+/* Вкладки админ панели */
+.admin-tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+    border-bottom-color: #d62300;
+    color: #d62300;
+    font-weight: bold;
+}
+
+.tab-btn:hover {
+    background: #f0f0f0;
+}
+
+.tab-content {
+    display: block;
+}
+
+.search-edit {
+    margin-bottom: 15px;
+}
+
+.search-edit input {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 70%;
+    margin-right: 10px;
+}
+
+.search-edit button {
+    padding: 8px 15px;
+    background: #d62300;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#editCardList {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+}
+
+.edit-card-item {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    background: #f9f9f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.edit-card-item button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.edit-card-item button:hover {
+    background: #0056b3;
 }
 

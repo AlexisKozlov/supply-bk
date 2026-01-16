@@ -783,44 +783,101 @@ function exportDatabase() {
     showAdminMessage('Файл cardDatabase.js скачан!', 'success');
 }
 
-function addCard(event) {
-    event.preventDefault();
-    console.log('addCard called');
+function showTab(tabName) {
+    // Скрываем все вкладки
+    document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
     
-    const id = document.getElementById('cardId').value.trim();
-    const name = document.getElementById('cardName').value.trim();
-    const analogsStr = document.getElementById('cardAnalogs').value.trim();
+    // Показываем выбранную вкладку
+    document.getElementById(tabName + 'Tab').style.display = 'block';
+    event.target.classList.add('active');
+}
+
+function searchCardsForEdit() {
+    const searchTerm = document.getElementById('editSearch').value.toLowerCase().trim();
+    const listDiv = document.getElementById('editCardList');
     
-    console.log('ID:', id, 'Name:', name, 'Analogs:', analogsStr);
-    
-    if (!id || !name) {
-        showAdminMessage('Заполните обязательные поля!', 'error');
+    if (!searchTerm) {
+        listDiv.innerHTML = '<p>Введите поисковый запрос</p>';
         return;
     }
     
-    if (cardDatabase[id]) {
-        showAdminMessage('Карточка с таким ID уже существует!', 'error');
+    let results = [];
+    
+    for (const [key, card] of Object.entries(cardDatabase)) {
+        if (key.toLowerCase().includes(searchTerm) || 
+            card.name.toLowerCase().includes(searchTerm) ||
+            card.analogs.some(analog => analog.toLowerCase().includes(searchTerm))) {
+            results.push({ key, ...card });
+        }
+    }
+    
+    if (results.length === 0) {
+        listDiv.innerHTML = '<p>Карточки не найдены</p>';
+        return;
+    }
+    
+    listDiv.innerHTML = results.map(card => `
+        <div class="edit-card-item">
+            <div>
+                <strong>${card.key}</strong>: ${card.name}
+                <br><small>Аналоги: ${card.analogs.join(', ') || 'нет'}</small>
+            </div>
+            <button onclick="editCard('${card.key}')">Редактировать</button>
+        </div>
+    `).join('');
+}
+
+function editCard(key) {
+    const card = cardDatabase[key];
+    if (!card) return;
+    
+    document.getElementById('editCardKey').value = key;
+    document.getElementById('editCardId').value = key;
+    document.getElementById('editCardName').value = card.name;
+    document.getElementById('editCardAnalogs').value = card.analogs.join(', ');
+    
+    document.getElementById('editForm').style.display = 'block';
+    document.getElementById('editCardList').style.display = 'none';
+}
+
+function cancelEdit() {
+    document.getElementById('editForm').style.display = 'none';
+    document.getElementById('editCardList').style.display = 'block';
+    document.getElementById('updateCardForm').reset();
+}
+
+function updateCard(event) {
+    event.preventDefault();
+    
+    const key = document.getElementById('editCardKey').value;
+    const name = document.getElementById('editCardName').value.trim();
+    const analogsStr = document.getElementById('editCardAnalogs').value.trim();
+    
+    if (!name) {
+        showAdminMessage('Название товара обязательно!', 'error');
         return;
     }
     
     const analogs = analogsStr ? analogsStr.split(',').map(a => a.trim()).filter(a => a) : [];
     
-    cardDatabase[id] = {
+    cardDatabase[key] = {
         name: name,
         analogs: analogs
     };
     
-    console.log('Added to cardDatabase:', cardDatabase[id]);
-    
-    // Сохраняем в localStorage для persistence
+    // Обновляем localStorage
     const customCards = JSON.parse(localStorage.getItem('customCards') || '{}');
-    customCards[id] = cardDatabase[id];
+    customCards[key] = cardDatabase[key];
     localStorage.setItem('customCards', JSON.stringify(customCards));
     
-    showAdminMessage('Карточка успешно добавлена!', 'success');
+    showAdminMessage('Карточка успешно обновлена!', 'success');
     
-    // Очищаем форму
-    document.getElementById('addCardForm').reset();
+    // Скрываем форму редактирования
+    cancelEdit();
+    
+    // Обновляем список
+    searchCardsForEdit();
 }
 
 // Загружаем кастомные карточки из localStorage (только для сессии админа)
@@ -849,6 +906,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const addForm = document.getElementById('addCardForm');
     if (addForm) {
         addForm.addEventListener('submit', addCard);
+    }
+    
+    const updateForm = document.getElementById('updateCardForm');
+    if (updateForm) {
+        updateForm.addEventListener('submit', updateCard);
     }
 });
 
@@ -879,5 +941,10 @@ window.loginAdmin = loginAdmin;
 window.hideAdminLogin = hideAdminLogin;
 window.exportDatabase = exportDatabase;
 window.addCard = addCard;
+window.showTab = showTab;
+window.searchCardsForEdit = searchCardsForEdit;
+window.editCard = editCard;
+window.cancelEdit = cancelEdit;
+window.updateCard = updateCard;
 
 
