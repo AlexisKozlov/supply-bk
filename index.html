@@ -35,7 +35,7 @@
                 <p>Мы проводим плановое обслуживание системы.</p>
                 <p>Пожалуйста, зайдите через некоторое время.</p>
                 <div class="maintenance-timer">
-                    <span>Ожидаемое время: 17.01.2026</span>
+                    <span>Ожидаемое время: Быстрее, чем готовится гамбургер</span>
                 </div>
             </div>
 
@@ -123,7 +123,7 @@
     <div class="admin-access-fixed">
         <button id="adminAccessBtn" class="admin-access-btn">
             <span class="btn-icon">🔧</span>
-            <span class="btn-text">Админ</span>
+            <span class="btn-text">База данных</span>
         </button>
         <div id="adminLoginForm" class="admin-login-form" style="display: none;">
             <input type="password" id="adminLoginPassword" placeholder="Пароль">
@@ -147,7 +147,7 @@
             <h3>Добавить новую карточку товара</h3>
             <form id="addCardForm" onsubmit="addCard(event); return false;">
                 <div class="form-group">
-                    <label for="cardId">Артикул/ID товара:</label>
+                    <label for="cardId">Артикул:</label>
                     <input type="text" id="cardId" required placeholder="Например: 123456">
                 </div>
                 <div class="form-group">
@@ -175,7 +175,7 @@
                 <form id="updateCardForm" onsubmit="updateCard(event); return false;">
                     <input type="hidden" id="editCardKey">
                     <div class="form-group">
-                        <label for="editCardId">Артикул/ID товара:</label>
+                        <label for="editCardId">Артикул:</label>
                         <input type="text" id="editCardId" required>
                     </div>
                     <div class="form-group">
