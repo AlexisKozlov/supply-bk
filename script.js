@@ -671,29 +671,49 @@ function updateCard(event) {
     event.preventDefault();
     console.log('updateCard called');
     
-    const key = document.getElementById('editCardKey').value;
+    const oldKey = document.getElementById('editCardKey').value;
+    const newKey = document.getElementById('editCardId').value.trim();
     const name = document.getElementById('editCardName').value.trim();
     const analogsStr = document.getElementById('editCardAnalogs').value.trim();
     
-    console.log('Key:', key, 'Name:', name, 'Analogs:', analogsStr);
+    console.log('Old Key:', oldKey, 'New Key:', newKey, 'Name:', name, 'Analogs:', analogsStr);
     
-    if (!name) {
-        showAdminMessage('Название товара обязательно!', 'error');
+    if (!newKey || !name) {
+        showAdminMessage('Заполните обязательные поля!', 'error');
+        return;
+    }
+    
+    if (newKey.length < 3) {
+        showAdminMessage('Артикул должен содержать минимум 3 символа!', 'error');
+        return;
+    }
+    
+    // Если ID изменился, проверяем что новый не занят (кроме текущего)
+    if (newKey !== oldKey && cardDatabase[newKey]) {
+        showAdminMessage('Карточка с таким ID уже существует!', 'error');
         return;
     }
     
     const analogs = analogsStr ? analogsStr.split(',').map(a => a.trim()).filter(a => a) : [];
     
-    cardDatabase[key] = {
+    // Если ID изменился, удаляем старую запись
+    if (newKey !== oldKey) {
+        delete cardDatabase[oldKey];
+    }
+    
+    cardDatabase[newKey] = {
         name: name,
         analogs: analogs
     };
     
-    console.log('Updated cardDatabase:', cardDatabase[key]);
+    console.log('Updated cardDatabase:', cardDatabase[newKey]);
     
     // Обновляем localStorage
     const customCards = JSON.parse(localStorage.getItem('customCards') || '{}');
-    customCards[key] = cardDatabase[key];
+    if (newKey !== oldKey) {
+        delete customCards[oldKey];
+    }
+    customCards[newKey] = cardDatabase[newKey];
     localStorage.setItem('customCards', JSON.stringify(customCards));
     
     showAdminMessage('Карточка успешно обновлена!', 'success');
