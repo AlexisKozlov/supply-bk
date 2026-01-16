@@ -569,6 +569,19 @@ function showAdminMessage(message, type) {
     }
 }
 
+// Загружаем кастомные карточки из localStorage (только для сессии админа)
+function loadCustomCards() {
+    if (isAdminLoggedIn) {
+        const customCards = JSON.parse(localStorage.getItem('customCards') || '{}');
+        // Добавляем только те, которых нет в основной базе
+        for (const [key, value] of Object.entries(customCards)) {
+            if (!cardDatabase[key]) {
+                cardDatabase[key] = value;
+            }
+        }
+    }
+}
+
 function exportDatabase() {
     console.log('Exporting database, total cards:', Object.keys(cardDatabase).length);
     
@@ -1022,6 +1035,7 @@ window.loginAdmin = loginAdmin;
 window.hideAdminLogin = hideAdminLogin;
 window.exportDatabase = exportDatabase;
 window.clearLocalStorage = clearLocalStorage;
+window.loadCustomCards = loadCustomCards;
 window.addCard = addCard;
 window.showTab = showTab;
 window.searchCardsForEdit = searchCardsForEdit;
