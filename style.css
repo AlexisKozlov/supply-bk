@@ -222,6 +222,7 @@ h1 {
     cursor: pointer;
     font-size: 16px;
     transition: all 0.3s ease;
+    margin-top: 0; /* Убираем margin-top от глобального стиля button */
 }
 
 .search-box .glow-on-hover:hover {
@@ -238,6 +239,7 @@ h1 {
     cursor: pointer;
     font-size: 16px;
     transition: all 0.3s ease;
+    margin-top: 0; /* Убираем margin-top от глобального стиля button */
 }
 
 .clear-btn:hover {
