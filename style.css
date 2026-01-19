@@ -363,27 +363,6 @@ margin: 5px;
     opacity: 1;
 }
 
-.copy-notification {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #d62300;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    animation: fadeOut 2s forwards;
-    opacity: 0;
-    z-index: 1000;
-}
-
-@keyframes fadeOut {
-    0% { opacity: 0; bottom: 10px; }
-    20% { opacity: 1; bottom: 20px; }
-    80% { opacity: 1; bottom: 20px; }
-    100% { opacity: 0; bottom: 30px; }
-}
-
 .maintenance {
     position: fixed;
     top: 0;
@@ -1897,5 +1876,94 @@ body {
 
 .edit-card-item button:hover {
     background: #0056b3;
+}
+
+/* Toast уведомления */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    pointer-events: none;
+}
+
+.toast {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transform: translateX(400px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: auto;
+    max-width: 400px;
+    word-wrap: break-word;
+}
+
+.toast.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.toast.success {
+    background: rgba(40, 167, 69, 0.9);
+    border-color: rgba(40, 167, 69, 0.3);
+}
+
+.toast.error {
+    background: rgba(220, 53, 69, 0.9);
+    border-color: rgba(220, 53, 69, 0.3);
+}
+
+.toast.warning {
+    background: rgba(255, 193, 7, 0.9);
+    border-color: rgba(255, 193, 7, 0.3);
+    color: #000;
+}
+
+.toast.info {
+    background: rgba(23, 162, 184, 0.9);
+    border-color: rgba(23, 162, 184, 0.3);
+}
+
+.toast-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.toast-close {
+    margin-left: auto;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    font-size: 16px;
+    padding: 0 5px;
+}
+
+.toast-close:hover {
+    opacity: 1;
+}
+
+/* Адаптивность для toast */
+@media (max-width: 768px) {
+    .toast-container {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+    }
+    
+    .toast {
+        max-width: none;
+        margin-bottom: 5px;
+    }
 }
 

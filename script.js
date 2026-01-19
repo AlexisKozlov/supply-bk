@@ -186,6 +186,62 @@ function showError(message) {
     document.addEventListener('keydown', escapeHandler);
 }
 
+// Функция для показа toast-уведомлений
+function showToast(message, type = 'info', duration = 3000) {
+    // Создаем контейнер для toast, если его нет
+    let container = document.querySelector('.toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.className = 'toast-container';
+        document.body.appendChild(container);
+    }
+    
+    // Создаем toast элемент
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    
+    // Определяем иконку в зависимости от типа
+    let icon = 'ℹ️';
+    switch (type) {
+        case 'success':
+            icon = '✅';
+            break;
+        case 'error':
+            icon = '❌';
+            break;
+        case 'warning':
+            icon = '⚠️';
+            break;
+        case 'info':
+            icon = 'ℹ️';
+            break;
+    }
+    
+    toast.innerHTML = `
+        <span class="toast-icon">${icon}</span>
+        <span class="toast-message">${message}</span>
+        <span class="toast-close" onclick="this.parentElement.remove()">×</span>
+    `;
+    
+    // Добавляем toast в контейнер
+    container.appendChild(toast);
+    
+    // Показываем toast с анимацией
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 10);
+    
+    // Автоматическое скрытие
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 300);
+    }, duration);
+}
+
 function searchCard() {
     let inputElement = document.getElementById("searchInput");
     if (!inputElement) {
@@ -365,14 +421,14 @@ function copyToClipboard(text, element) {
         const decodedText = text.replace(/&quot;/g, '"');
         navigator.clipboard.writeText(decodedText).then(() => {
             if (element) {
-                element.style.color = "#667eea";
+                element.style.color = "#d62300";
                 setTimeout(() => {
                     if (element) element.style.color = "";
                 }, 500);
             }
             
-            // Используем новую систему уведомлений
-            showToast(`Артикул "${decodedText}" скопирован!`, 'success');
+            // Показываем toast-уведомление
+            showToast(`Артикул ${decodedText} скопирован!`, 'success');
         }).catch(err => {
             console.error('Ошибка копирования:', err);
             showToast('Не удалось скопировать артикул', 'error');
@@ -443,29 +499,7 @@ function setupDownloadNotifications() {
 
 // Функция для показа уведомления
 function showDownloadNotification() {
-    const notification = document.createElement('div');
-    notification.className = 'download-notification';
-    notification.innerHTML = `
-        <span class="notification-icon">✅</span>
-        <span class="notification-text">Файл заказа скачивается</span>
-    `;
-    
-    document.body.appendChild(notification);
-    
-    // Анимация появления
-    setTimeout(() => {
-        notification.classList.add('show');
-    }, 10);
-    
-    // Автоматическое скрытие через 3 секунды
-    setTimeout(() => {
-        notification.classList.remove('show');
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
-            }
-        }, 300);
-    }, 3000);
+    showToast('Файл заказа скачивается', 'info', 3000);
 }
 
 // Функция для показа Google Form
@@ -574,15 +608,15 @@ function closeAdminPanel() {
 }
 
 function showAdminMessage(message, type) {
-    const msgDiv = document.getElementById('adminMessage');
-    if (msgDiv) {
-        msgDiv.textContent = message;
-        msgDiv.className = type;
-        setTimeout(() => {
-            msgDiv.textContent = '';
-            msgDiv.className = '';
-        }, 3000);
+    // Преобразуем типы админ-сообщений в типы toast
+    let toastType = 'info';
+    if (type === 'success') {
+        toastType = 'success';
+    } else if (type === 'error') {
+        toastType = 'error';
     }
+    
+    showToast(message, toastType);
 }
 
 // Загружаем кастомные карточки из localStorage (только для сессии админа)
