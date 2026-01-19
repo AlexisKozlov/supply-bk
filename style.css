@@ -97,6 +97,11 @@ body {
         height: 45px !important;
     }
     
+    .clear-btn {
+        width: 100% !important;
+        height: 45px !important;
+    }
+    
     /* Фикс для iOS input zoom */
     @media (max-width: 480px) {
         input, select, textarea {
