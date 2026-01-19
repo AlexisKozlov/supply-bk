@@ -443,7 +443,29 @@ function setupDownloadNotifications() {
 
 // Функция для показа уведомления
 function showDownloadNotification() {
-    showToast('Файл заказа скачивается', 'info', 3000);
+    const notification = document.createElement('div');
+    notification.className = 'download-notification';
+    notification.innerHTML = `
+        <span class="notification-icon">✅</span>
+        <span class="notification-text">Файл заказа скачивается</span>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Анимация появления
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 10);
+    
+    // Автоматическое скрытие через 3 секунды
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
 }
 
 // Функция для показа Google Form
@@ -552,9 +574,15 @@ function closeAdminPanel() {
 }
 
 function showAdminMessage(message, type) {
-    // Преобразуем типы для toast
-    const toastType = type === 'error' ? 'error' : 'success';
-    showToast(message, toastType);
+    const msgDiv = document.getElementById('adminMessage');
+    if (msgDiv) {
+        msgDiv.textContent = message;
+        msgDiv.className = type;
+        setTimeout(() => {
+            msgDiv.textContent = '';
+            msgDiv.className = '';
+        }, 3000);
+    }
 }
 
 // Загружаем кастомные карточки из localStorage (только для сессии админа)
@@ -927,79 +955,8 @@ function clearSearch() {
     document.getElementById('searchInput').focus();
 }
 
-// Универсальная функция для toast-уведомлений
-function showToast(message, type = 'info', duration = 3000) {
-    // Создаем контейнер если его нет
-    let container = document.querySelector('.toast-container');
-    if (!container) {
-        container = document.createElement('div');
-        container.className = 'toast-container';
-        document.body.appendChild(container);
-    }
-
-    // Создаем уведомление
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    
-    // Иконки для разных типов
-    const icons = {
-        success: '✅',
-        error: '❌',
-        warning: '⚠️',
-        info: 'ℹ️'
-    };
-
-    toast.innerHTML = `
-        <span class="toast-icon">${icons[type] || icons.info}</span>
-        <span class="toast-message">${message}</span>
-        <span class="toast-close">✕</span>
-    `;
-
-    // Добавляем в контейнер
-    container.appendChild(toast);
-
-    // Показываем уведомление
-    setTimeout(() => {
-        toast.classList.add('show');
-    }, 10);
-
-    // Функция скрытия
-    const hideToast = () => {
-        toast.classList.remove('show');
-        setTimeout(() => {
-            if (toast.parentNode) {
-                toast.parentNode.removeChild(toast);
-            }
-        }, 300);
-    };
-
-    // Обработчик клика для закрытия
-    toast.addEventListener('click', hideToast);
-
-    // Автоматическое скрытие
-    setTimeout(hideToast, duration);
-}
-
-// Демо-функция для показа всех типов уведомлений
-function demoToasts() {
-    const messages = [
-        { message: 'Это информационное уведомление', type: 'info' },
-        { message: 'Операция выполнена успешно!', type: 'success' },
-        { message: 'Произошла ошибка', type: 'error' },
-        { message: 'Внимание! Проверьте данные', type: 'warning' }
-    ];
-    
-    messages.forEach((item, index) => {
-        setTimeout(() => {
-            showToast(item.message, item.type);
-        }, index * 1000); // Показываем по очереди с интервалом 1 секунда
-    });
-}
-
 // Экспорт функций для глобального доступа
 window.clearSearch = clearSearch;
-window.showToast = showToast;
-window.demoToasts = demoToasts;
 window.checkPassword = checkPassword;
 window.copyToClipboard = copyToClipboard;
 window.showGoogleForm = showGoogleForm;
