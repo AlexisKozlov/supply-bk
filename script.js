@@ -46,6 +46,43 @@ function showDisclaimer() {
             }, 300);
         });
     }
+    
+    // Обработчик кнопки отказа
+    const declineButton = document.getElementById('declineDisclaimer');
+    if (declineButton) {
+        declineButton.addEventListener('click', function() {
+            disclaimerPopup.style.opacity = '0';
+            
+            // После завершения анимации исчезновения скрываем попап
+            setTimeout(() => {
+                disclaimerPopup.style.display = 'none';
+                // Показываем страницу "приложение недоступно"
+                showAppUnavailable();
+            }, 300);
+        });
+    }
+}
+
+// Функция для показа страницы "Приложение недоступно"
+function showAppUnavailable() {
+    const unavailablePage = document.getElementById('appUnavailable');
+    const refreshButton = document.getElementById('refreshPage');
+    
+    if (unavailablePage) {
+        unavailablePage.style.display = 'flex';
+        
+        // Добавляем анимацию появления
+        setTimeout(() => {
+            unavailablePage.style.opacity = '1';
+        }, 10);
+    }
+    
+    // Обработчик кнопки обновления страницы
+    if (refreshButton) {
+        refreshButton.addEventListener('click', function() {
+            location.reload();
+        });
+    }
 }
 
 function initMainContent() {
