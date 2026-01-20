@@ -618,7 +618,7 @@ function loginAdmin() {
             disclaimer.style.position = 'relative';
             disclaimer.style.left = '-400px';
         }
-        showAdminMessage('Добро пожаловать в админ панель!', 'success');
+        showAdminMessage('Добро пожаловать в базу данных!', 'success');
     } else {
         showAdminMessage('Неверный пароль!', 'error');
     }
