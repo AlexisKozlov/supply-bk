@@ -1057,11 +1057,18 @@ function showTab(tab) {
 }
 
 function renderAllCards() {
+  const sortBy = document.getElementById('allSort')?.value || 'id';
   const q = (document.getElementById('allSearch').value || '').toLowerCase();
   const list = document.getElementById('allCardList');
   if (!list) return;
   list.innerHTML = '';
-  Object.keys(cardDatabase).forEach(key => {
+  const keys = Object.keys(cardDatabase).sort((a,b)=>{
+    if(sortBy==='name'){
+      return cardDatabase[a].name.localeCompare(cardDatabase[b].name);
+    }
+    return a.localeCompare(b);
+  });
+  keys.forEach(key => {
     const card = cardDatabase[key];
     if (
       q &&
@@ -1070,8 +1077,8 @@ function renderAllCards() {
     ) return;
 
     const row = document.createElement('div');
-    row.innerHTML = `<strong>${key}</strong> — ${card.name}
-      <button onclick="startEditFromAll('${key}')">Редактировать</button>`;
+    row.className='allcard-row';
+    row.innerHTML = `<div class="allcard-info"><strong>${key}</strong><span>${card.name}</span></div><button class="edit-btn" onclick="startEditFromAll('${key}')">Редактировать</button>`;
     list.appendChild(row);
   });
 }

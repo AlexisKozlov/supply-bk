@@ -141,7 +141,13 @@
         
         <!-- Вкладка всех карточек -->
 <div id="allTab" class="tab-content" style="display:none;">
-  <input type="text" id="allSearch" placeholder="Поиск..." oninput="renderAllCards()">
+  <div class="allcards-controls">
+  <input type="text" id="allSearch" placeholder="Поиск по артикулу или названию" oninput="renderAllCards()">
+  <select id="allSort" onchange="renderAllCards()">
+    <option value="id">По артикулу</option>
+    <option value="name">По названию</option>
+  </select>
+</div>
   <div id="allCardList"></div>
 </div>
 
