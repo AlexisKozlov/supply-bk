@@ -6,6 +6,26 @@ const supabase = window.supabase.createClient(
   SUPABASE_KEY
 );
 
+let cardDatabase = {};
+
+async function loadDatabaseFromSupabase() {
+  const { data, error } = await supabase.from("cards").select("*");
+  if (error) {
+    console.error("Supabase error:", error);
+    alert("Ошибка загрузки базы: " + error.message);
+    return;
+  }
+  cardDatabase = {};
+  data.forEach(row => {
+    cardDatabase[row.id] = { name: row.name, analogs: row.analogs || [] };
+  });
+  console.log("База загружена из Supabase:", cardDatabase);
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  loadDatabaseFromSupabase();
+});
+
 // Проверка загрузки базы данных
 if (typeof cardDatabase === 'undefined') {
     console.error('cardDatabase не загружен!');
@@ -677,20 +697,7 @@ function loadCustomCards() {
     }
 }
 
-function exportDatabase() {
-    console.log('Exporting database, total cards:', Object.keys(cardDatabase).length);
-    
-   let cardDatabase = {};
-
-async function loadDatabaseFromSupabase() {
-  const { data, error } = await supabase
-    .from("cards")
-    .select("*");
-
-  if (error) {
-    alert("Ошибка загрузки базы: " + error.message);
-    return;
-  }
+function exportDatabase(){ showAdminMessage('Экспорт больше не нужен: база в Supabase','info'); }
 
   cardDatabase = {};
 
