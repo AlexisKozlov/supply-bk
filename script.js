@@ -13,23 +13,6 @@ const AppConfig = {
     adminPassword: "157"
 };
 
-function getTodayDate() {
-  const d = new Date();
-  const day = String(d.getDate()).padStart(2, '0');
-  const month = String(d.getMonth() + 1).padStart(2, '0');
-  const year = d.getFullYear();
-  return `${year}-${month}-${day}`;
-}
-
-function normalizeDatabaseDates() {
-  for (let key in cardDatabase) {
-    if (!cardDatabase[key].updatedAt) {
-      cardDatabase[key].updatedAt = getTodayDate();
-    }
-  }
-}
-normalizeDatabaseDates();
-
 // Глобальные переменные
 let isAdminLoggedIn = false;
 
@@ -704,33 +687,35 @@ function exportDatabase() {
 
   sortedKeys.forEach((key, index) => {
     const card = cardDatabase[key];
-    output += `  "${key}": {
-`;
-    output += `    name: "${card.name.replace(/"/g, '\\"')}",
-`;
-    output += `    analogs: ${JSON.stringify(card.analogs || [])},
-`;
-    output += `    updatedAt: "${card.updatedAt}"
-`;
-    output += "  }";
-    if (index < sortedKeys.length - 1) output += ",";
-    output += "
-";
+
+    output += '  "' + key + '": {
+';
+    output += '    name: "' + card.name.replace(/"/g, '\\"') + '",
+';
+    output += '    analogs: ' + JSON.stringify(card.analogs || []) + ',
+';
+    output += '    updatedAt: "' + card.updatedAt + '"
+';
+    output += '  }';
+
+    if (index < sortedKeys.length - 1) output += ',';
+    output += '
+';
   });
 
-  output += "};";
+  output += '};';
 
   const encoded = encodeURIComponent(output);
-  const href = "data:application/javascript;charset=utf-8," + encoded;
+  const href = 'data:application/javascript;charset=utf-8,' + encoded;
 
-  const a = document.createElement("a");
+  const a = document.createElement('a');
   a.href = href;
-  a.download = "cardDatabase.js";
+  a.download = 'cardDatabase.js';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
 
-  showToast("База данных успешно экспортирована", "success");
+  showToast('База данных успешно экспортирована', 'success');
 }
 
 function showTab(tabName) {
@@ -1076,56 +1061,3 @@ window.updateCard = updateCard;
 window.closeAdminPanel = closeAdminPanel;
 
 
-
-
-// ======================
-// ВКЛАДКА "ВСЕ КАРТОЧКИ"
-// ======================
-function renderAllCards(filter = '') {
-  const list = document.getElementById('allCardList');
-  if (!list) return;
-
-  list.innerHTML = '';
-
-  const entries = Object.entries(cardDatabase)
-    .filter(([key, card]) =>
-      (key + ' ' + card.name).toLowerCase().includes(filter.toLowerCase())
-    )
-    .sort((a, b) => {
-      const da = a[1].updatedAt || '';
-      const db = b[1].updatedAt || '';
-      return db.localeCompare(da);
-    });
-
-  entries.forEach(([key, card]) => {
-    const row = document.createElement('div');
-    row.className = 'admin-card-row';
-    row.innerHTML = `
-      <strong>${key}</strong> — ${card.name}<br>
-      <small>Обновлено: ${card.updatedAt || '—'}</small><br>
-      <button onclick="startEditFromAll('${key}')">Редактировать</button>
-      <hr>
-    `;
-    list.appendChild(row);
-  });
-}
-
-function startEditFromAll(key) {
-  showTab('edit');
-
-  const card = cardDatabase[key];
-  document.getElementById('editCardKey').value = key;
-  document.getElementById('editCardId').value = key;
-  document.getElementById('editCardName').value = card.name;
-  document.getElementById('editCardAnalogs').value =
-    (card.analogs || []).join(', ');
-
-  document.getElementById('editForm').style.display = 'block';
-}
-
-// Хук: когда пользователь открывает вкладку "Все карточки"
-document.addEventListener('click', function (e) {
-  if (e.target.matches('.tab-btn') && e.target.textContent.includes('Все карточки')) {
-    setTimeout(() => renderAllCards(''), 50);
-  }
-});
