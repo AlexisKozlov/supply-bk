@@ -1,3 +1,11 @@
+const SUPABASE_URL = "https://obywcpilionribalfrbl.supabase.co";
+const SUPABASE_KEY = "sb_publishable_BYToHeprZE-e64UjDgjlmQ_bKZBUFJ0";
+
+const supabase = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
 // Проверка загрузки базы данных
 if (typeof cardDatabase === 'undefined') {
     console.error('cardDatabase не загружен!');
