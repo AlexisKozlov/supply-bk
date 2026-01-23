@@ -670,27 +670,28 @@ function loadCustomCards() {
 }
 
 function exportDatabase() {
-  for (let key in cardDatabase) {
+  for (var key in cardDatabase) {
     if (!cardDatabase[key].updatedAt) {
       cardDatabase[key].updatedAt = getTodayDate();
     }
   }
 
-  const sortedKeys = Object.keys(cardDatabase).sort((a, b) => {
-    const da = cardDatabase[a].updatedAt || '';
-    const db = cardDatabase[b].updatedAt || '';
+  var sortedKeys = Object.keys(cardDatabase).sort(function (a, b) {
+    var da = cardDatabase[a].updatedAt || '';
+    var db = cardDatabase[b].updatedAt || '';
     return db.localeCompare(da);
   });
 
-  let output = "var cardDatabase = {
+  var output = "var cardDatabase = {
 ";
 
-  sortedKeys.forEach((key, index) => {
-    const card = cardDatabase[key];
+  for (var i = 0; i < sortedKeys.length; i++) {
+    var k = sortedKeys[i];
+    var card = cardDatabase[k];
 
-    output += '  "' + key + '": {
+    output += '  "' + k + '": {
 ';
-    output += '    name: "' + card.name.replace(/"/g, '\\"') + '",
+    output += '    name: "' + String(card.name).replace(/"/g, '\\"') + '",
 ';
     output += '    analogs: ' + JSON.stringify(card.analogs || []) + ',
 ';
@@ -698,24 +699,24 @@ function exportDatabase() {
 ';
     output += '  }';
 
-    if (index < sortedKeys.length - 1) output += ',';
+    if (i < sortedKeys.length - 1) output += ',';
     output += '
 ';
-  });
+  }
 
-  output += '};';
+  output += "};";
 
-  const encoded = encodeURIComponent(output);
-  const href = 'data:application/javascript;charset=utf-8,' + encoded;
+  var encoded = encodeURIComponent(output);
+  var href = "data:application/javascript;charset=utf-8," + encoded;
 
-  const a = document.createElement('a');
+  var a = document.createElement("a");
   a.href = href;
-  a.download = 'cardDatabase.js';
+  a.download = "cardDatabase.js";
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
 
-  showToast('База данных успешно экспортирована', 'success');
+  showToast("База данных успешно экспортирована", "success");
 }
 
 function showTab(tabName) {
