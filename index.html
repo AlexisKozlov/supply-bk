@@ -7,6 +7,7 @@
     <title>Поиск карточек</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="favicon.png">
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 </head>
 <body>
 <!-- Страница тех работ - ПОЛНОЭКРАННАЯ ВЕРСИЯ -->
@@ -227,20 +228,101 @@
 
     <script>
         // Инициализация частиц
-       <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const particlesEl = document.getElementById("particles-js-maintenance");
+        document.addEventListener('DOMContentLoaded', function() {
+            particlesJS('particles-js', {
+                particles: {
+                    number: { 
+                        value: 80,
+                        density: {
+                            enable: true,
+                            value_area: 800
+                        }
+                    },
+                    color: { 
+                        value: ["#d62300", "#ffcc00", "#12168c"] 
+                    },
+                    shape: { 
+                        type: "circle",
+                        stroke: {
+                            width: 0,
+                            color: "#000000"
+                        }
+                    },
+                    opacity: {
+                        value: 0.5,
+                        random: true,
+                        anim: {
+                            enable: true,
+                            speed: 1,
+                            opacity_min: 0.1,
+                            sync: false
+                        }
+                    },
+                    size: {
+                        value: 3,
+                        random: true,
+                        anim: {
+                            enable: true,
+                            speed: 2,
+                            size_min: 0.1,
+                            sync: false
+                        }
+                    },
+                    line_linked: {
+                        enable: true,
+                        distance: 150,
+                        color: "#d62300",
+                        opacity: 0.4,
+                        width: 1
+                    },
+                    move: {
+                        enable: true,
+                        speed: 2,
+                        direction: "none",
+                        random: true,
+                        straight: false,
+                        out_mode: "out",
+                        bounce: false,
+                        attract: {
+                            enable: true,
+                            rotateX: 600,
+                            rotateY: 1200
+                        }
+                    }
+                },
+                interactivity: {
+                    detect_on: "canvas",
+                    events: {
+                        onhover: {
+                            enable: true,
+                            mode: "grab"
+                        },
+                        onclick: {
+                            enable: true,
+                            mode: "push"
+                        },
+                        resize: true
+                    },
+                    modes: {
+                        grab: {
+                            distance: 140,
+                            line_linked: {
+                                opacity: 1
+                            }
+                        },
+                        push: {
+                            particles_nb: 4
+                        }
+                    }
+                },
+                retina_detect: true
+            });
+            
+            // Инициализация даты обновления
+            document.getElementById('lastUpdateDate').textContent = "23.05.2025";
+        });
+    </script>
 
-  if (particlesEl && window.particlesJS) {
-    particlesJS.load("particles-js-maintenance", "particles.json", function () {
-      console.log("Particles loaded safely");
-    });
-  } else {
-    console.log("Particles skipped: element not found");
-  }
-});
-</script>
-        
     
     <div id="loader" style="display: none;">
         <img src="load.gif" alt="Загрузка" class="loader-gif">
@@ -262,6 +344,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <div id="disclaimerPopup" class="disclaimer-popup">
   <div class="disclaimer-content">
     <div class="disclaimer-text">
+</script>
       <p>Данное приложение предоставляется исключительно в информационных целях. Мы прилагаем все усилия для обеспечения точности информации, однако не гарантируем её абсолютную достоверность и актуальность.</p>
     </div>
     <div class="disclaimer-buttons">
