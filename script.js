@@ -1,3 +1,22 @@
+
+// --- Safe Supabase SDK init ---
+const SUPABASE_URL = "https://obywcpilionribalfrbl.supabase.co";
+const SUPABASE_KEY = "sb_publishable_BYToHeprZE-e64UjDgjlmQ_bKZBUFJ0";
+
+let supabaseClient = null;
+
+function waitForSupabaseAndInit() {
+  if (window.supabase && !supabaseClient) {
+    console.log("Supabase SDK loaded");
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    loadDatabaseFromSupabase();
+  } else if (!supabaseClient) {
+    setTimeout(waitForSupabaseAndInit, 50);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", waitForSupabaseAndInit);
+
 const SUPABASE_URL = "https://obywcpilionribalfrbl.supabaseClient.co";
 const SUPABASE_KEY = "sb_publishable_BYToHeprZE-e64UjDgjlmQ_bKZBUFJ0";
 
