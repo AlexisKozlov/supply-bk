@@ -1,12 +1,12 @@
-const SUPABASE_URL = "https://obywcpilionribalfrbl.supabase.co";
+const SUPABASE_URL = "https://obywcpilionribalfrbl.supabaseClient.co";
 const SUPABASE_KEY = "sb_publishable_BYToHeprZE-e64UjDgjlmQ_bKZBUFJ0";
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabaseClient = window.supabaseClient.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let cardDatabase = {};
 
 async function loadDatabaseFromSupabase() {
-  const { data, error } = await supabase.from("cards").select("*");
+  const { data, error } = await supabaseClient.from("cards").select("*");
   if (error) {
     console.error("Supabase error:", error);
     return;
