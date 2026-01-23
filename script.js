@@ -669,7 +669,56 @@ function loadCustomCards() {
     }
 }
 
-// exportDatabase temporarily removed to restore site
+
+function exportDatabase() {
+  for (var key in cardDatabase) {
+    if (!cardDatabase[key].updatedAt) {
+      cardDatabase[key].updatedAt = getTodayDate();
+    }
+  }
+
+  var sortedKeys = Object.keys(cardDatabase).sort(function (a, b) {
+    var da = cardDatabase[a].updatedAt || '';
+    var db = cardDatabase[b].updatedAt || '';
+    return db.localeCompare(da);
+  });
+
+  var output = "var cardDatabase = {
+";
+
+  for (var i = 0; i < sortedKeys.length; i++) {
+    var k = sortedKeys[i];
+    var card = cardDatabase[k];
+
+    output += '  "' + k + '": {
+';
+    output += '    name: "' + String(card.name).replace(/"/g, '\\"') + '",
+';
+    output += '    analogs: ' + JSON.stringify(card.analogs || []) + ',
+';
+    output += '    updatedAt: "' + card.updatedAt + '"
+';
+    output += '  }';
+
+    if (i < sortedKeys.length - 1) output += ',';
+    output += '
+';
+  }
+
+  output += "};";
+
+  var encoded = encodeURIComponent(output);
+  var href = "data:application/javascript;charset=utf-8," + encoded;
+
+  var a = document.createElement("a");
+  a.href = href;
+  a.download = "cardDatabase.js";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+
+  showToast("База данных успешно экспортирована", "success");
+}
 
 
 function showTab(tabName) {
@@ -1016,50 +1065,9 @@ window.closeAdminPanel = closeAdminPanel;
 
 
 
-
-// ======================
-// ВКЛАДКА "ВСЕ КАРТОЧКИ" (упрощённая)
-// ======================
-function renderAllCards(filter = '') {
-  const list = document.getElementById('allCardList');
-  if (!list) return;
-
-  list.innerHTML = '';
-
-  const entries = Object.entries(cardDatabase)
-    .filter(([key, card]) =>
-      (key + ' ' + card.name).toLowerCase().includes(filter.toLowerCase())
-    )
-    .sort((a, b) => a[0].localeCompare(b[0]));
-
-  entries.forEach(([key, card]) => {
-    const row = document.createElement('div');
-    row.className = 'admin-card-row';
-    row.innerHTML = `
-      <strong>${key}</strong> — ${card.name}<br>
-      <button class="edit-btn-small" onclick="startEditFromAll('${key}')">Редактировать</button>
-      <hr>
-    `;
-    list.appendChild(row);
-  });
-}
-
-function startEditFromAll(key) {
-  showTab('edit');
-
-  const card = cardDatabase[key];
-  document.getElementById('editCardKey').value = key;
-  document.getElementById('editCardId').value = key;
-  document.getElementById('editCardName').value = card.name;
-  document.getElementById('editCardAnalogs').value =
-    (card.analogs || []).join(', ');
-
-  document.getElementById('editForm').style.display = 'block';
-}
-
-// Авто-рендер при открытии вкладки
+// Автопоказ карточек при открытии вкладки
 document.addEventListener('click', function (e) {
   if (e.target.matches('.tab-btn') && e.target.textContent.includes('Все карточки')) {
-    setTimeout(() => renderAllCards(''), 50);
+    setTimeout(function(){ renderAllCards(''); }, 50);
   }
 });
