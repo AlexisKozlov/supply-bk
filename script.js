@@ -669,56 +669,7 @@ function loadCustomCards() {
     }
 }
 
-
-function exportDatabase() {
-  for (var key in cardDatabase) {
-    if (!cardDatabase[key].updatedAt) {
-      cardDatabase[key].updatedAt = getTodayDate();
-    }
-  }
-
-  var sortedKeys = Object.keys(cardDatabase).sort(function (a, b) {
-    var da = cardDatabase[a].updatedAt || '';
-    var db = cardDatabase[b].updatedAt || '';
-    return db.localeCompare(da);
-  });
-
-  var output = "var cardDatabase = {
-";
-
-  for (var i = 0; i < sortedKeys.length; i++) {
-    var k = sortedKeys[i];
-    var card = cardDatabase[k];
-
-    output += '  "' + k + '": {
-';
-    output += '    name: "' + String(card.name).replace(/"/g, '\\"') + '",
-';
-    output += '    analogs: ' + JSON.stringify(card.analogs || []) + ',
-';
-    output += '    updatedAt: "' + card.updatedAt + '"
-';
-    output += '  }';
-
-    if (i < sortedKeys.length - 1) output += ',';
-    output += '
-';
-  }
-
-  output += "};";
-
-  var encoded = encodeURIComponent(output);
-  var href = "data:application/javascript;charset=utf-8," + encoded;
-
-  var a = document.createElement("a");
-  a.href = href;
-  a.download = "cardDatabase.js";
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-
-  showToast("База данных успешно экспортирована", "success");
-}
+// exportDatabase temporarily removed to restore site
 
 
 function showTab(tabName) {
@@ -1064,10 +1015,3 @@ window.updateCard = updateCard;
 window.closeAdminPanel = closeAdminPanel;
 
 
-
-// Автопоказ карточек при открытии вкладки
-document.addEventListener('click', function (e) {
-  if (e.target.matches('.tab-btn') && e.target.textContent.includes('Все карточки')) {
-    setTimeout(function(){ renderAllCards(''); }, 50);
-  }
-});
