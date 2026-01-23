@@ -136,7 +136,6 @@
         <div class="admin-tabs">
             <button class="tab-btn active" onclick="showTab('add')">Добавить</button>
             <button class="tab-btn" onclick="showTab('edit')">Редактировать</button>
-            <button class="tab-btn" onclick="showTab('all')">Все карточки</button>
         </div>
         
         <!-- Вкладка добавления -->
@@ -183,31 +182,13 @@
                         <label for="editCardAnalogs">Аналоги (через запятую):</label>
                         <input type="text" id="editCardAnalogs">
                     </div>
-                    <div class="form-group">
-                        <label for="editCardUpdatedAt">Дата обновления:</label>
-                        <input type="date" id="editCardUpdatedAt">
-                    </div>
                     <button type="submit" class="glow-on-hover">Сохранить изменения</button>
                     <button type="button" onclick="cancelEdit()">Отмена</button>
                 </form>
             </div>
         </div>
         
-        <!-- Вкладка все карточки -->
-<div id="allTab" class="tab-content" style="display: none;">
-  <h3>Все карточки</h3>
-  <div class="all-search-box">
-    <input
-      type="text"
-      id="allSearch"
-      placeholder="Поиск по артикулу или названию"
-      oninput="renderAllCards(this.value)"
-    >
-  </div>
-  <div id="allCardList"></div>
-</div>
-
-<div class="export-section">
+        <div class="export-section">
             <h3>Экспорт базы данных</h3>
             <p>После изменений скачайте обновленный файл cardDatabase.js и замените им существующий на сервере.</p>
             <button onclick="exportDatabase()" class="glow-on-hover">Скачать cardDatabase.js</button>
