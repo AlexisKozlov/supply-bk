@@ -680,15 +680,33 @@ function loadCustomCards() {
 function exportDatabase() {
     console.log('Exporting database, total cards:', Object.keys(cardDatabase).length);
     
-    // Создаем строку с обновленной базой данных
-    let dbString = 'var cardDatabase = {\n';
-    
-    for (const [key, value] of Object.entries(cardDatabase)) {
-        dbString += `  ${JSON.stringify(key)}: {\n`;
-        dbString += `    name: ${JSON.stringify(value.name)},\n`;
-        dbString += `    analogs: ${JSON.stringify(value.analogs)}\n`;
-        dbString += '  },\n';
-    }
+   let cardDatabase = {};
+
+async function loadDatabaseFromSupabase() {
+  const { data, error } = await supabase
+    .from("cards")
+    .select("*");
+
+  if (error) {
+    alert("Ошибка загрузки базы: " + error.message);
+    return;
+  }
+
+  cardDatabase = {};
+
+  data.forEach(row => {
+    cardDatabase[row.id] = {
+      name: row.name,
+      analogs: row.analogs || []
+    };
+  });
+
+  console.log("База загружена из Supabase:", cardDatabase);
+}
+
+// ВАЖНО: вызвать при старте сайта
+loadDatabaseFromSupabase();
+
     
     // Убираем последнюю запятую
     dbString = dbString.slice(0, -2) + '\n';
