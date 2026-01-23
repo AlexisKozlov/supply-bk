@@ -1092,3 +1092,18 @@ function startEditFromAll(key) {
   document.getElementById('editCardAnalogs').value = (card.analogs || []).join(', ');
   document.getElementById('editForm').style.display = 'block';
 }
+
+
+function deleteCurrentCard() {
+  const key = document.getElementById('editCardKey').value;
+  if (!key || !cardDatabase[key]) {
+    alert('Карточка не найдена');
+    return;
+  }
+  if (!confirm('Удалить карточку ' + key + '?')) return;
+
+  delete cardDatabase[key];
+  document.getElementById('editForm').style.display = 'none';
+  renderAllCards();
+  alert('Карточка удалена');
+}

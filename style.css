@@ -2536,3 +2536,34 @@ body {
 .edit-btn:hover {
   background: #ff8c00;
 }
+
+
+/* Форма редактирования */
+.edit-form {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.edit-form .form-group {
+  margin-bottom: 12px;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.delete-btn {
+  background: #e53935;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background: #c62828;
+}
