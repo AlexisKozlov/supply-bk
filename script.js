@@ -28,14 +28,6 @@ document.addEventListener('DOMContentLoaded', function(){
   loadDatabaseFromSupabase();
 });
 
-// Проверка загрузки базы данных
-if (typeof cardDatabase === 'undefined') {
-    console.error('cardDatabase не загружен!');
-    
-    // Создаем пустой объект, чтобы избежать ошибок
-    window.cardDatabase = {};
-}
-
 const AppConfig = {
     version: "1.2.1",
     lastUpdate: "17.01.2026",
@@ -703,7 +695,7 @@ function exportDatabase() {
     console.log('Exporting database, total cards:', Object.keys(cardDatabase).length);
     
     // Создаем строку с обновленной базой данных
-    let dbString = '
+    let dbString = "var cardDatabase = {\n";
     
     for (const [key, value] of Object.entries(cardDatabase)) {
         dbString += `  ${JSON.stringify(key)}: {\n`;
