@@ -687,37 +687,57 @@ function loadCustomCards() {
 }
 
 function exportDatabase() {
-    console.log('Exporting database, total cards:', Object.keys(cardDatabase).length);
-    
-    // Создаем строку с обновленной базой данных
-    let dbString = 'var cardDatabase = {\n';
-    
-    for (const [key, value] of Object.entries(cardDatabase)) {
-        dbString += `  ${JSON.stringify(key)}: {\n`;
-        dbString += `    name: ${JSON.stringify(value.name)},\n`;
-        dbString += `    analogs: ${JSON.stringify(value.analogs)}\n`;
-        dbString += '  },\n';
+  // Гарантируем, что у всех карточек есть дата
+  for (let key in cardDatabase) {
+    if (!cardDatabase[key].updatedAt) {
+      cardDatabase[key].updatedAt = getTodayDate();
     }
-    
-    // Убираем последнюю запятую
-    dbString = dbString.slice(0, -2) + '\n';
-    dbString += '};\n';
-    
-    console.log('Generated dbString length:', dbString.length);
-    
-    // Создаем blob и скачиваем
-    const blob = new Blob([dbString], { type: 'text/javascript' });
-    const url = URL.createObjectURL(blob);
-    
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'cardDatabase.js';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    
-    showAdminMessage('Файл cardDatabase.js скачан!', 'success');
+  }
+
+  const sortedKeys = Object.keys(cardDatabase).sort((a, b) => {
+    const da = cardDatabase[a].updatedAt || '';
+    const db = cardDatabase[b].updatedAt || '';
+    return db.localeCompare(da);
+  });
+
+  let output = "var cardDatabase = {
+";
+
+  sortedKeys.forEach((key, index) => {
+    const card = cardDatabase[key];
+
+    output += `  "${key}": {
+`;
+    output += `    name: "${card.name.replace(/"/g, '\\"')}",
+`;
+    output += `    analogs: ${JSON.stringify(card.analogs || [])},
+`;
+    output += `    updatedAt: "${card.updatedAt}"
+`;
+    output += "  }";
+
+    if (index < sortedKeys.length - 1) {
+      output += ",";
+    }
+
+    output += "
+";
+  });
+
+  output += "};";
+
+  // data URL — стабильно работает на GitHub Pages
+  const encoded = encodeURIComponent(output);
+  const href = "data:application/javascript;charset=utf-8," + encoded;
+
+  const a = document.createElement("a");
+  a.href = href;
+  a.download = "cardDatabase.js";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+
+  showToast("База данных успешно экспортирована", "success");
 }
 
 function showTab(tabName) {
