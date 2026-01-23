@@ -687,7 +687,6 @@ function loadCustomCards() {
 }
 
 function exportDatabase() {
-  // Гарантируем, что у всех карточек есть дата
   for (let key in cardDatabase) {
     if (!cardDatabase[key].updatedAt) {
       cardDatabase[key].updatedAt = getTodayDate();
@@ -705,7 +704,6 @@ function exportDatabase() {
 
   sortedKeys.forEach((key, index) => {
     const card = cardDatabase[key];
-
     output += `  "${key}": {
 `;
     output += `    name: "${card.name.replace(/"/g, '\\"')}",
@@ -715,18 +713,13 @@ function exportDatabase() {
     output += `    updatedAt: "${card.updatedAt}"
 `;
     output += "  }";
-
-    if (index < sortedKeys.length - 1) {
-      output += ",";
-    }
-
+    if (index < sortedKeys.length - 1) output += ",";
     output += "
 ";
   });
 
   output += "};";
 
-  // data URL — стабильно работает на GitHub Pages
   const encoded = encodeURIComponent(output);
   const href = "data:application/javascript;charset=utf-8," + encoded;
 
@@ -795,8 +788,6 @@ function editCard(key) {
     document.getElementById('editCardAnalogs').value = card.analogs.join(', ');
     
     document.getElementById('editForm').style.display = 'block';
-  const dateInput = document.getElementById('editCardUpdatedAt');
-  if (dateInput) dateInput.value = card.updatedAt || getTodayDate();
     document.getElementById('editCardList').style.display = 'none';
 }
 
@@ -1111,8 +1102,8 @@ function renderAllCards(filter = '') {
     row.className = 'admin-card-row';
     row.innerHTML = `
       <strong>${key}</strong> — ${card.name}<br>
-      <div class="card-meta">Обновлено: ${card.updatedAt || '—'}</div>
-      <button class="edit-btn-small" onclick="startEditFromAll('${key}')">Редактировать</button>
+      <small>Обновлено: ${card.updatedAt || '—'}</small><br>
+      <button onclick="startEditFromAll('${key}')">Редактировать</button>
       <hr>
     `;
     list.appendChild(row);
@@ -1130,8 +1121,6 @@ function startEditFromAll(key) {
     (card.analogs || []).join(', ');
 
   document.getElementById('editForm').style.display = 'block';
-  const dateInput = document.getElementById('editCardUpdatedAt');
-  if (dateInput) dateInput.value = card.updatedAt || getTodayDate();
 }
 
 // Хук: когда пользователь открывает вкладку "Все карточки"
