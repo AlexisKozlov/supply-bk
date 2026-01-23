@@ -1079,6 +1079,26 @@ function clearSearch() {
     document.getElementById('result').innerHTML = '';
     document.getElementById('searchInput').focus();
 }
+
+// Экспорт функций для глобального доступа
+window.clearSearch = clearSearch;
+window.checkPassword = checkPassword;
+window.copyToClipboard = copyToClipboard;
+window.showGoogleForm = showGoogleForm;
+window.closeGoogleForm = closeGoogleForm;
+window.loginAdmin = loginAdmin;
+window.hideAdminLogin = hideAdminLogin;
+window.exportDatabase = exportDatabase;
+window.clearLocalStorage = clearLocalStorage;
+window.loadCustomCards = loadCustomCards;
+window.addCard = addCard;
+window.showTab = showTab;
+window.searchCardsForEdit = searchCardsForEdit;
+window.editCard = editCard;
+window.cancelEdit = cancelEdit;
+window.updateCard = updateCard;
+window.closeAdminPanel = closeAdminPanel;
+
 // Добавление карточки
 window.addCard = async function (event) {
   event.preventDefault();
@@ -1182,24 +1202,4 @@ window.deleteCard = async function (key) {
   await loadDatabaseFromSupabase();
   showAdminMessage("Карточка удалена из Supabase!", "success");
 };
-
-// Экспорт функций для глобального доступа
-window.clearSearch = clearSearch;
-window.checkPassword = checkPassword;
-window.copyToClipboard = copyToClipboard;
-window.showGoogleForm = showGoogleForm;
-window.closeGoogleForm = closeGoogleForm;
-window.loginAdmin = loginAdmin;
-window.hideAdminLogin = hideAdminLogin;
-window.exportDatabase = exportDatabase;
-window.clearLocalStorage = clearLocalStorage;
-window.loadCustomCards = loadCustomCards;
-window.addCard = addCard;
-window.showTab = showTab;
-window.searchCardsForEdit = searchCardsForEdit;
-window.editCard = editCard;
-window.cancelEdit = cancelEdit;
-window.updateCard = updateCard;
-window.closeAdminPanel = closeAdminPanel;
-
 
