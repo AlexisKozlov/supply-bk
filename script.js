@@ -775,6 +775,8 @@ function editCard(key) {
     document.getElementById('editCardAnalogs').value = card.analogs.join(', ');
     
     document.getElementById('editForm').style.display = 'block';
+  const dateInput = document.getElementById('editCardUpdatedAt');
+  if (dateInput) dateInput.value = card.updatedAt || getTodayDate();
     document.getElementById('editCardList').style.display = 'none';
 }
 
@@ -1089,8 +1091,8 @@ function renderAllCards(filter = '') {
     row.className = 'admin-card-row';
     row.innerHTML = `
       <strong>${key}</strong> — ${card.name}<br>
-      <small>Обновлено: ${card.updatedAt || '—'}</small><br>
-      <button onclick="startEditFromAll('${key}')">Редактировать</button>
+      <div class="card-meta">Обновлено: ${card.updatedAt || '—'}</div>
+      <button class="edit-btn-small" onclick="startEditFromAll('${key}')">Редактировать</button>
       <hr>
     `;
     list.appendChild(row);
@@ -1108,6 +1110,8 @@ function startEditFromAll(key) {
     (card.analogs || []).join(', ');
 
   document.getElementById('editForm').style.display = 'block';
+  const dateInput = document.getElementById('editCardUpdatedAt');
+  if (dateInput) dateInput.value = card.updatedAt || getTodayDate();
 }
 
 // Хук: когда пользователь открывает вкладку "Все карточки"

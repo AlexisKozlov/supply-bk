@@ -183,6 +183,10 @@
                         <label for="editCardAnalogs">Аналоги (через запятую):</label>
                         <input type="text" id="editCardAnalogs">
                     </div>
+                    <div class="form-group">
+                        <label for="editCardUpdatedAt">Дата обновления:</label>
+                        <input type="date" id="editCardUpdatedAt">
+                    </div>
                     <button type="submit" class="glow-on-hover">Сохранить изменения</button>
                     <button type="button" onclick="cancelEdit()">Отмена</button>
                 </form>
@@ -192,12 +196,14 @@
         <!-- Вкладка все карточки -->
 <div id="allTab" class="tab-content" style="display: none;">
   <h3>Все карточки</h3>
-  <input
-    type="text"
-    id="allSearch"
-    placeholder="Поиск по артикулу или названию"
-    oninput="renderAllCards(this.value)"
-  >
+  <div class="all-search-box">
+    <input
+      type="text"
+      id="allSearch"
+      placeholder="Поиск по артикулу или названию"
+      oninput="renderAllCards(this.value)"
+    >
+  </div>
   <div id="allCardList"></div>
 </div>
 
