@@ -1,31 +1,10 @@
-
-// Supabase init
-const SUPABASE_URL = "https://obywcpilionribalfrbl.supabase.co";
-const SUPABASE_KEY = "sb_publishable_BYToHeprZE-e64UjDgjlmQ_bKZBUFJ0";
-
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-
-let cardDatabase = {};
-
-async function loadDatabaseFromSupabase() {
-  const { data, error } = await supabase.from("cards").select("*");
-  if (error) {
-    console.error("Supabase error:", error);
-    alert("Ошибка загрузки базы: " + error.message);
-    return;
-  }
-  cardDatabase = {};
-  data.forEach(row => {
-    cardDatabase[row.id] = { name: row.name, analogs: row.analogs || [] };
-  });
-  console.log("База загружена из Supabase:", cardDatabase);
+// Проверка загрузки базы данных
+if (typeof cardDatabase === 'undefined') {
+    console.error('cardDatabase не загружен!');
+    
+    // Создаем пустой объект, чтобы избежать ошибок
+    window.cardDatabase = {};
 }
-
-document.addEventListener('DOMContentLoaded', function(){
-  loadDatabaseFromSupabase();
-});
 
 const AppConfig = {
     version: "1.2.1",
@@ -694,7 +673,7 @@ function exportDatabase() {
     console.log('Exporting database, total cards:', Object.keys(cardDatabase).length);
     
     // Создаем строку с обновленной базой данных
-    let dbString = "var cardDatabase = {\n";
+    let dbString = 'var cardDatabase = {\n';
     
     for (const [key, value] of Object.entries(cardDatabase)) {
         dbString += `  ${JSON.stringify(key)}: {\n`;
