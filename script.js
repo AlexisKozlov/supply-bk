@@ -1,3 +1,27 @@
+
+// Supabase init
+const SUPABASE_URL = "https://obywcpilionribalfrbl.supabase.co";
+const SUPABASE_KEY = "sb_publishable_BYToHeprZE-e64UjDgjlmQ_bKZBUFJ0";
+
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let cardDatabase = {};
+
+async function loadDatabaseFromSupabase() {
+  const { data, error } = await supabase.from("cards").select("*");
+  if (error) {
+    console.error("Supabase error:", error);
+    return;
+  }
+  cardDatabase = {};
+  data.forEach(row => {
+    cardDatabase[row.id] = { name: row.name, analogs: row.analogs || [] };
+  });
+  console.log("База загружена из Supabase:", cardDatabase);
+}
+
+document.addEventListener("DOMContentLoaded", loadDatabaseFromSupabase);
+
 // Проверка загрузки базы данных
 if (typeof cardDatabase === 'undefined') {
     console.error('cardDatabase не загружен!');
