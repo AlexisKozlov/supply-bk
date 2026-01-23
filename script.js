@@ -709,7 +709,7 @@ function exportDatabase(){ showAdminMessage('Экспорт больше не н
   });
 
   console.log("База загружена из Supabase:", cardDatabase);
-}
+
 
 // ВАЖНО: вызвать при старте сайта
 loadDatabaseFromSupabase();
