@@ -1,7 +1,3 @@
-// --- Safe Supabase SDK init ---
-const SUPABASE_URL = "https://obywcpilionribalfrbl.supabase.co";
-const SUPABASE_KEY = "sb_publishable_BYToHeprZE-e64UjDgjlmQ_bKZBUFJ0";
-
 let supabaseClient = null;
 
 function waitForSupabaseAndInit() {
