@@ -1,42 +1,29 @@
-// --- Safe Supabase SDK init ---
-const SUPABASE_URL = "https://obywcpilionribalfrbl.supabase.co";
-const SUPABASE_KEY = "sb_publishable_BYToHeprZE-e64UjDgjlmQ_bKZBUFJ0";
+// --- Ultra-safe Supabase init (no redeclare) ---
+if (!window.__SUPABASE_CONFIG__) {
+  window.__SUPABASE_CONFIG__ = {
+    url: "https://obywcpilionribalfrbl.supabase.co",
+    key: "sb_publishable_BYToHeprZE-e64UjDgjlmQ_bKZBUFJ0"
+  };
+}
 
-let supabaseClient = null;
+if (!window.supabaseClient) {
+  window.supabaseClient = null;
+}
 
 function waitForSupabaseAndInit() {
-  if (window.supabase && !supabaseClient) {
+  if (window.supabase && !window.supabaseClient) {
     console.log("Supabase SDK loaded");
-    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    window.supabaseClient = window.supabase.createClient(
+      window.__SUPABASE_CONFIG__.url,
+      window.__SUPABASE_CONFIG__.key
+    );
     loadDatabaseFromSupabase();
-  } else if (!supabaseClient) {
+  } else if (!window.supabaseClient) {
     setTimeout(waitForSupabaseAndInit, 50);
   }
 }
 
 document.addEventListener("DOMContentLoaded", waitForSupabaseAndInit);
-
-
-
-const SUPABASE_URL = "https://obywcpilionribalfrbl.supabaseClient.co";
-const SUPABASE_KEY = "sb_publishable_BYToHeprZE-e64UjDgjlmQ_bKZBUFJ0";
-
-
-let cardDatabase = {};
-
-async function loadDatabaseFromSupabase() {
-  const { data, error } = await supabaseClient.from("cards").select("*");
-  if (error) {
-    console.error("Supabase error:", error);
-    return;
-  }
-  cardDatabase = {};
-  data.forEach(row => {
-    cardDatabase[row.id] = { name: row.name, analogs: row.analogs || [] };
-  });
-  console.log("База загружена из Supabase:", cardDatabase);
-}
-
 
 // Проверка загрузки базы данных
 if (typeof cardDatabase === 'undefined') {
@@ -1086,44 +1073,3 @@ window.updateCard = updateCard;
 window.closeAdminPanel = closeAdminPanel;
 
 
-
-
-// --- Override admin actions to use Supabase ---
-async function addCard() {
-  console.log("addCard called (Supabase)");
-  const id = document.getElementById("addKey").value.trim();
-  const name = document.getElementById("addName").value.trim();
-  const analogsRaw = document.getElementById("addAnalogs").value.trim();
-  const analogs = analogsRaw ? analogsRaw.split(",").map(a => a.trim()) : [];
-
-  if (!id || !name) { alert("Заполни артикул и название"); return; }
-
-  const ok = await addCardToDatabase(id, name, analogs);
-  if (ok) {
-    alert("Карточка добавлена");
-    clearAddForm();
-  }
-}
-
-async function updateCard() {
-  console.log("updateCard called (Supabase)");
-  const oldId = document.getElementById("editOldKey").value.trim();
-  const newId = document.getElementById("editNewKey").value.trim();
-  const name = document.getElementById("editName").value.trim();
-  const analogsRaw = document.getElementById("editAnalogs").value.trim();
-  const analogs = analogsRaw ? analogsRaw.split(",").map(a => a.trim()) : [];
-
-  if (!oldId || !newId || !name) { alert("Заполни все поля"); return; }
-
-  const ok = await updateCardInDatabase(oldId, newId, name, analogs);
-  if (ok) {
-    alert("Карточка обновлена");
-    clearEditForm();
-  }
-}
-
-async function deleteCard(key) {
-  if (!confirm("Удалить карточку " + key + "?")) return;
-  const ok = await deleteCardFromDatabase(key);
-  if (ok) alert("Карточка удалена");
-}
