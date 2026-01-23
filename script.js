@@ -1,4 +1,3 @@
-
 // --- Safe Supabase SDK init ---
 const SUPABASE_URL = "https://obywcpilionribalfrbl.supabase.co";
 const SUPABASE_KEY = "sb_publishable_BYToHeprZE-e64UjDgjlmQ_bKZBUFJ0";
@@ -17,10 +16,11 @@ function waitForSupabaseAndInit() {
 
 document.addEventListener("DOMContentLoaded", waitForSupabaseAndInit);
 
+
+
 const SUPABASE_URL = "https://obywcpilionribalfrbl.supabaseClient.co";
 const SUPABASE_KEY = "sb_publishable_BYToHeprZE-e64UjDgjlmQ_bKZBUFJ0";
 
-const supabaseClient = window.supabaseClient.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let cardDatabase = {};
 
@@ -37,7 +37,6 @@ async function loadDatabaseFromSupabase() {
   console.log("База загружена из Supabase:", cardDatabase);
 }
 
-document.addEventListener("DOMContentLoaded", loadDatabaseFromSupabase);
 
 // Проверка загрузки базы данных
 if (typeof cardDatabase === 'undefined') {
