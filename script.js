@@ -1068,3 +1068,29 @@ window.updateCard = updateCard;
 window.closeAdminPanel = closeAdminPanel;
 
 
+
+
+// --- Supabase CRUD overrides ---
+async function addCardToDatabase(id, name, analogs) {
+  const { error } = await supabaseClient.from("cards").insert([{ id, name, analogs }]);
+  if (error) { alert("Ошибка добавления: " + error.message); return false; }
+  console.log("Card inserted into Supabase");
+  await loadDatabaseFromSupabase();
+  return true;
+}
+
+async function updateCardInDatabase(oldId, newId, name, analogs) {
+  const { error } = await supabaseClient.from("cards").update({ id: newId, name, analogs }).eq("id", oldId);
+  if (error) { alert("Ошибка обновления: " + error.message); return false; }
+  console.log("Card updated in Supabase");
+  await loadDatabaseFromSupabase();
+  return true;
+}
+
+async function deleteCardFromDatabase(id) {
+  const { error } = await supabaseClient.from("cards").delete().eq("id", id);
+  if (error) { alert("Ошибка удаления: " + error.message); return false; }
+  console.log("Card deleted from Supabase");
+  await loadDatabaseFromSupabase();
+  return true;
+}
