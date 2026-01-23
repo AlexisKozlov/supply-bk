@@ -1,11 +1,3 @@
-const SUPABASE_URL = "https://obywcpilionribalfrbl.supabase.co";
-const SUPABASE_KEY = "sb_publishable_BYToHeprZE-e64UjDgjlmQ_bKZBUFJ0";
-
-const supabase = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-
 // Проверка загрузки базы данных
 if (typeof cardDatabase === 'undefined') {
     console.error('cardDatabase не загружен!');
@@ -680,33 +672,15 @@ function loadCustomCards() {
 function exportDatabase() {
     console.log('Exporting database, total cards:', Object.keys(cardDatabase).length);
     
-   let cardDatabase = {};
-
-async function loadDatabaseFromSupabase() {
-  const { data, error } = await supabase
-    .from("cards")
-    .select("*");
-
-  if (error) {
-    alert("Ошибка загрузки базы: " + error.message);
-    return;
-  }
-
-  cardDatabase = {};
-
-  data.forEach(row => {
-    cardDatabase[row.id] = {
-      name: row.name,
-      analogs: row.analogs || []
-    };
-  });
-
-  console.log("База загружена из Supabase:", cardDatabase);
-}
-
-// ВАЖНО: вызвать при старте сайта
-loadDatabaseFromSupabase();
-
+    // Создаем строку с обновленной базой данных
+    let dbString = 'var cardDatabase = {\n';
+    
+    for (const [key, value] of Object.entries(cardDatabase)) {
+        dbString += `  ${JSON.stringify(key)}: {\n`;
+        dbString += `    name: ${JSON.stringify(value.name)},\n`;
+        dbString += `    analogs: ${JSON.stringify(value.analogs)}\n`;
+        dbString += '  },\n';
+    }
     
     // Убираем последнюю запятую
     dbString = dbString.slice(0, -2) + '\n';
@@ -1072,63 +1046,3 @@ window.updateCard = updateCard;
 window.closeAdminPanel = closeAdminPanel;
 
 
-
-
-function showTab(tab) {
-  document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(tab + 'Tab').style.display = 'block';
-  event.target.classList.add('active');
-  if (tab === 'all') renderAllCards();
-}
-
-function renderAllCards() {
-  const sortBy = document.getElementById('allSort')?.value || 'id';
-  const q = (document.getElementById('allSearch').value || '').toLowerCase();
-  const list = document.getElementById('allCardList');
-  if (!list) return;
-  list.innerHTML = '';
-  const keys = Object.keys(cardDatabase).sort((a,b)=>{
-    if(sortBy==='name'){
-      return cardDatabase[a].name.localeCompare(cardDatabase[b].name);
-    }
-    return a.localeCompare(b);
-  });
-  keys.forEach(key => {
-    const card = cardDatabase[key];
-    if (
-      q &&
-      !key.includes(q) &&
-      !card.name.toLowerCase().includes(q)
-    ) return;
-
-    const row = document.createElement('div');
-    row.className='allcard-row';
-    row.innerHTML = `<div class="allcard-info"><strong>${key}</strong><span>${card.name}</span></div><button class="edit-btn" onclick="startEditFromAll('${key}')">Редактировать</button>`;
-    list.appendChild(row);
-  });
-}
-
-function startEditFromAll(key) {
-  showTab('edit');
-  const card = cardDatabase[key];
-  document.getElementById('editCardKey').value = key;
-  document.getElementById('editCardId').value = key;
-  document.getElementById('editCardName').value = card.name;
-  document.getElementById('editCardAnalogs').value = (card.analogs || []).join(', ');
-  document.getElementById('editForm').style.display = 'block';
-}
-
-
-function deleteCurrentCard() {
-  const key = document.getElementById('editCardKey').value;
-  if (!key || !cardDatabase[key]) {
-    alert('Карточка не найдена');
-    return;
-  }
-  if (!confirm('Удалить карточку ' + key + '?')) return;
-
-  delete cardDatabase[key];
-  document.getElementById('editForm').style.display = 'none';
-  renderAllCards();
-  alert('Карточка удалена');
