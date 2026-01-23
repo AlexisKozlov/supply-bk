@@ -1,12 +1,12 @@
 const SUPABASE_URL = "https://obywcpilionribalfrbl.supabase.co";
 const SUPABASE_KEY = "sb_publishable_BYToHeprZE-e64UjDgjlmQ_bKZBUFJ0";
 
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let cardDatabase = {};
 
 async function loadDatabaseFromSupabase() {
-  const { data, error } = await supabaseClient.from("cards").select("*");
+  const { data, error } = await supabase.from("cards").select("*");
   if (error) {
     console.error("Supabase error:", error);
     return;
@@ -1070,27 +1070,42 @@ window.closeAdminPanel = closeAdminPanel;
 
 
 
-// --- Supabase CRUD overrides ---
-async function addCardToDatabase(id, name, analogs) {
-  const { error } = await supabaseClient.from("cards").insert([{ id, name, analogs }]);
-  if (error) { alert("Ошибка добавления: " + error.message); return false; }
-  console.log("Card inserted into Supabase");
-  await loadDatabaseFromSupabase();
-  return true;
+// --- Override admin actions to use Supabase ---
+async function addCard() {
+  console.log("addCard called (Supabase)");
+  const id = document.getElementById("addKey").value.trim();
+  const name = document.getElementById("addName").value.trim();
+  const analogsRaw = document.getElementById("addAnalogs").value.trim();
+  const analogs = analogsRaw ? analogsRaw.split(",").map(a => a.trim()) : [];
+
+  if (!id || !name) { alert("Заполни артикул и название"); return; }
+
+  const ok = await addCardToDatabase(id, name, analogs);
+  if (ok) {
+    alert("Карточка добавлена");
+    clearAddForm();
+  }
 }
 
-async function updateCardInDatabase(oldId, newId, name, analogs) {
-  const { error } = await supabaseClient.from("cards").update({ id: newId, name, analogs }).eq("id", oldId);
-  if (error) { alert("Ошибка обновления: " + error.message); return false; }
-  console.log("Card updated in Supabase");
-  await loadDatabaseFromSupabase();
-  return true;
+async function updateCard() {
+  console.log("updateCard called (Supabase)");
+  const oldId = document.getElementById("editOldKey").value.trim();
+  const newId = document.getElementById("editNewKey").value.trim();
+  const name = document.getElementById("editName").value.trim();
+  const analogsRaw = document.getElementById("editAnalogs").value.trim();
+  const analogs = analogsRaw ? analogsRaw.split(",").map(a => a.trim()) : [];
+
+  if (!oldId || !newId || !name) { alert("Заполни все поля"); return; }
+
+  const ok = await updateCardInDatabase(oldId, newId, name, analogs);
+  if (ok) {
+    alert("Карточка обновлена");
+    clearEditForm();
+  }
 }
 
-async function deleteCardFromDatabase(id) {
-  const { error } = await supabaseClient.from("cards").delete().eq("id", id);
-  if (error) { alert("Ошибка удаления: " + error.message); return false; }
-  console.log("Card deleted from Supabase");
-  await loadDatabaseFromSupabase();
-  return true;
+async function deleteCard(key) {
+  if (!confirm("Удалить карточку " + key + "?")) return;
+  const ok = await deleteCardFromDatabase(key);
+  if (ok) alert("Карточка удалена");
 }
