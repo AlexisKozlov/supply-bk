@@ -1015,3 +1015,51 @@ window.updateCard = updateCard;
 window.closeAdminPanel = closeAdminPanel;
 
 
+
+
+// ======================
+// ВКЛАДКА "ВСЕ КАРТОЧКИ" (упрощённая)
+// ======================
+function renderAllCards(filter = '') {
+  const list = document.getElementById('allCardList');
+  if (!list) return;
+
+  list.innerHTML = '';
+
+  const entries = Object.entries(cardDatabase)
+    .filter(([key, card]) =>
+      (key + ' ' + card.name).toLowerCase().includes(filter.toLowerCase())
+    )
+    .sort((a, b) => a[0].localeCompare(b[0]));
+
+  entries.forEach(([key, card]) => {
+    const row = document.createElement('div');
+    row.className = 'admin-card-row';
+    row.innerHTML = `
+      <strong>${key}</strong> — ${card.name}<br>
+      <button class="edit-btn-small" onclick="startEditFromAll('${key}')">Редактировать</button>
+      <hr>
+    `;
+    list.appendChild(row);
+  });
+}
+
+function startEditFromAll(key) {
+  showTab('edit');
+
+  const card = cardDatabase[key];
+  document.getElementById('editCardKey').value = key;
+  document.getElementById('editCardId').value = key;
+  document.getElementById('editCardName').value = card.name;
+  document.getElementById('editCardAnalogs').value =
+    (card.analogs || []).join(', ');
+
+  document.getElementById('editForm').style.display = 'block';
+}
+
+// Авто-рендер при открытии вкладки
+document.addEventListener('click', function (e) {
+  if (e.target.matches('.tab-btn') && e.target.textContent.includes('Все карточки')) {
+    setTimeout(() => renderAllCards(''), 50);
+  }
+});
