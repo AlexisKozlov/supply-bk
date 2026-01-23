@@ -1064,3 +1064,33 @@ window.updateCard = updateCard;
 window.closeAdminPanel = closeAdminPanel;
 
 
+
+function renderAllCards(filter = '') {
+  const list = document.getElementById('allCardList');
+  if (!list) return;
+  list.innerHTML = '';
+  const entries = Object.entries(cardDatabase)
+    .filter(([k,v]) => (k + ' ' + v.name).toLowerCase().includes(filter.toLowerCase()))
+    .sort((a,b) => (b[1].updatedAt || '').localeCompare(a[1].updatedAt || ''));
+  entries.forEach(([key, card]) => {
+    const div = document.createElement('div');
+    div.className = 'card-row';
+    div.innerHTML = `
+      <strong>${key}</strong> — ${card.name}<br>
+      <small>Обновлено: ${card.updatedAt || '—'}</small>
+      <button onclick="startEditFromAll('${key}')">Редактировать</button>
+    `;
+    list.appendChild(div);
+  });
+}
+
+function startEditFromAll(key) {
+  showTab('edit');
+  const card = cardDatabase[key];
+  document.getElementById('editCardKey').value = key;
+  document.getElementById('editCardId').value = key;
+  document.getElementById('editCardName').value = card.name;
+  document.getElementById('editCardAnalogs').value = (card.analogs || []).join(', ');
+  document.getElementById('editForm').style.display = 'block';
+}
+
