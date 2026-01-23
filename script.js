@@ -670,6 +670,7 @@ function loadCustomCards() {
 }
 
 function exportDatabase() {
+  // гарантируем, что у всех карточек есть дата
   for (var key in cardDatabase) {
     if (!cardDatabase[key].updatedAt) {
       cardDatabase[key].updatedAt = getTodayDate();
@@ -691,7 +692,7 @@ function exportDatabase() {
 
     output += '  "' + k + '": {
 ';
-    output += '    name: "' + String(card.name).replace(/"/g, '\\"') + '",
+    output += '    name: "' + String(card.name).replace(/"/g, '\"') + '",
 ';
     output += '    analogs: ' + JSON.stringify(card.analogs || []) + ',
 ';
