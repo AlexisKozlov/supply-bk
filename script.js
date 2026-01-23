@@ -6,7 +6,7 @@ const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let cardDatabase = {};
 
 async function loadDatabaseFromSupabase() {
-  const { data, error } = await supabase.from("cards").select("*");
+  const { data, error } = await supabaseClient.from("cards").select("*");
   if (error) {
     console.error("Supabase error:", error);
     return;
