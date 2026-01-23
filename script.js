@@ -13,7 +13,6 @@ const AppConfig = {
     adminPassword: "157"
 };
 
-
 function getTodayDate() {
   const d = new Date();
   const day = String(d.getDate()).padStart(2, '0');
@@ -722,12 +721,6 @@ function exportDatabase() {
 }
 
 function showTab(tabName) {
-  const tabs = ['add','edit','all'];
-  tabs.forEach(t=>{
-    const el=document.getElementById(t+'Tab'); if(el) el.style.display='none';
-    const btn=document.querySelector(`.tab-btn[onclick*="'${t}'"]`); if(btn) btn.classList.remove('active');
-  });
-
     // Скрываем все вкладки
     document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -1071,41 +1064,55 @@ window.closeAdminPanel = closeAdminPanel;
 
 
 
-// override showTab to render all cards
-const _origShowTab = showTab;
-showTab = function(tabName){
-  _origShowTab(tabName);
-  const btn = document.querySelector(`.tab-btn[onclick*="'${tabName}'"]`);
-  if(btn) btn.classList.add('active');
-  if(tabName==='all'){
-    renderAllCards('');
-  }
-};
 
-function renderAllCards(filter=''){
-  const list=document.getElementById('allCardList');
-  if(!list){console.warn('no allCardList');return;}
-  list.innerHTML='';
-  Object.keys(cardDatabase).sort((a,b)=>{
-    const da=cardDatabase[a].updatedAt||'';
-    const db=cardDatabase[b].updatedAt||'';
-    return db.localeCompare(da);
-  }).forEach(key=>{
-    const card=cardDatabase[key];
-    if((key+' '+card.name).toLowerCase().includes(filter.toLowerCase())){
-      const row=document.createElement('div');
-      row.innerHTML=`<strong>${key}</strong> — ${card.name}<br><small>Обновлено: ${card.updatedAt||'—'}</small> <button onclick="startEditFromAll('${key}')">Редактировать</button>`;
-      list.appendChild(row);
-    }
+// ======================
+// ВКЛАДКА "ВСЕ КАРТОЧКИ"
+// ======================
+function renderAllCards(filter = '') {
+  const list = document.getElementById('allCardList');
+  if (!list) return;
+
+  list.innerHTML = '';
+
+  const entries = Object.entries(cardDatabase)
+    .filter(([key, card]) =>
+      (key + ' ' + card.name).toLowerCase().includes(filter.toLowerCase())
+    )
+    .sort((a, b) => {
+      const da = a[1].updatedAt || '';
+      const db = b[1].updatedAt || '';
+      return db.localeCompare(da);
+    });
+
+  entries.forEach(([key, card]) => {
+    const row = document.createElement('div');
+    row.className = 'admin-card-row';
+    row.innerHTML = `
+      <strong>${key}</strong> — ${card.name}<br>
+      <small>Обновлено: ${card.updatedAt || '—'}</small><br>
+      <button onclick="startEditFromAll('${key}')">Редактировать</button>
+      <hr>
+    `;
+    list.appendChild(row);
   });
 }
 
-function startEditFromAll(key){
+function startEditFromAll(key) {
   showTab('edit');
-  const card=cardDatabase[key];
-  document.getElementById('editCardKey').value=key;
-  document.getElementById('editCardId').value=key;
-  document.getElementById('editCardName').value=card.name;
-  document.getElementById('editCardAnalogs').value=(card.analogs||[]).join(', ');
-  document.getElementById('editForm').style.display='block';
+
+  const card = cardDatabase[key];
+  document.getElementById('editCardKey').value = key;
+  document.getElementById('editCardId').value = key;
+  document.getElementById('editCardName').value = card.name;
+  document.getElementById('editCardAnalogs').value =
+    (card.analogs || []).join(', ');
+
+  document.getElementById('editForm').style.display = 'block';
 }
+
+// Хук: когда пользователь открывает вкладку "Все карточки"
+document.addEventListener('click', function (e) {
+  if (e.target.matches('.tab-btn') && e.target.textContent.includes('Все карточки')) {
+    setTimeout(() => renderAllCards(''), 50);
+  }
+});
