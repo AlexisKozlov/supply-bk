@@ -1046,3 +1046,42 @@ window.updateCard = updateCard;
 window.closeAdminPanel = closeAdminPanel;
 
 
+
+
+function showTab(tab) {
+  document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(tab + 'Tab').style.display = 'block';
+  event.target.classList.add('active');
+  if (tab === 'all') renderAllCards();
+}
+
+function renderAllCards() {
+  const q = (document.getElementById('allSearch').value || '').toLowerCase();
+  const list = document.getElementById('allCardList');
+  if (!list) return;
+  list.innerHTML = '';
+  Object.keys(cardDatabase).forEach(key => {
+    const card = cardDatabase[key];
+    if (
+      q &&
+      !key.includes(q) &&
+      !card.name.toLowerCase().includes(q)
+    ) return;
+
+    const row = document.createElement('div');
+    row.innerHTML = `<strong>${key}</strong> — ${card.name}
+      <button onclick="startEditFromAll('${key}')">Редактировать</button>`;
+    list.appendChild(row);
+  });
+}
+
+function startEditFromAll(key) {
+  showTab('edit');
+  const card = cardDatabase[key];
+  document.getElementById('editCardKey').value = key;
+  document.getElementById('editCardId').value = key;
+  document.getElementById('editCardName').value = card.name;
+  document.getElementById('editCardAnalogs').value = (card.analogs || []).join(', ');
+  document.getElementById('editForm').style.display = 'block';
+}

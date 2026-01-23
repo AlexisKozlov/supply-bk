@@ -136,8 +136,15 @@
         <div class="admin-tabs">
             <button class="tab-btn active" onclick="showTab('add')">Добавить</button>
             <button class="tab-btn" onclick="showTab('edit')">Редактировать</button>
+<button class="tab-btn" onclick="showTab('all')">Все карточки</button>
         </div>
         
+        <!-- Вкладка всех карточек -->
+<div id="allTab" class="tab-content" style="display:none;">
+  <input type="text" id="allSearch" placeholder="Поиск..." oninput="renderAllCards()">
+  <div id="allCardList"></div>
+</div>
+
         <!-- Вкладка добавления -->
         <div id="addTab" class="tab-content">
             <h3>Добавить новую карточку товара</h3>
