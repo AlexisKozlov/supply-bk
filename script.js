@@ -842,63 +842,67 @@ function cancelEdit() {
     document.getElementById('updateCardForm').reset();
 }
 
-function updateCard(event) {
+async function updateCard(event) {
     event.preventDefault();
-    console.log('updateCard called');
-    
-    const oldKey = document.getElementById('editCardKey').value;
-    const newKey = document.getElementById('editCardId').value.trim();
-    const name = document.getElementById('editCardName').value.trim();
-    const analogsStr = document.getElementById('editCardAnalogs').value.trim();
-    
-    console.log('Old Key:', oldKey, 'New Key:', newKey, 'Name:', name, 'Analogs:', analogsStr);
-    
+
+    console.log("updateCard called");
+
+    const oldKey = document.getElementById("editCardKey").value;
+    const newKey = document.getElementById("editCardId").value.trim();
+    const name = document.getElementById("editCardName").value.trim();
+    const analogsRaw = document.getElementById("editCardAnalogs").value.trim();
+
     if (!newKey || !name) {
-        showAdminMessage('Заполните обязательные поля!', 'error');
+        showAdminMessage("Заполните артикул и название", "error");
         return;
     }
-    
-    if (newKey.length < 3) {
-        showAdminMessage('Артикул должен содержать минимум 3 символа!', 'error');
-        return;
+
+    const analogs = analogsRaw
+        ? analogsRaw.split(",").map(a => a.trim()).filter(a => a.length > 0)
+        : [];
+
+    console.log("Old Key:", oldKey, "New Key:", newKey, "Name:", name, "Analogs:", analogs);
+
+    // Если поменяли ID — удаляем старую строку
+    if (oldKey !== newKey && window.supabaseClient) {
+        await window.supabaseClient
+            .from("cards")
+            .delete()
+            .eq("id", oldKey);
     }
-    
-    // Если ID изменился, проверяем что новый не занят (кроме текущего)
-    if (newKey !== oldKey && cardDatabase[newKey]) {
-        showAdminMessage('Карточка с таким ID уже существует!', 'error');
-        return;
+
+    // Записываем новую
+    if (window.supabaseClient) {
+        const { error } = await window.supabaseClient
+            .from("cards")
+            .upsert([{
+                id: newKey,
+                name: name,
+                analogs: analogs
+            }]);
+
+        if (error) {
+            console.error("Supabase upsert error:", error);
+            showAdminMessage("Ошибка обновления в Supabase", "error");
+            return;
+        }
+
+        console.log("Supabase update success");
     }
-    
-    const analogs = analogsStr ? analogsStr.split(',').map(a => a.trim()).filter(a => a) : [];
-    
-    // Если ID изменился, удаляем старую запись
-    if (newKey !== oldKey) {
+
+    // Локально
+    if (oldKey !== newKey) {
         delete cardDatabase[oldKey];
     }
-    
-    cardDatabase[newKey] = {
-        name: name,
-        analogs: analogs
-    };
-    
-    console.log('Updated cardDatabase:', cardDatabase[newKey]);
-    
-    // Обновляем localStorage
-    const customCards = JSON.parse(localStorage.getItem('customCards') || '{}');
-    if (newKey !== oldKey) {
-        delete customCards[oldKey];
-    }
-    customCards[newKey] = cardDatabase[newKey];
-    localStorage.setItem('customCards', JSON.stringify(customCards));
-    
-    showAdminMessage('Карточка успешно обновлена!', 'success');
-    
-    // Скрываем форму редактирования
-    cancelEdit();
-    
-    // Обновляем список
+
+    cardDatabase[newKey] = { name, analogs };
+
+    document.getElementById("editForm").style.display = "none";
+    showAdminMessage("Карточка обновлена", "success");
+
     searchCardsForEdit();
 }
+
 
 // === УДАЛЕНИЕ КАРТОЧКИ ИЗ SUPABASE ===
 async function deleteCurrentCard() {
@@ -1038,49 +1042,54 @@ function initApplication() {
     }
 }
 
-function addCard(event) {
+async function addCard(event) {
     event.preventDefault();
-    console.log('addCard called');
-    
-    const id = document.getElementById('cardId').value.trim();
-    const name = document.getElementById('cardName').value.trim();
-    const analogsStr = document.getElementById('cardAnalogs').value.trim();
-    
-    console.log('ID:', id, 'Name:', name, 'Analogs:', analogsStr);
-    
+
+    console.log("addCard called");
+
+    const id = document.getElementById("cardId").value.trim();
+    const name = document.getElementById("cardName").value.trim();
+    const analogsRaw = document.getElementById("cardAnalogs").value.trim();
+
     if (!id || !name) {
-        showAdminMessage('Заполните обязательные поля!', 'error');
+        showAdminMessage("Заполните артикул и название", "error");
         return;
     }
-    
-    if (id.length < 3) {
-        showAdminMessage('Артикул должен содержать минимум 3 символа!', 'error');
-        return;
+
+    const analogs = analogsRaw
+        ? analogsRaw.split(",").map(a => a.trim()).filter(a => a.length > 0)
+        : [];
+
+    // Локально
+    cardDatabase[id] = { name, analogs };
+
+    console.log("Added to cardDatabase:", cardDatabase[id]);
+
+    // В Supabase
+    if (window.supabaseClient) {
+        const { error } = await window.supabaseClient
+            .from("cards")
+            .insert([{
+                id: id,
+                name: name,
+                analogs: analogs
+            }]);
+
+        if (error) {
+            console.error("Supabase insert error:", error);
+            showAdminMessage("Ошибка записи в Supabase", "error");
+            return;
+        }
+
+        console.log("Supabase insert success");
     }
-    
-    if (cardDatabase[id]) {
-        showAdminMessage('Карточка с таким ID уже существует!', 'error');
-        return;
+
+    document.getElementById("addCardForm").reset();
+    showAdminMessage("Карточка добавлена", "success");
+
+    if (typeof searchCardsForEdit === "function") {
+        searchCardsForEdit();
     }
-    
-    const analogs = analogsStr ? analogsStr.split(',').map(a => a.trim()).filter(a => a) : [];
-    
-    cardDatabase[id] = {
-        name: name,
-        analogs: analogs
-    };
-    
-    console.log('Added to cardDatabase:', cardDatabase[id]);
-    
-    // Сохраняем в localStorage для persistence
-    const customCards = JSON.parse(localStorage.getItem('customCards') || '{}');
-    customCards[id] = cardDatabase[id];
-    localStorage.setItem('customCards', JSON.stringify(customCards));
-    
-    showAdminMessage('Карточка успешно добавлена!', 'success');
-    
-    // Очищаем форму
-    document.getElementById('addCardForm').reset();
 }
 
 // Инициализация админ доступа
@@ -1137,7 +1146,6 @@ window.showGoogleForm = showGoogleForm;
 window.closeGoogleForm = closeGoogleForm;
 window.loginAdmin = loginAdmin;
 window.hideAdminLogin = hideAdminLogin;
-window.exportDatabase = exportDatabase;
 window.clearLocalStorage = clearLocalStorage;
 window.loadCustomCards = loadCustomCards;
 window.addCard = addCard;
