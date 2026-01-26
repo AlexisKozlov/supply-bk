@@ -63,8 +63,10 @@ async function loadDatabaseFromSupabase() {
     return;
   }
 
-cardDatabase = {};
-window.cardDatabase = cardDatabase;
+// ОЧИЩАЕМ существующий объект, не создавая новый
+for (const key in cardDatabase) {
+  delete cardDatabase[key];
+}
 
 data.forEach(row => {
   cardDatabase[row.id] = {
@@ -72,6 +74,8 @@ data.forEach(row => {
     analogs: row.analogs || []
   };
 });
+
+window.cardDatabase = cardDatabase;
 
   console.log("База загружена из Supabase:", window.cardDatabase);
 }
@@ -895,12 +899,6 @@ async function updateCard(event) {
     }
 
     // Локально
-    if (oldKey !== newKey) {
-        delete cardDatabase[oldKey];
-    }
-
-    cardDatabase[newKey] = { name, analogs };
-window.cardDatabase = cardDatabase;
     document.getElementById("editForm").style.display = "none";
     showAdminMessage("Карточка обновлена", "success");
 
@@ -938,8 +936,6 @@ async function deleteCurrentCard() {
     }
 
     // Удаляем локально
-    delete cardDatabase[cardKey];
-window.cardDatabase = cardDatabase;
 
   const searchInput = document.getElementById("searchInput");
 if (searchInput) searchInput.focus();
@@ -1072,7 +1068,6 @@ async function addCard(event) {
         : [];
 
     // Локально
-    cardDatabase[id] = { name, analogs };
 
     console.log("Added to cardDatabase:", cardDatabase[id]);
 
