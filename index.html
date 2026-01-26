@@ -167,23 +167,29 @@
             <div id="editCardList"></div>
             <div id="editForm" style="display: none;">
                 <h4>Редактировать карточку</h4>
-                <form id="updateCardForm" onsubmit="updateCard(event); return false;">
-                    <input type="hidden" id="editCardKey">
-                    <div class="form-group">
-                        <label for="editCardId">Артикул:</label>
-                        <input type="text" id="editCardId" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="editCardName">Название товара:</label>
-                        <input type="text" id="editCardName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="editCardAnalogs">Аналоги (через запятую):</label>
-                        <input type="text" id="editCardAnalogs">
-                    </div>
-                    <button type="submit" class="glow-on-hover">Сохранить изменения</button>
-                    <button type="button" onclick="cancelEdit()">Отмена</button>
-                </form>
+              <form id="updateCardForm" onsubmit="updateCard(event); return false;">
+    <input type="hidden" id="editCardKey">
+
+    <div class="form-group">
+        <label for="editCardId">Артикул:</label>
+        <input type="text" id="editCardId" required>
+    </div>
+
+    <div class="form-group">
+        <label for="editCardName">Название товара:</label>
+        <input type="text" id="editCardName" required>
+    </div>
+
+    <div class="form-group">
+        <label for="editCardAnalogs">Аналоги (через запятую):</label>
+        <input type="text" id="editCardAnalogs">
+    </div>
+
+    <button type="submit" class="glow-on-hover">Сохранить изменения</button>
+    <button type="button" onclick="deleteCurrentCard()" class="delete-btn">Удалить карточку</button>
+    <button type="button" onclick="cancelEdit()">Отмена</button>
+</form>
+
             </div>
         </div>
         
