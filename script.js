@@ -18,13 +18,36 @@ function waitForSupabaseAndInit() {
       window.__SUPABASE_CONFIG__.key
     );
     loadDatabaseFromSupabase();
+    loadAdminPasswordFromSupabase();
   } else if (!window.supabaseClient) {
     setTimeout(waitForSupabaseAndInit, 50);
   }
 }
 
 document.addEventListener("DOMContentLoaded", waitForSupabaseAndInit);
+
+let serverAdminPasswordHash = null;
+
 // --- Загрузка базы из Supabase ---
+
+async function loadAdminPasswordFromSupabase() {
+  if (!window.supabaseClient) return;
+
+  const { data, error } = await window.supabaseClient
+    .from("settings")
+    .select("value")
+    .eq("key", "admin_password")
+    .single();
+
+  if (error) {
+    console.error("Ошибка загрузки пароля из Supabase:", error);
+    return;
+  }
+
+  serverAdminPasswordHash = data.value;
+  console.log("Пароль админки загружен из Supabase");
+}
+
 async function loadDatabaseFromSupabase() {
   if (!window.supabaseClient) {
     console.warn("Supabase client not ready yet");
@@ -60,6 +83,12 @@ if (typeof cardDatabase === 'undefined') {
     window.cardDatabase = {};
 }
 
+const AppConfig = {
+    version: "1.2.1",
+    lastUpdate: "17.01.2026",
+    maintenanceMode: false
+};
+
 
 function simpleHash(str) {
   let hash = 0;
@@ -70,14 +99,8 @@ function simpleHash(str) {
   return hash.toString(16);
 }
 
-const AppConfig = {
-    version: "1.2.1",
-    lastUpdate: "17.01.2026",
-    maintenanceMode: false,
-    adminPasswordHash: simpleHash("157")
-};
-
 // Глобальные переменные
+
 let isAdminLoggedIn = false;
 
 // Функции
@@ -442,7 +465,7 @@ function checkPassword(event) {
         submitBtn.disabled = true;
         
         setTimeout(() => {
-            if (simpleHash(password) === AppConfig.adminPasswordHash) {
+            if (simpleHash(password) === serverAdminPasswordHash) {
                 // Успешный вход
                 submitBtn.innerHTML = '<span class="submit-icon">✅</span>';
                 
@@ -663,7 +686,7 @@ function hideAdminLogin() {
 
 function loginAdmin() {
     const password = document.getElementById('adminLoginPassword').value;
-    if (simpleHash(password) === AppConfig.adminPasswordHash) {
+    if (simpleHash(password) === serverAdminPasswordHash) {
         isAdminLoggedIn = true;
         loadCustomCards(); // Загружаем кастомные карточки для админа
         document.getElementById('adminLoginForm').style.display = 'none';
@@ -1142,6 +1165,7 @@ window.addCard = async function (event) {
   }
 
   await loadDatabaseFromSupabase();
+    loadAdminPasswordFromSupabase();
   document.getElementById("addCardForm").reset();
   showAdminMessage("Карточка добавлена в Supabase!", "success");
 };
@@ -1185,6 +1209,7 @@ window.updateCard = async function (event) {
   }
 
   await loadDatabaseFromSupabase();
+    loadAdminPasswordFromSupabase();
   cancelEdit();
   showAdminMessage("Карточка обновлена в Supabase!", "success");
 };
@@ -1210,6 +1235,7 @@ window.deleteCard = async function (key) {
   }
 
   await loadDatabaseFromSupabase();
+    loadAdminPasswordFromSupabase();
   showAdminMessage("Карточка удалена из Supabase!", "success");
 };
 
