@@ -63,13 +63,15 @@ async function loadDatabaseFromSupabase() {
     return;
   }
 
-  window.cardDatabase = {};
-  data.forEach(row => {
-    cardDatabase[row.id] = {
-      name: row.name,
-      analogs: row.analogs || []
-    };
-  });
+cardDatabase = {};
+window.cardDatabase = cardDatabase;
+
+data.forEach(row => {
+  cardDatabase[row.id] = {
+    name: row.name,
+    analogs: row.analogs || []
+  };
+});
 
   console.log("База загружена из Supabase:", window.cardDatabase);
 }
@@ -197,7 +199,6 @@ function initMainContent() {
     
     if (!AppConfig.maintenanceMode) {
         // Инициализация основного функционала только если не режим техработ
-        initSearchFunctionality();
         initApplication();
     }
 }
@@ -904,7 +905,8 @@ window.cardDatabase = cardDatabase;
     showAdminMessage("Карточка обновлена", "success");
 
     searchCardsForEdit();
-initSearchFunctionality();
+await loadDatabaseFromSupabase();
+
 }
 
 
@@ -953,7 +955,7 @@ if (searchInput) searchInput.focus();
     searchCardsForEdit();
 
     showAdminMessage("Карточка удалена", "success");
-  initSearchFunctionality();
+  await loadDatabaseFromSupabase();
 }
 
 
@@ -1099,7 +1101,7 @@ async function addCard(event) {
     if (typeof searchCardsForEdit === "function") {
         searchCardsForEdit();
     }
-  initSearchFunctionality();
+await loadDatabaseFromSupabase();
 
 }
 
@@ -1167,110 +1169,6 @@ window.cancelEdit = cancelEdit;
 window.updateCard = updateCard;
 window.closeAdminPanel = closeAdminPanel;
 
-// Добавление карточки
-window.addCard = async function (event) {
-  event.preventDefault();
-  console.log("addCard called (Supabase)");
 
-  const id = document.getElementById("cardId").value.trim();
-  const name = document.getElementById("cardName").value.trim();
-  const analogsStr = document.getElementById("cardAnalogs").value.trim();
-  const analogs = analogsStr
-    ? analogsStr.split(",").map(a => a.trim()).filter(Boolean)
-    : [];
 
-  if (!id || !name) {
-    showAdminMessage("Заполните обязательные поля!", "error");
-    return;
-  }
-
-  if (!window.supabaseClient) {
-    showAdminMessage("Supabase не инициализирован", "error");
-    return;
-  }
-
-  const { error } = await window.supabaseClient
-    .from("cards")
-    .insert([{ id, name, analogs }]);
-
-  if (error) {
-    console.error("Supabase insert error:", error);
-    showAdminMessage("Ошибка записи в Supabase", "error");
-    return;
-  }
-
-  await loadDatabaseFromSupabase();
-    loadAdminPasswordFromSupabase();
-  document.getElementById("addCardForm").reset();
-  showAdminMessage("Карточка добавлена в Supabase!", "success");
-};
-
-// Обновление карточки
-window.updateCard = async function (event) {
-  event.preventDefault();
-  console.log("updateCard called (Supabase)");
-
-  const oldKey = document.getElementById("editCardKey").value;
-  const newKey = document.getElementById("editCardId").value.trim();
-  const name = document.getElementById("editCardName").value.trim();
-  const analogsStr = document.getElementById("editCardAnalogs").value.trim();
-  const analogs = analogsStr
-    ? analogsStr.split(",").map(a => a.trim()).filter(Boolean)
-    : [];
-
-  if (!newKey || !name) {
-    showAdminMessage("Заполните обязательные поля!", "error");
-    return;
-  }
-
-  if (!window.supabaseClient) {
-    showAdminMessage("Supabase не инициализирован", "error");
-    return;
-  }
-
-  // если изменился ID — удаляем старую строку
-  if (oldKey !== newKey) {
-    await window.supabaseClient.from("cards").delete().eq("id", oldKey);
-  }
-
-  const { error } = await window.supabaseClient
-    .from("cards")
-    .upsert([{ id: newKey, name, analogs }]);
-
-  if (error) {
-    console.error("Supabase update error:", error);
-    showAdminMessage("Ошибка обновления в Supabase", "error");
-    return;
-  }
-
-  await loadDatabaseFromSupabase();
-    loadAdminPasswordFromSupabase();
-  cancelEdit();
-  showAdminMessage("Карточка обновлена в Supabase!", "success");
-};
-
-// Удаление карточки
-window.deleteCard = async function (key) {
-  if (!confirm("Удалить карточку " + key + "?")) return;
-
-  if (!window.supabaseClient) {
-    showAdminMessage("Supabase не инициализирован", "error");
-    return;
-  }
-
-  const { error } = await window.supabaseClient
-    .from("cards")
-    .delete()
-    .eq("id", key);
-
-  if (error) {
-    console.error("Supabase delete error:", error);
-    showAdminMessage("Ошибка удаления в Supabase", "error");
-    return;
-  }
-
-  await loadDatabaseFromSupabase();
-    loadAdminPasswordFromSupabase();
-  showAdminMessage("Карточка удалена из Supabase!", "success");
-};
 
