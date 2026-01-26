@@ -1099,107 +1099,46 @@ window.cancelEdit = cancelEdit;
 window.updateCard = updateCard;
 window.closeAdminPanel = closeAdminPanel;
 
-// Добавление карточки
-window.addCard = async function (event) {
-  event.preventDefault();
-  console.log("addCard called (Supabase)");
 
-  const id = document.getElementById("cardId").value.trim();
-  const name = document.getElementById("cardName").value.trim();
-  const analogsStr = document.getElementById("cardAnalogs").value.trim();
-  const analogs = analogsStr
-    ? analogsStr.split(",").map(a => a.trim()).filter(Boolean)
-    : [];
 
-  if (!id || !name) {
-    showAdminMessage("Заполните обязательные поля!", "error");
-    return;
+
+// ===== ADMIN LOGIN =====
+const ADMIN_PASSWORD_HASH = "e4b9c6b8d4e0a6b6c5b7c6d2d3e2b9a1"; // hash of "157"
+
+function hashPassword(pw) {
+  let hash = 0;
+  for (let i = 0; i < pw.length; i++) {
+    hash = ((hash << 5) - hash) + pw.charCodeAt(i);
+    hash |= 0;
   }
+  return hash.toString(16);
+}
 
-  if (!window.supabaseClient) {
-    showAdminMessage("Supabase не инициализирован", "error");
-    return;
+function isAdminLoggedIn() {
+  return localStorage.getItem("adminLoggedIn") === "true";
+}
+
+function showLoginModal() {
+  document.getElementById("loginModal").style.display = "block";
+}
+
+function hideLoginModal() {
+  document.getElementById("loginModal").style.display = "none";
+}
+
+function submitAdminLogin() {
+  const input = document.getElementById("adminPasswordInput").value;
+  const hash = hashPassword(input);
+  if (hash === ADMIN_PASSWORD_HASH) {
+    localStorage.setItem("adminLoggedIn", "true");
+    hideLoginModal();
+    openAdminPanel();
+  } else {
+    document.getElementById("loginError").style.display = "block";
   }
+}
 
-  const { error } = await window.supabaseClient
-    .from("cards")
-    .insert([{ id, name, analogs }]);
-
-  if (error) {
-    console.error("Supabase insert error:", error);
-    showAdminMessage("Ошибка записи в Supabase", "error");
-    return;
-  }
-
-  await loadDatabaseFromSupabase();
-  document.getElementById("addCardForm").reset();
-  showAdminMessage("Карточка добавлена в Supabase!", "success");
-};
-
-// Обновление карточки
-window.updateCard = async function (event) {
-  event.preventDefault();
-  console.log("updateCard called (Supabase)");
-
-  const oldKey = document.getElementById("editCardKey").value;
-  const newKey = document.getElementById("editCardId").value.trim();
-  const name = document.getElementById("editCardName").value.trim();
-  const analogsStr = document.getElementById("editCardAnalogs").value.trim();
-  const analogs = analogsStr
-    ? analogsStr.split(",").map(a => a.trim()).filter(Boolean)
-    : [];
-
-  if (!newKey || !name) {
-    showAdminMessage("Заполните обязательные поля!", "error");
-    return;
-  }
-
-  if (!window.supabaseClient) {
-    showAdminMessage("Supabase не инициализирован", "error");
-    return;
-  }
-
-  // если изменился ID — удаляем старую строку
-  if (oldKey !== newKey) {
-    await window.supabaseClient.from("cards").delete().eq("id", oldKey);
-  }
-
-  const { error } = await window.supabaseClient
-    .from("cards")
-    .upsert([{ id: newKey, name, analogs }]);
-
-  if (error) {
-    console.error("Supabase update error:", error);
-    showAdminMessage("Ошибка обновления в Supabase", "error");
-    return;
-  }
-
-  await loadDatabaseFromSupabase();
-  cancelEdit();
-  showAdminMessage("Карточка обновлена в Supabase!", "success");
-};
-
-// Удаление карточки
-window.deleteCard = async function (key) {
-  if (!confirm("Удалить карточку " + key + "?")) return;
-
-  if (!window.supabaseClient) {
-    showAdminMessage("Supabase не инициализирован", "error");
-    return;
-  }
-
-  const { error } = await window.supabaseClient
-    .from("cards")
-    .delete()
-    .eq("id", key);
-
-  if (error) {
-    console.error("Supabase delete error:", error);
-    showAdminMessage("Ошибка удаления в Supabase", "error");
-    return;
-  }
-
-  await loadDatabaseFromSupabase();
-  showAdminMessage("Карточка удалена из Supabase!", "success");
-};
-
+function logoutAdmin() {
+  localStorage.removeItem("adminLoggedIn");
+  alert("Вы вышли из админки");
+}
