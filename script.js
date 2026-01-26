@@ -777,39 +777,6 @@ function loadCustomCards() {
     }
 }
 
-function exportDatabase() {
-    console.log('Exporting database, total cards:', Object.keys(cardDatabase).length);
-    
-    // Создаем строку с обновленной базой данных
-    let dbString = 'var cardDatabase = {\n';
-    
-    for (const [key, value] of Object.entries(cardDatabase)) {
-        dbString += `  ${JSON.stringify(key)}: {\n`;
-        dbString += `    name: ${JSON.stringify(value.name)},\n`;
-        dbString += `    analogs: ${JSON.stringify(value.analogs)}\n`;
-        dbString += '  },\n';
-    }
-    
-    // Убираем последнюю запятую
-    dbString = dbString.slice(0, -2) + '\n';
-    dbString += '};\n';
-    
-    console.log('Generated dbString length:', dbString.length);
-    
-    // Создаем blob и скачиваем
-    const blob = new Blob([dbString], { type: 'text/javascript' });
-    const url = URL.createObjectURL(blob);
-    
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'cardDatabase.js';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    
-    showAdminMessage('Файл cardDatabase.js скачан!', 'success');
-}
 
 function showTab(tabName) {
     // Скрываем все вкладки
@@ -976,21 +943,6 @@ async function deleteCurrentCard() {
     showAdminMessage("Карточка удалена", "success");
 }
 
-function clearLocalStorage() {
-    const customCards = JSON.parse(localStorage.getItem('customCards') || '{}');
-    
-    // Удаляем кастомные карточки из cardDatabase
-    for (const key of Object.keys(customCards)) {
-        if (cardDatabase[key]) {
-            delete cardDatabase[key];
-        }
-    }
-    
-    // Очищаем localStorage
-    localStorage.removeItem('customCards');
-    
-    showAdminMessage('localStorage очищен! Тестовые карточки удалены.', 'success');
-}
 
 // Инициализация приложения после загрузки DOM
 document.addEventListener('DOMContentLoaded', function() {
