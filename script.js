@@ -65,7 +65,7 @@ async function loadDatabaseFromSupabase() {
 
   window.cardDatabase = {};
   data.forEach(row => {
-    window.cardDatabase[row.id] = {
+    cardDatabase[row.id] = {
       name: row.name,
       analogs: row.analogs || []
     };
@@ -90,6 +90,9 @@ async function logSearchToSupabase(query, found, matchType, matchedCardId) {
     console.error("Ошибка логирования поиска:", error);
   }
 }
+// === ЕДИНЫЙ ГЛОБАЛЬНЫЙ ОБЪЕКТ БАЗЫ ===
+let cardDatabase = window.cardDatabase || {};
+window.cardDatabase = cardDatabase;
 
 
 // Проверка загрузки базы данных
@@ -896,11 +899,12 @@ async function updateCard(event) {
     }
 
     cardDatabase[newKey] = { name, analogs };
-
+window.cardDatabase = cardDatabase;
     document.getElementById("editForm").style.display = "none";
     showAdminMessage("Карточка обновлена", "success");
 
     searchCardsForEdit();
+initSearchFunctionality();
 }
 
 
@@ -933,7 +937,11 @@ async function deleteCurrentCard() {
 
     // Удаляем локально
     delete cardDatabase[cardKey];
+window.cardDatabase = cardDatabase;
 
+  const searchInput = document.getElementById("searchInput");
+if (searchInput) searchInput.focus();
+  
     // Скрываем форму
     document.getElementById("editForm").style.display = "none";
 
@@ -945,6 +953,7 @@ async function deleteCurrentCard() {
     searchCardsForEdit();
 
     showAdminMessage("Карточка удалена", "success");
+  initSearchFunctionality();
 }
 
 
@@ -1090,6 +1099,8 @@ async function addCard(event) {
     if (typeof searchCardsForEdit === "function") {
         searchCardsForEdit();
     }
+  initSearchFunctionality();
+
 }
 
 // Инициализация админ доступа
