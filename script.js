@@ -970,6 +970,8 @@ async function updateCard(event) {
   await updateLastUpdateDate();
 await loadDatabaseFromSupabase();
     searchCardsForEdit();
+  initSearchFunctionality();
+initAdminSearchEnter();
 }
 
 
@@ -1017,6 +1019,8 @@ if (searchInput) searchInput.focus();
     searchCardsForEdit();
     showAdminMessage("Карточка удалена", "success");
     await updateLastUpdateDate();
+  initSearchFunctionality();
+initAdminSearchEnter();
 }
 
 
@@ -1035,6 +1039,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Инициализация для мобильных устройств
     initMobileFeatures();
+  initSearchFunctionality();
+  initAdminSearchEnter();
 });
 
 // Инициализация мобильных функций
@@ -1157,8 +1163,21 @@ await loadDatabaseFromSupabase();
         searchCardsForEdit();
     }
   await updateLastUpdateDate();
+  initSearchFunctionality();
+initAdminSearchEnter();
 }
 
+function initAdminSearchEnter() {
+    const editSearchInput = document.getElementById("editSearch");
+    if (!editSearchInput) return;
+
+    editSearchInput.addEventListener("keypress", function (e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            searchCardsForEdit();
+        }
+    });
+}
 // Инициализация админ доступа
 document.addEventListener('DOMContentLoaded', function() {
     // Обработчики для админ кнопок
