@@ -60,12 +60,6 @@ if (typeof cardDatabase === 'undefined') {
     window.cardDatabase = {};
 }
 
-const AppConfig = {
-  version: "1.2.1",
-  lastUpdate: "17.01.2026",
-  maintenanceMode: false,
-  adminPasswordHash: "9f9f9f" // хэш от "157"
-};
 
 function simpleHash(str) {
   let hash = 0;
@@ -75,6 +69,13 @@ function simpleHash(str) {
   }
   return hash.toString(16);
 }
+
+const AppConfig = {
+    version: "1.2.1",
+    lastUpdate: "17.01.2026",
+    maintenanceMode: false,
+    adminPasswordHash: simpleHash("157")
+};
 
 // Глобальные переменные
 let isAdminLoggedIn = false;
@@ -441,7 +442,7 @@ function checkPassword(event) {
         submitBtn.disabled = true;
         
         setTimeout(() => {
-            if (password === AppConfig.adminPassword) {
+            if (simpleHash(password) === AppConfig.adminPasswordHash) {
                 // Успешный вход
                 submitBtn.innerHTML = '<span class="submit-icon">✅</span>';
                 
@@ -662,7 +663,7 @@ function hideAdminLogin() {
 
 function loginAdmin() {
     const password = document.getElementById('adminLoginPassword').value;
-    if (password === AppConfig.adminPassword) {
+    if (simpleHash(password) === AppConfig.adminPasswordHash) {
         isAdminLoggedIn = true;
         loadCustomCards(); // Загружаем кастомные карточки для админа
         document.getElementById('adminLoginForm').style.display = 'none';
