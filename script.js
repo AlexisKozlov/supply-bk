@@ -24,33 +24,6 @@ function waitForSupabaseAndInit() {
 }
 
 document.addEventListener("DOMContentLoaded", waitForSupabaseAndInit);
-// --- Загрузка базы из Supabase ---
-async function loadDatabaseFromSupabase() {
-  if (!window.supabaseClient) {
-    console.warn("Supabase client not ready yet");
-    return;
-  }
-
-  const { data, error } = await window.supabaseClient
-    .from("cards")
-    .select("*");
-
-  if (error) {
-    console.error("Supabase error:", error);
-    return;
-  }
-
-  window.cardDatabase = {};
-  data.forEach(row => {
-    window.cardDatabase[row.id] = {
-      name: row.name,
-      analogs: row.analogs || []
-    };
-  });
-
-  console.log("База загружена из Supabase:", window.cardDatabase);
-}
-
 
 // Проверка загрузки базы данных
 if (typeof cardDatabase === 'undefined') {
@@ -1140,5 +1113,6 @@ function submitAdminLogin() {
 
 function logoutAdmin() {
   localStorage.removeItem("adminLoggedIn");
+  closeAdminPanel();
   alert("Вы вышли из админки");
 }
