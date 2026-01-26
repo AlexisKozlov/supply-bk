@@ -383,70 +383,87 @@ function showToast(message, type = 'info', duration = 3000) {
     }, duration);
 }
 
+/* === ПОИСК === */
 function searchCard() {
-  let inputElement = document.getElementById("searchInput");
-  if (!inputElement) return;
-
-  let article = inputElement.value.trim();
-  if (article.length < 3) return;
-
-  let firstWord = article.split(" ")[0];
-  let resultElement = document.getElementById("result");
-  if (!resultElement) return;
-
-  resultElement.innerHTML = "";
-  let foundCards = [];
-
-  let matchType = null;
-  let matchedCardId = null;
-
-  if (window.cardDatabase && Object.keys(window.cardDatabase).length > 0) {
-    if (cardDatabase[firstWord]) {
-      foundCards.push({ article: firstWord, ...cardDatabase[firstWord] });
-      matchType = "direct";
-      matchedCardId = firstWord;
+    let inputElement = document.getElementById("searchInput");
+    if (!inputElement) {
+        showError("Поле ввода не найдено!");
+        return;
     }
 
-    for (let key in cardDatabase) {
-      if (cardDatabase[key].analogs?.includes(firstWord)) {
-        foundCards.push({ article: key, ...cardDatabase[key] });
-        if (!matchType) {
-          matchType = "analog";
-          matchedCardId = key;
+    let article = inputElement.value.trim();
+    if (article.length < 3) {
+        showError("Введите минимум 3 символа!");
+        return;
+    }
+
+    if (window.innerWidth <= 768) inputElement.blur();
+
+    const loader = document.getElementById("loader");
+    if (loader) loader.style.display = "flex";
+
+    setTimeout(() => {
+        let firstWord = article.split(" ")[0];
+        let resultElement = document.getElementById("result");
+        if (!resultElement) return;
+
+        resultElement.innerHTML = "";
+        let foundCards = [];
+
+        let matchType = null;
+        let matchedCardId = null;
+
+        if (typeof cardDatabase === 'object' && Object.keys(cardDatabase).length > 0) {
+            if (cardDatabase[firstWord]) {
+                foundCards.push({ article: firstWord, ...cardDatabase[firstWord] });
+                matchType = "direct";
+                matchedCardId = firstWord;
+            }
+
+            for (let key in cardDatabase) {
+                if (cardDatabase[key].analogs && cardDatabase[key].analogs.includes(firstWord)) {
+                    foundCards.push({ article: key, ...cardDatabase[key] });
+                    if (!matchType) {
+                        matchType = "analog";
+                        matchedCardId = key;
+                    }
+                }
+            }
+
+            for (let key in cardDatabase) {
+                if (cardDatabase[key].name && cardDatabase[key].name.toLowerCase().includes(article.toLowerCase())) {
+                    if (!foundCards.some(card => card.article === key)) {
+                        foundCards.push({ article: key, ...cardDatabase[key] });
+                        if (!matchType) {
+                            matchType = "name";
+                            matchedCardId = key;
+                        }
+                    }
+                }
+            }
         }
-      }
-    }
 
-    for (let key in cardDatabase) {
-      if (cardDatabase[key].name?.toLowerCase().includes(article.toLowerCase())) {
-        if (!foundCards.some(card => card.article === key)) {
-          foundCards.push({ article: key, ...cardDatabase[key] });
-          if (!matchType) {
-            matchType = "name";
-            matchedCardId = key;
-          }
+        if (foundCards.length > 0) {
+            let output = foundCards.map(card => {
+                const safeText = `${card.article} ${card.name}`.replace(/"/g, '&quot;');
+                return `<h3 class="copyable" onclick="copyToClipboard('${safeText}', this)">${card.article} ${card.name}</h3>`;
+            }).join("");
+            resultElement.innerHTML = output;
+
+            logSearchToSupabase(article, true, matchType, matchedCardId);
+        } else {
+            resultElement.innerHTML = `
+                <div class="not-found-animation">
+                    <p>Карточка не найдена, возможно она не имеет аналогов или её пока нет в базе данных</p>
+                    <img src="sad.gif" alt="Грустный смайлик" class="sad-gif">
+                </div>
+            `;
+            logSearchToSupabase(article, false, null, null);
         }
-      }
-    }
-  }
 
-  if (foundCards.length > 0) {
-    let output = foundCards.map(card => {
-      return `<h3 class="copyable">${card.article} ${card.name}</h3>`;
-    }).join("");
-    resultElement.innerHTML = output;
-
-    // ЛОГ: найдено
-    logSearchToSupabase(article, true, matchType, matchedCardId);
-
-  } else {
-    resultElement.innerHTML = `<p>Карточка не найдена</p>`;
-
-    // ЛОГ: не найдено
-    logSearchToSupabase(article, false, null, null);
-  }
+        if (loader) loader.style.display = "none";
+    }, 700);
 }
-
 // Проверка пароля (исправленная версия)
 function checkPassword(event) {
     if (event) {
