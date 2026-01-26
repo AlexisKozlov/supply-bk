@@ -445,11 +445,6 @@ function searchCard() {
     // ЛОГ: не найдено
     logSearchToSupabase(article, false, null, null);
   }
-        // Скрываем loader
-        if (loader) {
-            loader.style.display = "none";
-        }
-    }, 700);
 }
 
 // Проверка пароля (исправленная версия)
