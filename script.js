@@ -528,7 +528,7 @@ function searchCard() {
     }, 700);
 }
 // Проверка пароля (исправленная версия)
-function checkPassword(event) {
+async function checkPassword(event) {
     if (event) {
         event.preventDefault();
     }
@@ -963,9 +963,8 @@ async function updateCard(event) {
     document.getElementById("editForm").style.display = "none";
     showAdminMessage("Карточка обновлена", "success");
   await updateLastUpdateDate();
-    searchCardsForEdit();
 await loadDatabaseFromSupabase();
-
+    searchCardsForEdit();
 }
 
 
@@ -1009,11 +1008,10 @@ if (searchInput) searchInput.focus();
     if (editSearch) editSearch.value = "";
 
     // Перерисовываем список
+    await loadDatabaseFromSupabase();
     searchCardsForEdit();
-
     showAdminMessage("Карточка удалена", "success");
     await updateLastUpdateDate();
-  await loadDatabaseFromSupabase();
 }
 
 
@@ -1149,13 +1147,11 @@ async function addCard(event) {
 
     document.getElementById("addCardForm").reset();
     showAdminMessage("Карточка добавлена", "success");
-
+await loadDatabaseFromSupabase();
     if (typeof searchCardsForEdit === "function") {
         searchCardsForEdit();
     }
   await updateLastUpdateDate();
-await loadDatabaseFromSupabase();
-
 }
 
 // Инициализация админ доступа
