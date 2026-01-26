@@ -19,6 +19,7 @@ function waitForSupabaseAndInit() {
     );
     loadDatabaseFromSupabase();
     loadAdminPasswordFromSupabase();
+    loadAppConfigFromSupabase();
   } else if (!window.supabaseClient) {
     setTimeout(waitForSupabaseAndInit, 50);
   }
@@ -47,6 +48,40 @@ async function loadAdminPasswordFromSupabase() {
   serverAdminPasswordHash = data.value;
   console.log("Пароль админки загружен из Supabase");
 }
+// --- Загрузка AppConfig из Supabase ---
+async function loadAppConfigFromSupabase() {
+  if (!window.supabaseClient) return;
+
+  const { data, error } = await window.supabaseClient
+    .from("settings")
+    .select("key, value")
+    .in("key", ["maintenance_mode", "last_update", "app_version"]);
+
+  if (error) {
+    console.error("Ошибка загрузки AppConfig:", error);
+    return;
+  }
+
+  data.forEach(row => {
+    if (row.key === "maintenance_mode") {
+      AppConfig.maintenanceMode = row.value === "true";
+    }
+
+    if (row.key === "last_update") {
+      AppConfig.lastUpdate = row.value;
+    }
+
+    if (row.key === "app_version") {
+      AppConfig.version = row.value;
+    }
+  });
+
+  console.log("AppConfig загружен из Supabase:", AppConfig);
+
+  updateContentVisibility();
+  updateVersionInfo();
+}
+
 
 async function loadDatabaseFromSupabase() {
   if (!window.supabaseClient) {
@@ -78,6 +113,26 @@ data.forEach(row => {
 window.cardDatabase = cardDatabase;
 
   console.log("База загружена из Supabase:", window.cardDatabase);
+}
+
+// --- Обновление даты последнего изменения карточек ---
+async function updateLastUpdateDate() {
+  const today = new Date().toLocaleDateString("ru-RU");
+
+  AppConfig.lastUpdate = today;
+  updateVersionInfo();
+
+  if (!window.supabaseClient) return;
+
+  const { error } = await window.supabaseClient
+    .from("settings")
+    .upsert([
+      { key: "last_update", value: today }
+    ]);
+
+  if (error) {
+    console.error("Ошибка обновления last_update:", error);
+  }
 }
 
 async function logSearchToSupabase(query, found, matchType, matchedCardId) {
@@ -501,8 +556,14 @@ function checkPassword(event) {
                 // Переключаем режим техработ
                 AppConfig.maintenanceMode = !AppConfig.maintenanceMode;
                 
-                // Сохраняем состояние в localStorage
-                localStorage.setItem('maintenanceMode', AppConfig.maintenanceMode.toString());
+               // Сохраняем состояние в Supabase
+if (window.supabaseClient) {
+  await window.supabaseClient
+    .from("settings")
+    .upsert([
+      { key: "maintenance_mode", value: AppConfig.maintenanceMode.toString() }
+    ]);
+}
                 
                 setTimeout(() => {
                     if (AppConfig.maintenanceMode) {
@@ -901,7 +962,7 @@ async function updateCard(event) {
     // Локально
     document.getElementById("editForm").style.display = "none";
     showAdminMessage("Карточка обновлена", "success");
-
+  await updateLastUpdateDate();
     searchCardsForEdit();
 await loadDatabaseFromSupabase();
 
@@ -951,6 +1012,7 @@ if (searchInput) searchInput.focus();
     searchCardsForEdit();
 
     showAdminMessage("Карточка удалена", "success");
+    await updateLastUpdateDate();
   await loadDatabaseFromSupabase();
 }
 
@@ -959,11 +1021,6 @@ if (searchInput) searchInput.focus();
 document.addEventListener('DOMContentLoaded', function() {
     // Не предотвращаем отправку форм - обрабатываем в отдельных функциях
     
-    // Загружаем сохраненное состояние техработ
-    const savedMaintenanceMode = localStorage.getItem('maintenanceMode');
-    if (savedMaintenanceMode) {
-        AppConfig.maintenanceMode = savedMaintenanceMode === 'true';
-    }
     
     // Показываем дисклеймер только если не режим техработ
     if (!AppConfig.maintenanceMode) {
@@ -1096,6 +1153,7 @@ async function addCard(event) {
     if (typeof searchCardsForEdit === "function") {
         searchCardsForEdit();
     }
+  await updateLastUpdateDate();
 await loadDatabaseFromSupabase();
 
 }
