@@ -933,6 +933,49 @@ function updateCard(event) {
     searchCardsForEdit();
 }
 
+// === УДАЛЕНИЕ КАРТОЧКИ ИЗ SUPABASE ===
+async function deleteCurrentCard() {
+    const cardKey = document.getElementById("editCardKey").value;
+
+    if (!cardKey) {
+        showAdminMessage("Карточка не выбрана", "error");
+        return;
+    }
+
+    if (!confirm("Удалить карточку " + cardKey + "?")) return;
+
+    if (!window.supabaseClient) {
+        showAdminMessage("Supabase не подключён", "error");
+        return;
+    }
+
+    const { error } = await window.supabaseClient
+        .from("cards")
+        .delete()
+        .eq("id", cardKey);
+
+    if (error) {
+        console.error("Ошибка удаления:", error);
+        showAdminMessage("Ошибка удаления карточки", "error");
+        return;
+    }
+
+    // Удаляем локально
+    delete cardDatabase[cardKey];
+
+    // Скрываем форму
+    document.getElementById("editForm").style.display = "none";
+
+    // Очищаем поиск
+    const editSearch = document.getElementById("editSearch");
+    if (editSearch) editSearch.value = "";
+
+    // Перерисовываем список
+    searchCardsForEdit();
+
+    showAdminMessage("Карточка удалена", "success");
+}
+
 function clearLocalStorage() {
     const customCards = JSON.parse(localStorage.getItem('customCards') || '{}');
     
