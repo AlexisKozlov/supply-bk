@@ -558,11 +558,16 @@ async function checkPassword(event) {
                 
                // Сохраняем состояние в Supabase
 if (window.supabaseClient) {
-  await window.supabaseClient
+  window.supabaseClient
     .from("settings")
     .upsert([
       { key: "maintenance_mode", value: AppConfig.maintenanceMode.toString() }
-    ]);
+    ])
+    .then(({ error }) => {
+      if (error) {
+        console.error("Ошибка сохранения maintenance_mode:", error);
+      }
+    });
 }
                 
                 setTimeout(() => {
