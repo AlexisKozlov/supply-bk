@@ -74,6 +74,23 @@ async function loadDatabaseFromSupabase() {
   console.log("База загружена из Supabase:", window.cardDatabase);
 }
 
+async function logSearchToSupabase(query, found, matchType, matchedCardId) {
+  if (!window.supabaseClient) return;
+
+  const { error } = await window.supabaseClient
+    .from("search_logs")
+    .insert([{
+      query: query,
+      found: found,
+      match_type: matchType,
+      matched_card_id: matchedCardId || null
+    }]);
+
+  if (error) {
+    console.error("Ошибка логирования поиска:", error);
+  }
+}
+
 
 // Проверка загрузки базы данных
 if (typeof cardDatabase === 'undefined') {
@@ -367,75 +384,67 @@ function showToast(message, type = 'info', duration = 3000) {
 }
 
 function searchCard() {
-    let inputElement = document.getElementById("searchInput");
-    if (!inputElement) {
-        showError("Поле ввода не найдено!");
-        return;
+  let inputElement = document.getElementById("searchInput");
+  if (!inputElement) return;
+
+  let article = inputElement.value.trim();
+  if (article.length < 3) return;
+
+  let firstWord = article.split(" ")[0];
+  let resultElement = document.getElementById("result");
+  if (!resultElement) return;
+
+  resultElement.innerHTML = "";
+  let foundCards = [];
+
+  let matchType = null;
+  let matchedCardId = null;
+
+  if (window.cardDatabase && Object.keys(window.cardDatabase).length > 0) {
+    if (cardDatabase[firstWord]) {
+      foundCards.push({ article: firstWord, ...cardDatabase[firstWord] });
+      matchType = "direct";
+      matchedCardId = firstWord;
     }
-    
-    let article = inputElement.value.trim();
-    if (article.length < 3) {
-        showError("Введите минимум 3 символа!");
-        return;
-    }
-    
-    // Скрываем клавиатуру на мобильных
-    if (window.innerWidth <= 768) {
-        inputElement.blur();
-    }
-    
-    // Показываем loader
-    const loader = document.getElementById("loader");
-    if (loader) {
-        loader.style.display = "flex";
-    }
-    
-    // Через 1 секунду выполняем поиск и скрываем loader
-    setTimeout(() => {
-        let firstWord = article.split(" ")[0];
-        let resultElement = document.getElementById("result");
-        if (!resultElement) return;
-        
-        resultElement.innerHTML = "";
-        let foundCards = [];
-        
-        // Проверяем, что база данных загружена
-        if (typeof cardDatabase === 'object' && Object.keys(cardDatabase).length > 0) {
-            if (cardDatabase[firstWord]) {
-                foundCards.push({ article: firstWord, ...cardDatabase[firstWord] });
-            }
-            
-            for (let key in cardDatabase) {
-                if (cardDatabase[key].analogs && cardDatabase[key].analogs.includes(firstWord)) {
-                    foundCards.push({ article: key, ...cardDatabase[key] });
-                }
-            }
-            
-            for (let key in cardDatabase) {
-                if (cardDatabase[key].name && cardDatabase[key].name.toLowerCase().includes(article.toLowerCase())) {
-                    // Проверяем дубликаты
-                    if (!foundCards.some(card => card.article === key)) {
-                        foundCards.push({ article: key, ...cardDatabase[key] });
-                    }
-                }
-            }
+
+    for (let key in cardDatabase) {
+      if (cardDatabase[key].analogs?.includes(firstWord)) {
+        foundCards.push({ article: key, ...cardDatabase[key] });
+        if (!matchType) {
+          matchType = "analog";
+          matchedCardId = key;
         }
-        
-        if (foundCards.length > 0) {
-            let output = foundCards.map(card => {
-                const safeText = `${card.article} ${card.name}`.replace(/"/g, '&quot;');
-                return `<h3 class="copyable" onclick="copyToClipboard('${safeText}', this)">${card.article} ${card.name}</h3>`;
-            }).join("");
-            resultElement.innerHTML = output;
-        } else {
-            resultElement.innerHTML = `
-                <div class="not-found-animation">
-                    <p>Карточка не найдена, возможно она не имеет аналогов или её пока нет в базе данных</p>
-                    <img src="sad.gif" alt="Грустный смайлик" class="sad-gif">
-                </div>
-            `;
+      }
+    }
+
+    for (let key in cardDatabase) {
+      if (cardDatabase[key].name?.toLowerCase().includes(article.toLowerCase())) {
+        if (!foundCards.some(card => card.article === key)) {
+          foundCards.push({ article: key, ...cardDatabase[key] });
+          if (!matchType) {
+            matchType = "name";
+            matchedCardId = key;
+          }
         }
-        
+      }
+    }
+  }
+
+  if (foundCards.length > 0) {
+    let output = foundCards.map(card => {
+      return `<h3 class="copyable">${card.article} ${card.name}</h3>`;
+    }).join("");
+    resultElement.innerHTML = output;
+
+    // ЛОГ: найдено
+    logSearchToSupabase(article, true, matchType, matchedCardId);
+
+  } else {
+    resultElement.innerHTML = `<p>Карточка не найдена</p>`;
+
+    // ЛОГ: не найдено
+    logSearchToSupabase(article, false, null, null);
+  }
         // Скрываем loader
         if (loader) {
             loader.style.display = "none";
