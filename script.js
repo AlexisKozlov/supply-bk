@@ -82,15 +82,14 @@ updateContentVisibility();
 updateVersionInfo();
 
 // 🔑 ЕДИНАЯ ТОЧКА УПРАВЛЕНИЯ UI
+updateContentVisibility();
+
 if (!AppConfig.maintenanceMode) {
   // сайт открыт для всех
-  isAdminLoggedIn = true;  // временно считаем всех "допущенными"
-  updateContentVisibility();
   showDisclaimer();
 } else {
-  // сайт закрыт, только админ через пароль
-  isAdminLoggedIn = false;
-  updateContentVisibility();
+  // сайт закрыт — ждём пароль
+  // НИЧЕГО не делаем
 }
 }
 
@@ -266,12 +265,9 @@ function showAppUnavailable() {
 }
 
 function initMainContent() {
-    updateContentVisibility();
-    
-    if (!AppConfig.maintenanceMode) {
-        // Инициализация основного функционала только если не режим техработ
-        initApplication();
-    }
+  if (!AppConfig.maintenanceMode) {
+    initApplication();
+  }
 }
 
 // Функция для обновления видимости контента
@@ -679,10 +675,13 @@ async function checkPassword(event) {
     if (simpleHash(password) === serverAdminPasswordHash) {
 
       // ✅ ВХОДИМ В СЕССИИ, НИЧЕГО НЕ МЕНЯЯ В SUPABASE
-      isAdminLoggedIn = true;
+     isAdminLoggedIn = true;
 
-updateContentVisibility();
-initMainContent(); // ← ВОТ ЭТА СТРОКА КРИТИЧНА
+// 🔥 ПРИНУДИТЕЛЬНО скрываем заглушку
+document.getElementById("maintenance").style.display = "none";
+document.getElementById("normalSite").style.display = "block";
+
+initMainContent();
 
 showToast("Доступ администратора разрешён", "success");
 
