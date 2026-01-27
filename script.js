@@ -83,6 +83,7 @@ updateContentVisibility();
 
 if (!AppConfig.maintenanceMode) {
   showDisclaimer();
+  initMainContent();   // ← ВОТ ЭТА СТРОКА КРИТИЧНА
 }
 }
 
