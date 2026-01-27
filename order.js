@@ -148,15 +148,6 @@ if (baseNeeded > 0) {
 }
 
 
-  let orderQty = 0;
-  if (shortage > 0) {
-    const withBuffer = shortage * (1 + bufferPercent / 100);
-    const packSize = selectedProduct.box_qty || 1;
-
-    orderQty =
-      Math.ceil(withBuffer / packSize) * packSize;
-  }
-
 const item = {
   product: selectedProduct,
   currentStock,
