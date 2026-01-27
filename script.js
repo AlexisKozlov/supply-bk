@@ -286,12 +286,15 @@ function initSearchFunctionality() {
     const searchButton = document.querySelector('.glow-on-hover');
     
     if (searchInput) {
+      
         searchInput.addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
                 searchCard();
             }
         });
-        
+        searchInput.addEventListener("input", function () {
+  showAutocomplete(this.value);
+});
         // Для мобильных - скрываем клавиатуру после поиска
         searchInput.addEventListener('search', function() {
             if (window.innerWidth <= 768) {
@@ -473,6 +476,59 @@ function normalize(str) {
     .toLowerCase()
     .replace(/ё/g, "е")
     .replace(/[^a-zа-я0-9]/gi, "");
+}
+function showAutocomplete(queryRaw) {
+  const list = document.getElementById("autocompleteList");
+  if (!list) return;
+
+  const query = normalize(queryRaw);
+  list.innerHTML = "";
+
+  if (query.length < 2) {
+    list.style.display = "none";
+    return;
+  }
+
+  let matches = [];
+
+  for (const [key, card] of Object.entries(cardDatabase)) {
+    const keyNorm = normalize(key);
+    const nameNorm = normalize(card.name || "");
+    const analogsNorm = (card.analogs || []).map(a => normalize(a));
+
+    if (
+      keyNorm.includes(query) ||
+      nameNorm.includes(query) ||
+      analogsNorm.some(a => a.includes(query))
+    ) {
+      matches.push({ key, ...card });
+    }
+
+    if (matches.length >= 5) break;
+  }
+
+  if (matches.length === 0) {
+    list.style.display = "none";
+    return;
+  }
+
+  list.innerHTML = matches.map(card => `
+    <div class="autocomplete-item" data-article="${card.key}">
+      <span class="autocomplete-article">${card.key}</span>
+      <span class="autocomplete-name">${card.name}</span>
+    </div>
+  `).join("");
+
+  list.style.display = "block";
+
+  list.querySelectorAll(".autocomplete-item").forEach(item => {
+    item.addEventListener("click", () => {
+      const article = item.dataset.article;
+      document.getElementById("searchInput").value = article;
+      list.style.display = "none";
+      searchCard();
+    });
+  });
 }
 
 
@@ -1292,5 +1348,16 @@ window.updateCard = updateCard;
 window.closeAdminPanel = closeAdminPanel;
 
 
+// Скрытие автоподсказок при клике вне поля
+document.addEventListener("click", function (e) {
+  const list = document.getElementById("autocompleteList");
+  const input = document.getElementById("searchInput");
+
+  if (!list || !input) return;
+
+  if (!list.contains(e.target) && e.target !== input) {
+    list.style.display = "none";
+  }
+});
 
 
