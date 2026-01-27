@@ -604,25 +604,6 @@ for (const [key, card] of Object.entries(cardDatabase)) {
     }
     continue;
   }
-
-// 5️⃣ Нечёткое совпадение (по подстрокам названия)
-let fuzzyHit = false;
-
-for (let i = 0; i <= nameNorm.length - query.length; i++) {
-  const chunk = nameNorm.slice(i, i + query.length);
-  if (levenshtein(chunk, query) <= 2) {
-    fuzzyHit = true;
-    break;
-  }
-}
-
-if (fuzzyHit) {
-  foundCards.push({ article: key, ...card, reason: "возможно, опечатка" });
-  if (!matchType) {
-    matchType = "fuzzy";
-    matchedCardId = key;
-  }
-}
 }
 
 
