@@ -1330,3 +1330,22 @@ const savedBypass = sessionStorage.getItem("adminBypass");
 if (savedBypass === "true") {
   isAdminLoggedIn = true;
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const orderBtn = document.getElementById("orderMenuBtn");
+  if (!orderBtn) return;
+
+  orderBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    const isAdmin =
+      sessionStorage.getItem("adminBypass") === "true";
+
+    if (!isAdmin) {
+      showError("Доступ к калькулятору заказа только для администратора");
+      return;
+    }
+
+    window.location.href = "order.html";
+  });
+});
