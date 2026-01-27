@@ -639,87 +639,74 @@ for (const [key, card] of Object.entries(cardDatabase)) {
 
 // Проверка пароля (исправленная версия)
 async function checkPassword(event) {
-    if (event) {
-        event.preventDefault();
-    }
-    
-    const passwordInput = document.getElementById('adminPassword');
-    if (!passwordInput) {
-        showError("Поле для ввода пароля не найдено!");
-        return false;
-    }
-    
-    const password = passwordInput.value;
-    
-    // Простая анимация загрузки
-    const submitBtn = document.querySelector('.password-submit') || document.querySelector('.submit-button');
-    if (submitBtn) {
-        const originalHtml = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<span class="submit-icon">⏳</span>';
-        submitBtn.disabled = true;
-        
-        setTimeout(() => {
-            if (simpleHash(password) === serverAdminPasswordHash) {
-                // Успешный вход
-                submitBtn.innerHTML = '<span class="submit-icon">✅</span>';
-                
-                // Переключаем режим техработ
-                AppConfig.maintenanceMode = !AppConfig.maintenanceMode;
-                
-               // Сохраняем состояние в Supabase
-if (window.supabaseClient) {
-  window.supabaseClient
-    .from("settings")
-    .upsert([
-      { key: "maintenance_mode", value: AppConfig.maintenanceMode.toString() }
-    ])
-    .then(({ error }) => {
-      if (error) {
-        console.error("Ошибка сохранения maintenance_mode:", error);
+  if (event) event.preventDefault();
+
+  const passwordInput = document.getElementById("adminPassword");
+  if (!passwordInput) {
+    showError("Поле для ввода пароля не найдено!");
+    return;
+  }
+
+  const password = passwordInput.value.trim();
+  if (!password) {
+    showError("Введите пароль");
+    return;
+  }
+
+  if (!serverAdminPasswordHash) {
+    showError("Пароль ещё не загружен. Попробуйте через 2–3 секунды.");
+    return;
+  }
+
+  const submitBtn = document.querySelector(".maintenance-submit");
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Проверка...";
+  }
+
+  // Имитируем лёгкую загрузку
+  setTimeout(async () => {
+    if (simpleHash(password) === serverAdminPasswordHash) {
+      // Успешный вход
+      AppConfig.maintenanceMode = !AppConfig.maintenanceMode;
+
+      if (window.supabaseClient) {
+        const { error } = await window.supabaseClient
+          .from("settings")
+          .upsert([
+            { key: "maintenance_mode", value: AppConfig.maintenanceMode.toString() }
+          ]);
+
+        if (error) {
+          console.error("Ошибка сохранения maintenance_mode:", error);
+        }
       }
-    });
-}
-                
-                setTimeout(() => {
-                    if (AppConfig.maintenanceMode) {
-                        showMaintenanceMessage('Режим техработ включен', 'success');
-                    } else {
-                        showMaintenanceMessage('Режим техработ выключен', 'success');
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 2000);
-                    }
-                    
-                    const passwordForm = document.getElementById('passwordForm');
-                    if (passwordForm) {
-                        passwordForm.style.display = 'none';
-                    }
-                    
-                    passwordInput.value = '';
-                    
-                    setTimeout(() => {
-                        submitBtn.innerHTML = originalHtml;
-                        submitBtn.disabled = false;
-                        updateContentVisibility();
-                    }, 1000);
-                    
-                }, 1000);
-                
-            } else {
-                submitBtn.innerHTML = '<span class="submit-icon">❌</span>';
-                
-                setTimeout(() => {
-                    showError('Неверный пароль!');
-                    submitBtn.innerHTML = originalHtml;
-                    submitBtn.disabled = false;
-                    passwordInput.value = '';
-                    passwordInput.focus();
-                }, 1000);
-            }
-        }, 1000);
+
+      updateContentVisibility();
+
+      showToast(
+        AppConfig.maintenanceMode
+          ? "Режим техработ включён"
+          : "Режим техработ выключен",
+        "success"
+      );
+
+      if (!AppConfig.maintenanceMode) {
+        setTimeout(() => location.reload(), 1500);
+      }
+
+      passwordInput.value = "";
+      document.getElementById("passwordForm").style.display = "none";
+    } else {
+      showError("Неверный пароль");
+      passwordInput.focus();
     }
-    
-    return false;
+
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Войти";
+    }
+  }, 600);
 }
 
 // Функция для показа сообщений в режиме техработ
