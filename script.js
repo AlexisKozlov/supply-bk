@@ -533,6 +533,7 @@ function showAutocomplete(queryRaw) {
 
 
 
+
 /* === ПОИСК === */
 function searchCard() {
   const inputElement = document.getElementById("searchInput");
@@ -561,7 +562,7 @@ function searchCard() {
     let matchType = null;
     let matchedCardId = null;
 
-   for (const [key, card] of Object.entries(cardDatabase)) {
+for (const [key, card] of Object.entries(cardDatabase)) {
   const keyNorm = normalize(key);
   const nameNorm = normalize(card.name || "");
   const analogsNorm = (card.analogs || []).map(a => normalize(a));
@@ -604,7 +605,7 @@ function searchCard() {
     continue;
   }
 
-  // 5️⃣ Нечёткое совпадение по словам
+  // 5️⃣ Нечёткое совпадение по словам (ВОТ КЛЮЧЕВОЕ)
   const words = nameNorm.split(/[^a-zа-я0-9]+/);
   const fuzzyHit = words.some(word => levenshtein(word, query) <= 2);
 
@@ -616,6 +617,7 @@ function searchCard() {
     }
   }
 }
+
 
 
     if (foundCards.length > 0) {
