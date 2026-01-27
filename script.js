@@ -1341,11 +1341,59 @@ document.addEventListener("DOMContentLoaded", () => {
     const isAdmin =
       sessionStorage.getItem("adminBypass") === "true";
 
-    if (!isAdmin) {
-      showError("Доступ к калькулятору заказа только для администратора");
-      return;
+    if (isAdmin) {
+      window.location.href = "order.html";
+    } else {
+      openOrderAuthModal();
     }
-
-    window.location.href = "order.html";
   });
 });
+
+// 🔐 Модалка доступа к заказу
+
+function openOrderAuthModal() {
+  const modal = document.getElementById("orderAuthModal");
+  const input = document.getElementById("orderAuthPassword");
+  const error = document.getElementById("orderAuthError");
+
+  if (!modal || !input) return;
+
+  error.textContent = "";
+  input.value = "";
+
+  modal.style.display = "flex";
+  setTimeout(() => input.focus(), 100);
+}
+
+function closeOrderAuthModal() {
+  const modal = document.getElementById("orderAuthModal");
+  if (modal) modal.style.display = "none";
+}
+
+async function submitOrderPassword() {
+  const input = document.getElementById("orderAuthPassword");
+  const error = document.getElementById("orderAuthError");
+
+  if (!input || !error) return;
+
+  const password = input.value.trim();
+  if (!password) {
+    error.textContent = "Введите пароль";
+    return;
+  }
+
+  if (!serverAdminPasswordHash) {
+    error.textContent = "Пароль ещё не загружен, попробуйте через 2 сек";
+    return;
+  }
+
+  if (simpleHash(password) === serverAdminPasswordHash) {
+    sessionStorage.setItem("adminBypass", "true");
+    closeOrderAuthModal();
+    window.location.href = "order.html";
+  } else {
+    error.textContent = "Неверный пароль";
+    input.focus();
+  }
+}
+
