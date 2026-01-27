@@ -1232,7 +1232,6 @@ window.showGoogleForm = showGoogleForm;
 window.closeGoogleForm = closeGoogleForm;
 window.loginAdmin = loginAdmin;
 window.hideAdminLogin = hideAdminLogin;
-window.clearLocalStorage = clearLocalStorage;
 window.loadCustomCards = loadCustomCards;
 window.addCard = addCard;
 window.showTab = showTab;
