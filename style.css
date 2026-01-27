@@ -2744,3 +2744,21 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* ФИКС ЦЕНТРОВКИ СТРАНИЦЫ ТЕХРАБОТ */
+.maintenance-screen {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.maintenance-card {
+  margin: 0 auto !important;
+  transform: none !important;
+}
