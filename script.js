@@ -79,7 +79,14 @@ async function loadAppConfigFromSupabase() {
   console.log("AppConfig загружен из Supabase:", AppConfig);
 
   updateContentVisibility();
-  updateVersionInfo();
+updateVersionInfo();
+
+// 🔑 ВОТ ЭТО КЛЮЧЕВО
+if (!AppConfig.maintenanceMode) {
+  showDisclaimer();
+} else {
+  initMainContent();
+}
 }
 
 
@@ -1102,19 +1109,8 @@ initAdminSearchEnter();
 
 // Инициализация приложения после загрузки DOM
 document.addEventListener('DOMContentLoaded', function() {
-    // Не предотвращаем отправку форм - обрабатываем в отдельных функциях
-    
-    
-    // Показываем дисклеймер только если не режим техработ
-    if (!AppConfig.maintenanceMode) {
-        showDisclaimer();
-    } else {
-        // Если режим техработ - сразу инициализируем контент
-        initMainContent();
-    }
-    
-    // Инициализация для мобильных устройств
-    initMobileFeatures();
+  // НИЧЕГО не решаем до загрузки Supabase
+  initMobileFeatures();
   initSearchFunctionality();
   initAdminSearchEnter();
 });
