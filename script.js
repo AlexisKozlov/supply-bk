@@ -264,21 +264,20 @@ function initMainContent() {
 
 // Функция для обновления видимости контента
 function updateContentVisibility() {
-    const maintenanceElement = document.getElementById('maintenance');
-    const normalSiteElement = document.getElementById('normalSite');
-    
-    if (AppConfig.maintenanceMode) {
-        // Показываем полноэкранную страницу техработ
-        if (maintenanceElement) maintenanceElement.style.display = 'block';
-        if (normalSiteElement) normalSiteElement.style.display = 'none';
-        
-        // Инициализация анимации техработ
-        initMaintenanceAnimation();
-    } else {
-        // Показываем основной сайт
-        if (maintenanceElement) maintenanceElement.style.display = 'none';
-        if (normalSiteElement) normalSiteElement.style.display = 'block';
-    }
+  const maintenanceElement = document.getElementById('maintenance');
+  const normalSiteElement = document.getElementById('normalSite');
+
+  // 🔑 КЛЮЧЕВАЯ ЛОГИКА
+  const shouldShowMaintenance =
+    AppConfig.maintenanceMode && !isAdminLoggedIn;
+
+  if (shouldShowMaintenance) {
+    if (maintenanceElement) maintenanceElement.style.display = 'flex';
+    if (normalSiteElement) normalSiteElement.style.display = 'none';
+  } else {
+    if (maintenanceElement) maintenanceElement.style.display = 'none';
+    if (normalSiteElement) normalSiteElement.style.display = 'block';
+  }
 }
 
 function initSearchFunctionality() {
@@ -664,39 +663,19 @@ async function checkPassword(event) {
     submitBtn.textContent = "Проверка...";
   }
 
-  // Имитируем лёгкую загрузку
-  setTimeout(async () => {
+  setTimeout(() => {
     if (simpleHash(password) === serverAdminPasswordHash) {
-      // Успешный вход
-      AppConfig.maintenanceMode = !AppConfig.maintenanceMode;
 
-      if (window.supabaseClient) {
-        const { error } = await window.supabaseClient
-          .from("settings")
-          .upsert([
-            { key: "maintenance_mode", value: AppConfig.maintenanceMode.toString() }
-          ]);
-
-        if (error) {
-          console.error("Ошибка сохранения maintenance_mode:", error);
-        }
-      }
+      // ✅ ВХОДИМ В СЕССИИ, НИЧЕГО НЕ МЕНЯЯ В SUPABASE
+      isAdminLoggedIn = true;
 
       updateContentVisibility();
 
-      showToast(
-        AppConfig.maintenanceMode
-          ? "Режим техработ включён"
-          : "Режим техработ выключен",
-        "success"
-      );
-
-      if (!AppConfig.maintenanceMode) {
-        setTimeout(() => location.reload(), 1500);
-      }
+      showToast("Доступ администратора разрешён", "success");
 
       passwordInput.value = "";
       document.getElementById("passwordForm").style.display = "none";
+
     } else {
       showError("Неверный пароль");
       passwordInput.focus();
@@ -706,7 +685,7 @@ async function checkPassword(event) {
       submitBtn.disabled = false;
       submitBtn.textContent = "Войти";
     }
-  }, 600);
+  }, 400);
 }
 
 // Функция для показа сообщений в режиме техработ
