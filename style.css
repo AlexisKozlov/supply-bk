@@ -2583,11 +2583,19 @@ body {
   background: #cc0000;
 }
 
+/* Выпадающий список */
+
+/* Контейнер поиска делаем якорем */
+.search-box {
+  position: relative;
+}
 .autocomplete-list {
   position: absolute;
+  top: calc(100% + 6px); /* ← вот это ключевое */
+  left: 0;
+  right: 0;
   background: #fff;
   border: 1px solid #ddd;
-  width: 100%;
   max-height: 220px;
   overflow-y: auto;
   z-index: 999;
