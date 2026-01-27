@@ -182,7 +182,10 @@ function renderTable() {
     }
 
     tr.innerHTML = `
-      <td>${item.product.name}</td>
+      <td>
+  <strong>${item.product.article}</strong><br>
+  <span>${item.product.name}</span>
+</td>
       <td>${item.currentStock}</td>
       <td>${item.dailyUsage}</td>
       <td>${item.daysUntilArrival}</td>
@@ -209,7 +212,7 @@ function renderSummary() {
 
   result.innerHTML = orderItems
     .filter(i => i.orderQty > 0)
-    .map(i => `• ${i.product.name} — ${i.orderQty} шт`)
+.map(i => `• ${i.product.article} — ${i.product.name} — ${i.orderQty} шт`)
     .join("<br>");
 }
 
@@ -222,4 +225,23 @@ function copyOrder() {
 
   navigator.clipboard.writeText(text);
   alert("Заказ скопирован");
+}
+
+
+function clearOrder() {
+  if (orderItems.length === 0) {
+    alert("Заказ уже пуст");
+    return;
+  }
+
+  if (!confirm("Очистить весь заказ?")) {
+    return;
+  }
+
+  orderItems = [];
+  renderTable();
+
+  showToast
+    ? showToast("Заказ очищен", "success")
+    : alert("Заказ очищен");
 }
