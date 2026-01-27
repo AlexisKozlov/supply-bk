@@ -118,34 +118,35 @@ function addOrderItem() {
     return;
   }
 
-  const neededUntilArrival = dailyUsage * daysUntilArrival;
+ const neededUntilArrival = dailyUsage * daysUntilArrival;
 
-  // ❌ ТОВАР НЕ ДОЖИВАЕТ ДО ПРИХОДА — НЕ ЗАКАЗЫВАЕМ
-  if (currentStock < neededUntilArrival) {
-    const item = {
-      product: selectedProduct,
-      currentStock,
-      dailyUsage: dailyUsage.toFixed(2),
-      daysUntilArrival: Math.ceil(daysUntilArrival),
-      needed: Math.ceil(neededUntilArrival),
-      orderQty: 0,
-      status: "out_before_arrival"
-    };
+let baseNeeded = 0;
+let status = "ok";
 
-    orderItems.push(item);
-    renderTable();
-
-    selectedProduct = null;
-    document.getElementById("productInput").value = "";
-    return;
-  }
-
-  // ✅ СЧИТАЕМ ПЕРИОД: ДО ПРИХОДА + ПОСЛЕ ПРИХОДА
+// 🧠 КЕЙС B — НЕ ДОЖИВАЕТ ДО ПРИХОДА
+if (currentStock < neededUntilArrival) {
+  // считаем ТОЛЬКО период после прихода
+  baseNeeded = dailyUsage * postArrivalDays;
+  status = "out_before_arrival";
+} else {
+  // 🧠 КЕЙС A — ДОЖИВАЕТ ДО ПРИХОДА
   const totalDays = daysUntilArrival + postArrivalDays;
   const totalNeeded = dailyUsage * totalDays;
+  baseNeeded = totalNeeded - currentStock;
+  status = "ok";
+}
 
-  let shortage = totalNeeded - currentStock;
-  if (shortage < 0) shortage = 0;
+if (baseNeeded < 0) baseNeeded = 0;
+
+let orderQty = 0;
+if (baseNeeded > 0) {
+  const withBuffer = baseNeeded * (1 + bufferPercent / 100);
+  const packSize = selectedProduct.box_qty || 1;
+
+  orderQty =
+    Math.ceil(withBuffer / packSize) * packSize;
+}
+
 
   let orderQty = 0;
   if (shortage > 0) {
@@ -156,15 +157,15 @@ function addOrderItem() {
       Math.ceil(withBuffer / packSize) * packSize;
   }
 
-  const item = {
-    product: selectedProduct,
-    currentStock,
-    dailyUsage: dailyUsage.toFixed(2),
-    daysUntilArrival: Math.ceil(daysUntilArrival),
-    needed: Math.ceil(totalNeeded),
-    orderQty,
-    status: "ok"
-  };
+const item = {
+  product: selectedProduct,
+  currentStock,
+  dailyUsage: dailyUsage.toFixed(2),
+  daysUntilArrival: Math.ceil(daysUntilArrival),
+  needed: Math.ceil(baseNeeded),
+  orderQty,
+  status
+};
 
   orderItems.push(item);
   renderTable();
