@@ -68,11 +68,18 @@
     <tbody id="orderTableBody"></tbody>
   </table>
 
-  <div class="order-summary">
-    <h3>📦 Итого к заказу</h3>
-    <div id="orderResult"></div>
+<div class="order-summary">
+  <h3>📦 Итого к заказу</h3>
+  <div id="orderResult"></div>
+
+  <div class="order-actions">
     <button onclick="copyOrder()">📋 Скопировать заказ</button>
+    <button onclick="clearOrder()" class="order-clear">
+      🧹 Очистить заказ
+    </button>
   </div>
+</div>
+
 
 </div>
 
