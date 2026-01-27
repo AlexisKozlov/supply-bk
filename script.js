@@ -78,13 +78,8 @@ async function loadAppConfigFromSupabase() {
 
   console.log("AppConfig загружен из Supabase:", AppConfig);
 
-updateVersionInfo();
-updateContentVisibility();
-
-if (!AppConfig.maintenanceMode) {
-  showDisclaimer();
-  initMainContent();   // ← ВОТ ЭТА СТРОКА КРИТИЧНА
-}
+  updateContentVisibility();
+  updateVersionInfo();
 }
 
 
@@ -187,6 +182,7 @@ function simpleHash(str) {
 
 // Глобальные переменные
 
+let isAdminLoggedIn = false;
 
 // Функции
 function showDisclaimer() {
@@ -258,23 +254,31 @@ function showAppUnavailable() {
 }
 
 function initMainContent() {
-  if (!AppConfig.maintenanceMode) {
-    initApplication();
-  }
+    updateContentVisibility();
+    
+    if (!AppConfig.maintenanceMode) {
+        // Инициализация основного функционала только если не режим техработ
+        initApplication();
+    }
 }
 
 // Функция для обновления видимости контента
 function updateContentVisibility() {
-  const maintenanceElement = document.getElementById('maintenance');
-  const normalSiteElement = document.getElementById('normalSite');
-
-  if (AppConfig.maintenanceMode) {
-    if (maintenanceElement) maintenanceElement.style.display = 'flex';
-    if (normalSiteElement) normalSiteElement.style.display = 'none';
-  } else {
-    if (maintenanceElement) maintenanceElement.style.display = 'none';
-    if (normalSiteElement) normalSiteElement.style.display = 'block';
-  }
+    const maintenanceElement = document.getElementById('maintenance');
+    const normalSiteElement = document.getElementById('normalSite');
+    
+    if (AppConfig.maintenanceMode) {
+        // Показываем полноэкранную страницу техработ
+        if (maintenanceElement) maintenanceElement.style.display = 'block';
+        if (normalSiteElement) normalSiteElement.style.display = 'none';
+        
+        // Инициализация анимации техработ
+        initMaintenanceAnimation();
+    } else {
+        // Показываем основной сайт
+        if (maintenanceElement) maintenanceElement.style.display = 'none';
+        if (normalSiteElement) normalSiteElement.style.display = 'block';
+    }
 }
 
 function initSearchFunctionality() {
@@ -635,50 +639,87 @@ for (const [key, card] of Object.entries(cardDatabase)) {
 
 // Проверка пароля (исправленная версия)
 async function checkPassword(event) {
-  if (event) event.preventDefault();
-
-  const passwordInput = document.getElementById("adminPassword");
-  if (!passwordInput) {
-    showError("Поле для ввода пароля не найдено!");
-    return;
-  }
-
-  const password = passwordInput.value.trim();
-  if (!password) {
-    showError("Введите пароль");
-    return;
-  }
-
-  if (!serverAdminPasswordHash) {
-    showError("Пароль ещё не загружен. Попробуйте через 2–3 секунды.");
-    return;
-  }
-
-  const submitBtn = document.querySelector(".maintenance-submit");
-  if (submitBtn) {
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Проверка...";
-  }
-
-  setTimeout(() => {
-    if (simpleHash(password) === serverAdminPasswordHash) {
-
-
-showToast("Доступ администратора разрешён", "success");
-
-      passwordInput.value = "";
-      document.getElementById("passwordForm").style.display = "none";
-
-    } else {
-      showError("Неверный пароль");
-      passwordInput.focus();
+    if (event) {
+        event.preventDefault();
     }
-
+    
+    const passwordInput = document.getElementById('adminPassword');
+    if (!passwordInput) {
+        showError("Поле для ввода пароля не найдено!");
+        return false;
+    }
+    
+    const password = passwordInput.value;
+    
+    // Простая анимация загрузки
+    const submitBtn = document.querySelector('.password-submit') || document.querySelector('.submit-button');
     if (submitBtn) {
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Войти";
+        const originalHtml = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<span class="submit-icon">⏳</span>';
+        submitBtn.disabled = true;
+        
+        setTimeout(() => {
+            if (simpleHash(password) === serverAdminPasswordHash) {
+                // Успешный вход
+                submitBtn.innerHTML = '<span class="submit-icon">✅</span>';
+                
+                // Переключаем режим техработ
+                AppConfig.maintenanceMode = !AppConfig.maintenanceMode;
+                
+               // Сохраняем состояние в Supabase
+if (window.supabaseClient) {
+  window.supabaseClient
+    .from("settings")
+    .upsert([
+      { key: "maintenance_mode", value: AppConfig.maintenanceMode.toString() }
+    ])
+    .then(({ error }) => {
+      if (error) {
+        console.error("Ошибка сохранения maintenance_mode:", error);
+      }
+    });
+}
+                
+                setTimeout(() => {
+                    if (AppConfig.maintenanceMode) {
+                        showMaintenanceMessage('Режим техработ включен', 'success');
+                    } else {
+                        showMaintenanceMessage('Режим техработ выключен', 'success');
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 2000);
+                    }
+                    
+                    const passwordForm = document.getElementById('passwordForm');
+                    if (passwordForm) {
+                        passwordForm.style.display = 'none';
+                    }
+                    
+                    passwordInput.value = '';
+                    
+                    setTimeout(() => {
+                        submitBtn.innerHTML = originalHtml;
+                        submitBtn.disabled = false;
+                        updateContentVisibility();
+                    }, 1000);
+                    
+                }, 1000);
+                
+            } else {
+                submitBtn.innerHTML = '<span class="submit-icon">❌</span>';
+                
+                setTimeout(() => {
+                    showError('Неверный пароль!');
+                    submitBtn.innerHTML = originalHtml;
+                    submitBtn.disabled = false;
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                }, 1000);
+            }
+        }, 1000);
     }
-  }, 400);
+    
+    return false;
 }
 
 // Функция для показа сообщений в режиме техработ
@@ -892,6 +933,7 @@ function closeAdminPanel() {
         disclaimer.style.position = '';
         disclaimer.style.left = '';
     }
+    isAdminLoggedIn = false;
 }
 
 function showAdminMessage(message, type) {
@@ -1091,6 +1133,25 @@ if (searchInput) searchInput.focus();
 initAdminSearchEnter();
 }
 
+
+// Инициализация приложения после загрузки DOM
+document.addEventListener('DOMContentLoaded', function() {
+    // Не предотвращаем отправку форм - обрабатываем в отдельных функциях
+    
+    
+    // Показываем дисклеймер только если не режим техработ
+    if (!AppConfig.maintenanceMode) {
+        showDisclaimer();
+    } else {
+        // Если режим техработ - сразу инициализируем контент
+        initMainContent();
+    }
+    
+    // Инициализация для мобильных устройств
+    initMobileFeatures();
+  initSearchFunctionality();
+  initAdminSearchEnter();
+});
 
 // Инициализация мобильных функций
 function initMobileFeatures() {
