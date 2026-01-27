@@ -79,15 +79,9 @@ async function loadAppConfigFromSupabase() {
   console.log("AppConfig загружен из Supabase:", AppConfig);
 
 updateVersionInfo();
+updateContentVisibility();
 
-if (AppConfig.maintenanceMode) {
-  // сайт закрыт
-  isAdminLoggedIn = false;
-  updateContentVisibility();
-} else {
-  // сайт открыт для всех
-  isAdminLoggedIn = true;
-  updateContentVisibility();
+if (!AppConfig.maintenanceMode) {
   showDisclaimer();
 }
 }
@@ -192,7 +186,6 @@ function simpleHash(str) {
 
 // Глобальные переменные
 
-let isAdminLoggedIn = false;
 
 // Функции
 function showDisclaimer() {
@@ -264,7 +257,9 @@ function showAppUnavailable() {
 }
 
 function initMainContent() {
-  initApplication(); // ВСЕГДА инициализируем сайт
+  if (!AppConfig.maintenanceMode) {
+    initApplication();
+  }
 }
 
 // Функция для обновления видимости контента
@@ -272,11 +267,7 @@ function updateContentVisibility() {
   const maintenanceElement = document.getElementById('maintenance');
   const normalSiteElement = document.getElementById('normalSite');
 
-  // 🔑 КЛЮЧЕВАЯ ЛОГИКА
-  const shouldShowMaintenance =
-    AppConfig.maintenanceMode && !isAdminLoggedIn;
-
-  if (shouldShowMaintenance) {
+  if (AppConfig.maintenanceMode) {
     if (maintenanceElement) maintenanceElement.style.display = 'flex';
     if (normalSiteElement) normalSiteElement.style.display = 'none';
   } else {
@@ -671,12 +662,6 @@ async function checkPassword(event) {
   setTimeout(() => {
     if (simpleHash(password) === serverAdminPasswordHash) {
 
-      // ✅ ВХОДИМ В СЕССИИ, НИЧЕГО НЕ МЕНЯЯ В SUPABASE
-     isAdminLoggedIn = true;
-
-isAdminLoggedIn = true;
-updateContentVisibility();
-initMainContent();
 
 showToast("Доступ администратора разрешён", "success");
 
@@ -906,7 +891,6 @@ function closeAdminPanel() {
         disclaimer.style.position = '';
         disclaimer.style.left = '';
     }
-    isAdminLoggedIn = false;
 }
 
 function showAdminMessage(message, type) {
