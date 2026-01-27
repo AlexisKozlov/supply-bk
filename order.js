@@ -1,5 +1,5 @@
-const SUPABASE_URL = "ТВОЙ_URL";
-const SUPABASE_KEY = "ТВОЙ_ANON_KEY";
+const SUPABASE_URL = "https://obywcpilionribalfrbl.supabase.co";
+const SUPABASE_KEY = "sb_publishable_BYToHeprZE-e64UjDgjlmQ_bKZBUFJ0";
 const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let products = [];
