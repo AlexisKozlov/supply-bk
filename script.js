@@ -491,21 +491,62 @@ function showAutocomplete(queryRaw) {
 
   let matches = [];
 
-  for (const [key, card] of Object.entries(cardDatabase)) {
-    const keyNorm = normalize(key);
-    const nameNorm = normalize(card.name || "");
-    const analogsNorm = (card.analogs || []).map(a => normalize(a));
+for (const [key, card] of Object.entries(cardDatabase)) {
+  const keyNorm = normalize(key);
+  const nameNorm = normalize(card.name || "");
+  const analogsNorm = (card.analogs || []).map(a => normalize(a));
 
-    if (
-      keyNorm.includes(query) ||
-      nameNorm.includes(query) ||
-      analogsNorm.some(a => a.includes(query))
-    ) {
-      matches.push({ key, ...card });
-    }
-
-    if (matches.length >= 5) break;
+  // 1️⃣ Точное совпадение артикула
+  if (keyNorm === query) {
+    foundCards.push({ article: key, ...card, reason: "точное совпадение" });
+    matchType = "direct";
+    matchedCardId = key;
+    continue;
   }
+
+  // 2️⃣ Частичное совпадение артикула (ВОТ ЧЕГО НЕ ХВАТАЛО)
+  if (keyNorm.includes(query)) {
+    foundCards.push({ article: key, ...card, reason: "часть артикула" });
+    if (!matchType) {
+      matchType = "partial_id";
+      matchedCardId = key;
+    }
+    continue;
+  }
+
+  // 3️⃣ Совпадение по аналогу
+  if (analogsNorm.includes(query)) {
+    foundCards.push({ article: key, ...card, reason: "найдено по аналогу" });
+    if (!matchType) {
+      matchType = "analog";
+      matchedCardId = key;
+    }
+    continue;
+  }
+
+  // 4️⃣ Частичное совпадение по названию
+  if (nameNorm.includes(query)) {
+    foundCards.push({ article: key, ...card, reason: "найдено по названию" });
+    if (!matchType) {
+      matchType = "name";
+      matchedCardId = key;
+    }
+    continue;
+  }
+
+  // 5️⃣ Нечёткое совпадение по КАЖДОМУ слову названия
+  const words = nameNorm.split(/[^a-zа-я0-9]+/);
+  const fuzzyHit = words.some(word => levenshtein(word, query) <= 2);
+
+  if (fuzzyHit) {
+    foundCards.push({ article: key, ...card, reason: "возможно, опечатка" });
+    if (!matchType) {
+      matchType = "fuzzy";
+      matchedCardId = key;
+    }
+  }
+}
+
 
   if (matches.length === 0) {
     list.style.display = "none";
