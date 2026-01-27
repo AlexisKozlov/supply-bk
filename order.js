@@ -241,7 +241,5 @@ function clearOrder() {
   orderItems = [];
   renderTable();
 
-  showToast
-    ? showToast("Заказ очищен", "success")
-    : alert("Заказ очищен");
+  alert("Заказ очищен");
 }
