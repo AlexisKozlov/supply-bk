@@ -566,7 +566,7 @@ function searchCard() {
     } else {
       resultElement.innerHTML = `
         <div class="not-found-animation">
-          <p>Карточка не найдена. Попробуйте изменить запрос или проверить опечатки.</p>
+          <p>Карточка не найдена. Возможно карточка не имеет аналогов или её еще нет в базе.</p>
           <img src="sad.gif" alt="Грустный смайлик" class="sad-gif">
         </div>
       `;
