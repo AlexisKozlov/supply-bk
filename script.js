@@ -491,62 +491,21 @@ function showAutocomplete(queryRaw) {
 
   let matches = [];
 
-for (const [key, card] of Object.entries(cardDatabase)) {
-  const keyNorm = normalize(key);
-  const nameNorm = normalize(card.name || "");
-  const analogsNorm = (card.analogs || []).map(a => normalize(a));
+  for (const [key, card] of Object.entries(cardDatabase)) {
+    const keyNorm = normalize(key);
+    const nameNorm = normalize(card.name || "");
+    const analogsNorm = (card.analogs || []).map(a => normalize(a));
 
-  // 1️⃣ Точное совпадение артикула
-  if (keyNorm === query) {
-    foundCards.push({ article: key, ...card, reason: "точное совпадение" });
-    matchType = "direct";
-    matchedCardId = key;
-    continue;
-  }
-
-  // 2️⃣ Частичное совпадение артикула (ВОТ ЧЕГО НЕ ХВАТАЛО)
-  if (keyNorm.includes(query)) {
-    foundCards.push({ article: key, ...card, reason: "часть артикула" });
-    if (!matchType) {
-      matchType = "partial_id";
-      matchedCardId = key;
+    if (
+      keyNorm.includes(query) ||
+      nameNorm.includes(query) ||
+      analogsNorm.some(a => a.includes(query))
+    ) {
+      matches.push({ key, ...card });
     }
-    continue;
+
+    if (matches.length >= 5) break;
   }
-
-  // 3️⃣ Совпадение по аналогу
-  if (analogsNorm.includes(query)) {
-    foundCards.push({ article: key, ...card, reason: "найдено по аналогу" });
-    if (!matchType) {
-      matchType = "analog";
-      matchedCardId = key;
-    }
-    continue;
-  }
-
-  // 4️⃣ Частичное совпадение по названию
-  if (nameNorm.includes(query)) {
-    foundCards.push({ article: key, ...card, reason: "найдено по названию" });
-    if (!matchType) {
-      matchType = "name";
-      matchedCardId = key;
-    }
-    continue;
-  }
-
-  // 5️⃣ Нечёткое совпадение по КАЖДОМУ слову названия
-  const words = nameNorm.split(/[^a-zа-я0-9]+/);
-  const fuzzyHit = words.some(word => levenshtein(word, query) <= 2);
-
-  if (fuzzyHit) {
-    foundCards.push({ article: key, ...card, reason: "возможно, опечатка" });
-    if (!matchType) {
-      matchType = "fuzzy";
-      matchedCardId = key;
-    }
-  }
-}
-
 
   if (matches.length === 0) {
     list.style.display = "none";
@@ -571,6 +530,7 @@ for (const [key, card] of Object.entries(cardDatabase)) {
     });
   });
 }
+
 
 
 /* === ПОИСК === */
@@ -601,49 +561,62 @@ function searchCard() {
     let matchType = null;
     let matchedCardId = null;
 
-    for (const [key, card] of Object.entries(cardDatabase)) {
-      const keyNorm = normalize(key);
-      const nameNorm = normalize(card.name || "");
-      const analogsNorm = (card.analogs || []).map(a => normalize(a));
+   for (const [key, card] of Object.entries(cardDatabase)) {
+  const keyNorm = normalize(key);
+  const nameNorm = normalize(card.name || "");
+  const analogsNorm = (card.analogs || []).map(a => normalize(a));
 
-      // 1️⃣ Прямое совпадение артикула
-      if (keyNorm === query) {
-        foundCards.push({ article: key, ...card, reason: "точное совпадение" });
-        matchType = "direct";
-        matchedCardId = key;
-        continue;
-      }
+  // 1️⃣ Точное совпадение артикула
+  if (keyNorm === query) {
+    foundCards.push({ article: key, ...card, reason: "точное совпадение" });
+    matchType = "direct";
+    matchedCardId = key;
+    continue;
+  }
 
-      // 2️⃣ Совпадение по аналогу
-      if (analogsNorm.includes(query)) {
-        foundCards.push({ article: key, ...card, reason: "найдено по аналогу" });
-        if (!matchType) {
-          matchType = "analog";
-          matchedCardId = key;
-        }
-        continue;
-      }
-
-      // 3️⃣ Частичное совпадение по названию
-      if (nameNorm.includes(query)) {
-        foundCards.push({ article: key, ...card, reason: "найдено по названию" });
-        if (!matchType) {
-          matchType = "name";
-          matchedCardId = key;
-        }
-        continue;
-      }
-
-      // 4️⃣ Нечёткое совпадение (опечатки)
-      const distName = levenshtein(nameNorm, query);
-      if (distName <= 2) {
-        foundCards.push({ article: key, ...card, reason: "возможно, опечатка" });
-        if (!matchType) {
-          matchType = "fuzzy";
-          matchedCardId = key;
-        }
-      }
+  // 2️⃣ Частичное совпадение артикула ✅
+  if (keyNorm.includes(query)) {
+    foundCards.push({ article: key, ...card, reason: "часть артикула" });
+    if (!matchType) {
+      matchType = "partial_id";
+      matchedCardId = key;
     }
+    continue;
+  }
+
+  // 3️⃣ Совпадение по аналогу
+  if (analogsNorm.includes(query)) {
+    foundCards.push({ article: key, ...card, reason: "найдено по аналогу" });
+    if (!matchType) {
+      matchType = "analog";
+      matchedCardId = key;
+    }
+    continue;
+  }
+
+  // 4️⃣ Частичное совпадение по названию
+  if (nameNorm.includes(query)) {
+    foundCards.push({ article: key, ...card, reason: "найдено по названию" });
+    if (!matchType) {
+      matchType = "name";
+      matchedCardId = key;
+    }
+    continue;
+  }
+
+  // 5️⃣ Нечёткое совпадение по словам
+  const words = nameNorm.split(/[^a-zа-я0-9]+/);
+  const fuzzyHit = words.some(word => levenshtein(word, query) <= 2);
+
+  if (fuzzyHit) {
+    foundCards.push({ article: key, ...card, reason: "возможно, опечатка" });
+    if (!matchType) {
+      matchType = "fuzzy";
+      matchedCardId = key;
+    }
+  }
+}
+
 
     if (foundCards.length > 0) {
       const output = foundCards.map(card => {
