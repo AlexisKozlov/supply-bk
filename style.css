@@ -2583,3 +2583,38 @@ body {
   background: #cc0000;
 }
 
+.autocomplete-list {
+  position: absolute;
+  background: #fff;
+  border: 1px solid #ddd;
+  width: 100%;
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 999;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  display: none;
+}
+
+.autocomplete-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+.autocomplete-item:hover {
+  background: #f5f5f5;
+}
+
+.autocomplete-article {
+  font-weight: bold;
+  color: #d62300;
+}
+
+.autocomplete-name {
+  display: block;
+  font-size: 12px;
+  color: #555;
+}
+
