@@ -2743,3 +2743,79 @@ body {
   from { opacity: 0; transform: translateY(15px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* === Модалка доступа к заказу === */
+
+.order-auth-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10001;
+}
+
+.order-auth-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 25px 22px;
+  width: 90%;
+  max-width: 360px;
+  text-align: center;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+  animation: fadeIn 0.25s ease;
+}
+
+.order-auth-card h3 {
+  margin-bottom: 5px;
+  color: #d62300;
+}
+
+.order-auth-card p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.order-auth-card input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.order-auth-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.order-auth-actions button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #d62300;
+  color: #fff;
+}
+
+.order-auth-actions button:hover {
+  background: #b51e00;
+}
+
+.order-auth-cancel {
+  background: #aaa !important;
+}
+
+.order-auth-cancel:hover {
+  background: #888 !important;
+}
+
+.order-auth-error {
+  color: #d62300;
+  font-size: 13px;
+  margin-top: 10px;
+  min-height: 16px;
+}
