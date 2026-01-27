@@ -2626,3 +2626,120 @@ body {
   color: #555;
 }
 
+/* === СТРАНИЦА ТЕХРАБОТ (КРАСИВАЯ ВЕРСИЯ) === */
+
+.maintenance-screen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #ffcc00, #d62300);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+.maintenance-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 40px 30px;
+  width: 90%;
+  max-width: 420px;
+  text-align: center;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+  animation: fadeIn 0.4s ease;
+}
+
+.maintenance-logo {
+  width: 90px;
+  margin-bottom: 20px;
+}
+
+.maintenance-card h1 {
+  font-family: 'Flame', sans-serif;
+  font-size: 22px;
+  color: #d62300;
+  margin-bottom: 10px;
+}
+
+.maintenance-subtitle {
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.maintenance-status {
+  background: #fff4e5;
+  border: 1px solid #ffd59e;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 14px;
+  color: #a35a00;
+  margin-bottom: 15px;
+}
+
+.maintenance-hint {
+  font-size: 13px;
+  color: #777;
+  margin-bottom: 25px;
+}
+
+.maintenance-admin {
+  margin-top: 10px;
+}
+
+.maintenance-admin-btn {
+  background: transparent;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.maintenance-admin-btn:hover {
+  background: #f5f5f5;
+}
+
+.maintenance-password {
+  margin-top: 15px;
+  display: flex;
+  gap: 8px;
+}
+
+.maintenance-password input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.maintenance-password button {
+  background: #d62300;
+  border: none;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.maintenance-password button:hover {
+  background: #b51e00;
+}
+
+.maintenance-footer {
+  margin-top: 25px;
+  font-size: 12px;
+  color: #777;
+}
+
+.maintenance-footer a {
+  color: #d62300;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
