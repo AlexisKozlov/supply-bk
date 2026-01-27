@@ -1,1 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Калькулятор заказа</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="order.css">
+</head>
+<body>
+
+<div id="orderAccessDenied" class="order-denied" style="display:none;">
+  <h2>🔒 Доступ ограничен</h2>
+  <p>Калькулятор заказа доступен только администраторам.</p>
+  <a href="index.html">← Вернуться к карточкам</a>
+</div>
+
+<div id="orderApp" class="order-app" style="display:none;">
+
+  <div class="order-header">
+    <a href="index.html" class="order-back">← Назад</a>
+    <h1>📦 Калькулятор заказа</h1>
+  </div>
+
+  <div class="order-form">
+
+    <input id="productInput" placeholder="Товар (начните вводить...)" autocomplete="off">
+    <div id="productSuggestions" class="order-suggestions"></div>
+
+    <input id="monthlyUsage" type="number" placeholder="Расход / месяц">
+    <input id="currentStock" type="number" placeholder="Остаток сейчас">
+
+    <label>
+      Дата прихода:
+      <input id="arrivalDate" type="date">
+    </label>
+
+    <label>
+      Сегодня:
+      <input id="todayDate" type="date">
+    </label>
+
+    <label>
+      Запас %:
+      <input id="bufferPercent" type="number" value="0">
+    </label>
+
+    <button onclick="addOrderItem()">➕ Добавить</button>
+
+  </div>
+
+  <table class="order-table">
+    <thead>
+      <tr>
+        <th>Товар</th>
+        <th>Остаток</th>
+        <th>Расход/день</th>
+        <th>До прихода</th>
+        <th>Нужно</th>
+        <th>К заказу</th>
+      </tr>
+    </thead>
+    <tbody id="orderTableBody"></tbody>
+  </table>
+
+  <div class="order-summary">
+    <h3>📦 Итого к заказу</h3>
+    <div id="orderResult"></div>
+    <button onclick="copyOrder()">📋 Скопировать заказ</button>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="order.js"></script>
+</body>
+</html>
 
