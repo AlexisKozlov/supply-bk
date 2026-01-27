@@ -93,6 +93,9 @@ function addOrderItem() {
   const bufferPercent = parseFloat(
     document.getElementById("bufferPercent").value || 0
   );
+  const postArrivalDays = parseFloat(
+    document.getElementById("postArrivalDays").value || 0
+  );
 
   if (
     !monthlyUsage ||
@@ -105,12 +108,44 @@ function addOrderItem() {
   }
 
   const dailyUsage = monthlyUsage / 30;
+
   const daysUntilArrival =
     (new Date(arrivalDate) - new Date(todayDate)) /
     (1000 * 60 * 60 * 24);
 
-  const needed = dailyUsage * daysUntilArrival;
-  const shortage = needed - currentStock;
+  if (daysUntilArrival < 0) {
+    alert("Дата прихода не может быть раньше сегодняшней");
+    return;
+  }
+
+  const neededUntilArrival = dailyUsage * daysUntilArrival;
+
+  // ❌ ТОВАР НЕ ДОЖИВАЕТ ДО ПРИХОДА — НЕ ЗАКАЗЫВАЕМ
+  if (currentStock < neededUntilArrival) {
+    const item = {
+      product: selectedProduct,
+      currentStock,
+      dailyUsage: dailyUsage.toFixed(2),
+      daysUntilArrival: Math.ceil(daysUntilArrival),
+      needed: Math.ceil(neededUntilArrival),
+      orderQty: 0,
+      status: "out_before_arrival"
+    };
+
+    orderItems.push(item);
+    renderTable();
+
+    selectedProduct = null;
+    document.getElementById("productInput").value = "";
+    return;
+  }
+
+  // ✅ СЧИТАЕМ ПЕРИОД: ДО ПРИХОДА + ПОСЛЕ ПРИХОДА
+  const totalDays = daysUntilArrival + postArrivalDays;
+  const totalNeeded = dailyUsage * totalDays;
+
+  let shortage = totalNeeded - currentStock;
+  if (shortage < 0) shortage = 0;
 
   let orderQty = 0;
   if (shortage > 0) {
@@ -126,8 +161,9 @@ function addOrderItem() {
     currentStock,
     dailyUsage: dailyUsage.toFixed(2),
     daysUntilArrival: Math.ceil(daysUntilArrival),
-    needed: Math.ceil(needed),
-    orderQty
+    needed: Math.ceil(totalNeeded),
+    orderQty,
+    status: "ok"
   };
 
   orderItems.push(item);
@@ -144,6 +180,15 @@ function renderTable() {
 
   orderItems.forEach(item => {
     const tr = document.createElement("tr");
+
+    let statusText = "";
+    let rowStyle = "";
+
+    if (item.status === "out_before_arrival") {
+      statusText = "❌ Закончится до прихода";
+      rowStyle = "background:#ffe5e5;";
+    }
+
     tr.innerHTML = `
       <td>${item.product.name}</td>
       <td>${item.currentStock}</td>
@@ -151,7 +196,10 @@ function renderTable() {
       <td>${item.daysUntilArrival}</td>
       <td>${item.needed}</td>
       <td><strong>${item.orderQty}</strong></td>
+      <td>${statusText}</td>
     `;
+
+    tr.style = rowStyle;
     tbody.appendChild(tr);
   });
 
