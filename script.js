@@ -78,14 +78,19 @@ async function loadAppConfigFromSupabase() {
 
   console.log("AppConfig загружен из Supabase:", AppConfig);
 
-  updateContentVisibility();
+updateContentVisibility();
 updateVersionInfo();
 
-// 🔑 ВОТ ЭТО КЛЮЧЕВО
+// 🔑 ЕДИНАЯ ТОЧКА УПРАВЛЕНИЯ UI
 if (!AppConfig.maintenanceMode) {
+  // сайт открыт для всех
+  isAdminLoggedIn = true;  // временно считаем всех "допущенными"
+  updateContentVisibility();
   showDisclaimer();
 } else {
-  initMainContent();
+  // сайт закрыт, только админ через пароль
+  isAdminLoggedIn = false;
+  updateContentVisibility();
 }
 }
 
@@ -676,9 +681,10 @@ async function checkPassword(event) {
       // ✅ ВХОДИМ В СЕССИИ, НИЧЕГО НЕ МЕНЯЯ В SUPABASE
       isAdminLoggedIn = true;
 
-      updateContentVisibility();
+updateContentVisibility();
+initMainContent(); // ← ВОТ ЭТА СТРОКА КРИТИЧНА
 
-      showToast("Доступ администратора разрешён", "success");
+showToast("Доступ администратора разрешён", "success");
 
       passwordInput.value = "";
       document.getElementById("passwordForm").style.display = "none";
@@ -1106,14 +1112,6 @@ if (searchInput) searchInput.focus();
 initAdminSearchEnter();
 }
 
-
-// Инициализация приложения после загрузки DOM
-document.addEventListener('DOMContentLoaded', function() {
-  // НИЧЕГО не решаем до загрузки Supabase
-  initMobileFeatures();
-  initSearchFunctionality();
-  initAdminSearchEnter();
-});
 
 // Инициализация мобильных функций
 function initMobileFeatures() {
