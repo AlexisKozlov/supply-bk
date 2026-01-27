@@ -80,12 +80,13 @@ async function loadAppConfigFromSupabase() {
 
 updateVersionInfo();
 
-// 🔑 ЕДИНАЯ точка управления UI
 if (AppConfig.maintenanceMode) {
+  // сайт закрыт
   isAdminLoggedIn = false;
   updateContentVisibility();
 } else {
-  isAdminLoggedIn = true; // пускаем всех
+  // сайт открыт для всех
+  isAdminLoggedIn = true;
   updateContentVisibility();
   showDisclaimer();
 }
