@@ -10,70 +10,47 @@
 </head>
 <body>
 <!-- Страница тех работ - ПОЛНОЭКРАННАЯ ВЕРСИЯ -->
-<div id="maintenance" class="maintenance-fullscreen" style="display: none;">
-    <div class="maintenance-bg"></div>
+<div id="maintenance" class="maintenance-screen" style="display:none;">
+  <div class="maintenance-card">
     
-    <div class="maintenance-container">
-        <div class="maintenance-header">
-            <div class="logo-maintenance">
-                <img src="burger-king-logo.png" alt="Burger King" class="logo-img">
-                <h1>Burger King</h1>
-            </div>
-        </div>
+    <img src="burger-king-logo.png" alt="Burger King" class="maintenance-logo">
 
-        <div class="maintenance-content">
-            <div class="maintenance-header">
-                <div class="logo-maintenance">
-                    <img src="burger-king-logo.png" alt="Burger King" class="logo-img">
-                </div>
-            </div>
+    <h1>Сервис временно недоступен</h1>
+    <p class="maintenance-subtitle">
+      Мы обновляем базу карточек и улучшаем систему.
+    </p>
 
-            <div class="maintenance-message">
-                <div class="maintenance-icon">🔧</div>
-                <h2>Технические работы</h2>
-                <p>Мы проводим плановое обслуживание системы.</p>
-                <p>Пожалуйста, зайдите через некоторое время.</p>
-                <div class="maintenance-timer">
-                    <span>Ожидаемое время: Быстрее, чем готовится гамбургер</span>
-                </div>
-            </div>
-
-            <div class="admin-section">
-                <div class="admin-card">
-                    <h3>Доступ для администратора</h3>
-                    
-                    <button id="adminBtn" class="admin-toggle-btn">
-                        <span class="btn-icon">🔒</span>
-                        <span class="btn-text">Войти как администратор</span>
-                        <span class="btn-arrow">▼</span>
-                    </button>
-
-                    <div id="passwordForm" class="password-form" style="display: none;">
-    <div class="form-group">
-        <label for="adminPassword">Пароль доступа:</label>
-        <div class="input-with-button">
-            <input type="password" id="adminPassword" placeholder="Введите пароль" class="password-input">
-            <button type="button" onclick="checkPassword()" class="password-submit">
-                <span class="submit-icon">→</span>
-            </button>
-        </div>
+    <div class="maintenance-status">
+      🔧 Проводятся технические работы
     </div>
-    <p class="form-hint">Только для отдела закупок</p>
-</div>
-                </div>
-            </div>
 
-            <div class="contact-section">
-                <div class="contact-card">
-                    <h4>По срочным вопросам:</h4>
-                    <a href="https://t.me/alexiskozlov" class="contact-link" target="_blank">
-                        <span class="contact-icon">📱</span>
-                        <span>Связаться с поддержкой</span>
-                    </a>
-                </div>
-            </div>
-        </div>
+    <div class="maintenance-hint">
+      Попробуйте зайти через 10–15 минут
     </div>
+
+    <!-- Админ-доступ -->
+    <div class="maintenance-admin">
+      <button id="adminBtn" class="maintenance-admin-btn">
+        Войти как администратор
+      </button>
+
+      <div id="passwordForm" class="maintenance-password" style="display:none;">
+        <input 
+          type="password" 
+          id="adminPassword" 
+          placeholder="Пароль доступа">
+        <button class="maintenance-submit" onclick="checkPassword(event)">
+          Войти
+        </button>
+      </div>
+    </div>
+
+    <div class="maintenance-footer">
+      По срочным вопросам:  
+      <a href="https://t.me/alexiskozlov" target="_blank">поддержка</a>
+    </div>
+
+  </div>
 </div>
 
     <!-- Верхнее меню -->
