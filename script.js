@@ -1506,22 +1506,28 @@ function getAvailableDates() {
   const day = now.getDay(); // 1=Mon,3=Wed,5=Fri
   const hour = now.getHours();
 
-  const isBeforeDeadline = hour < 12;
+  const beforeDeadline = hour < 12;
 
-  const map = {
-    1: { before: [3], after: [5] },
-    3: { before: [5], after: [1] },
-    5: { before: [1], after: [3] }
-  };
+  // цепочка дней
+  const chain = [1, 3, 5]; // Mon → Wed → Fri
 
-  const rule = map[day];
-  if (!rule) return [];
+  // находим текущий индекс
+  const idx = chain.indexOf(day);
 
-  const targets = isBeforeDeadline
-    ? rule.before.concat(rule.after)
-    : rule.after;
+  let firstTarget;
+  let secondTarget;
 
-  return targets.map(d => {
+  if (idx !== -1 && beforeDeadline) {
+    // до дедлайна — берём следующий
+    firstTarget = chain[(idx + 1) % chain.length];
+    secondTarget = chain[(idx + 2) % chain.length];
+  } else {
+    // после дедлайна — пропускаем следующий
+    firstTarget = chain[(idx + 2) % chain.length];
+    secondTarget = chain[(idx + 3) % chain.length] || chain[0];
+  }
+
+  return [firstTarget, secondTarget].map(d => {
     const date = new Date(now);
     let diff = (d + 7 - day) % 7;
     if (diff === 0) diff = 7;
@@ -1529,6 +1535,7 @@ function getAvailableDates() {
     return date;
   });
 }
+
 
 function openOrderModal() {
   const modal = document.getElementById("orderModal");
