@@ -337,7 +337,21 @@
     </button>
   </div>
 </div>
+<!-- 🥕 ЛОГИН ДЛЯ ЗАЯВКИ ОВОЩЕЙ -->
+<div id="vegAuthModal" class="order-modal" style="display:none;">
+  <div class="order-modal-content">
+    <span class="order-close" onclick="closeVegAuthModal()">×</span>
 
+    <h2>Вход ресторана</h2>
+
+    <input id="vegLogin" placeholder="Логин (BK-01)">
+    <input id="vegPassword" type="password" placeholder="Пароль">
+
+    <button class="glow-on-hover" onclick="loginVegRestaurant()">
+      Войти
+    </button>
+  </div>
+</div>
     
 </body>
 </html>
