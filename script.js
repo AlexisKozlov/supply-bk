@@ -565,7 +565,8 @@ for (const [key, card] of Object.entries(cardDatabase)) {
   const keyNorm = normalize(key);
   const nameNorm = normalize(card.name || "");
   const analogsNorm = (card.analogs || []).map(a => normalize(a));
-
+const fullNorm = normalize(`${key} ${card.name || ""}`);
+  
   // 1️⃣ Точное совпадение артикула
   if (keyNorm === query) {
     foundCards.push({ article: key, ...card, reason: "точное совпадение" });
