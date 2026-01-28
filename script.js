@@ -1600,3 +1600,11 @@ function submitOrderMock() {
   );
   closeOrderModal();
 }
+
+// 🔧 ВРЕМЕННО: тестовый ресторан
+currentRestaurant = {
+  id: "00000000-0000-0000-0000-000000000001", // UUID из Supabase
+  code: "BK-01",
+  name: "Burger King ТЕСТ",
+  region: "Минск"
+};
