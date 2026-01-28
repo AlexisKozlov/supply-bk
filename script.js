@@ -1608,3 +1608,88 @@ currentRestaurant = {
   name: "Burger King ТЕСТ",
   region: "Минск"
 };
+
+
+// ===============================
+// 🔐 ЛОГИН РЕСТОРАНА
+// ===============================
+
+function openOrderAuthModal() {
+  document.getElementById("orderAuthModal").style.display = "flex";
+}
+
+function closeOrderAuthModal() {
+  document.getElementById("orderAuthModal").style.display = "none";
+}
+
+async function loginRestaurant() {
+  const login = document.getElementById("restaurantLogin").value.trim();
+  const password = document.getElementById("restaurantPassword").value.trim();
+
+  if (!login || !password) {
+    showError("Введите логин и пароль");
+    return;
+  }
+
+  if (!window.supabaseClient) {
+    showError("Supabase ещё не готов, попробуйте через секунду");
+    return;
+  }
+
+  const passwordHash = simpleHash(password);
+
+  const { data, error } = await window.supabaseClient
+    .from("restaurants")
+    .select("*")
+    .eq("login", login)
+    .eq("password_hash", passwordHash)
+    .eq("active", true)
+    .single();
+
+  if (error || !data) {
+    showError("Неверный логин или пароль");
+    return;
+  }
+
+  // ✅ логин успешен
+  currentRestaurant = {
+    id: data.id,
+    code: data.code,
+    name: data.name,
+    region: data.region
+  };
+
+  // сохраняем сессию
+  localStorage.setItem(
+    "restaurantSession",
+    JSON.stringify(currentRestaurant)
+  );
+
+  showToast(`Вы вошли как ${data.code}`, "success");
+
+  closeOrderAuthModal();
+  openOrderModal();
+}
+
+// 🔁 восстановление сессии ресторана
+(function restoreRestaurantSession() {
+  const saved = localStorage.getItem("restaurantSession");
+  if (saved) {
+    try {
+      currentRestaurant = JSON.parse(saved);
+      console.log("Ресторан восстановлен:", currentRestaurant);
+    } catch (e) {
+      localStorage.removeItem("restaurantSession");
+    }
+  }
+})();
+
+function handleOrderClick(e) {
+  e.preventDefault();
+
+  if (currentRestaurant) {
+    openOrderModal();
+  } else {
+    openOrderAuthModal();
+  }
+}
