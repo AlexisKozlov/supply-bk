@@ -290,5 +290,52 @@
   </div>
 </div>
 
+<!-- МОДАЛЬНОЕ ОКНО ЗАКАЗА ОВОЩЕЙ -->
+<div id="orderModal" class="order-modal">
+  <div class="order-modal-content">
+    <span class="order-close" onclick="closeOrderModal()">×</span>
+
+    <h2>📦 Заказ овощей</h2>
+
+    <div class="order-meta">
+      <div><strong>Ресторан:</strong> <span id="orderRestaurant">—</span></div>
+      <div><strong>Регион:</strong> Минск</div>
+    </div>
+
+    <!-- ДАТЫ -->
+    <div class="order-section">
+      <h3>📅 Дата заказа</h3>
+      <div id="orderDates" class="order-dates"></div>
+    </div>
+
+    <!-- ОВОЩИ -->
+    <div class="order-section">
+      <h3>🥦 Овощи</h3>
+
+      <div class="order-row">
+        <label>🍅 Томаты</label>
+        <input type="number" id="tomatoQty" min="0" step="6" placeholder="кратно 6">
+      </div>
+
+      <div class="order-row locked">
+        <label>🧅 Лук 🔒</label>
+        <input type="number" disabled placeholder="недоступно">
+      </div>
+
+      <div class="order-row locked">
+        <label>🥬 Салат 🔒</label>
+        <input type="number" disabled placeholder="недоступно">
+      </div>
+    </div>
+
+    <div id="orderDeadlineInfo" class="order-deadline"></div>
+
+    <button class="glow-on-hover" onclick="submitOrderMock()">
+      Отправить заказ
+    </button>
+  </div>
+</div>
+
+    
 </body>
 </html>
