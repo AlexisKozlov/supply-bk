@@ -493,6 +493,7 @@ function showAutocomplete(queryRaw) {
     const keyNorm = normalize(key);
     const nameNorm = normalize(card.name || "");
     const analogsNorm = (card.analogs || []).map(a => normalize(a));
+    const fullNorm = normalize(`${key} ${card.name || ""}`);
 
     if (
       keyNorm.includes(query) ||
@@ -573,6 +574,21 @@ for (const [key, card] of Object.entries(cardDatabase)) {
     continue;
   }
 
+  // 2️⃣ Совпадение по "артикул + название"
+if (fullNorm.includes(query)) {
+  foundCards.push({
+    article: key,
+    ...card,
+    reason: "найдено по артикулу и названию"
+  });
+
+  if (!matchType) {
+    matchType = "full";
+    matchedCardId = key;
+  }
+  continue;
+}
+  
   // 2️⃣ Частичное совпадение артикула ✅
   if (keyNorm.includes(query)) {
     foundCards.push({ article: key, ...card, reason: "часть артикула" });
