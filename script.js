@@ -1356,6 +1356,39 @@ function clearSearch() {
     document.getElementById('searchInput').focus();
 }
 
+
+function getMSKDate() {
+  return new Date(
+    new Date().toLocaleString("en-US", { timeZone: "Europe/Moscow" })
+  );
+}
+
+function getAvailableOrderDates() {
+  const now = getMSKDate();
+  const day = now.getDay(); // 1=Mon,3=Wed,5=Fri
+  const hour = now.getHours();
+
+  const deadlinesPassed = hour >= 12;
+  const daysMap = {
+    1: [3, 5], // Mon → Wed, Fri
+    3: [5, 1], // Wed → Fri, Mon
+    5: [1, 3]  // Fri → Mon, Wed
+  };
+
+  let available = daysMap[day] || [];
+
+  if (deadlinesPassed) {
+    available = available.slice(1);
+  }
+
+  return available.map(d => {
+    const date = new Date(now);
+    date.setDate(now.getDate() + ((d + 7 - day) % 7 || 7));
+    return date.toISOString().split("T")[0];
+  });
+}
+
+
 // Экспорт функций для глобального доступа
 window.clearSearch = clearSearch;
 window.checkPassword = checkPassword;
