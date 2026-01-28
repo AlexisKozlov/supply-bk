@@ -493,7 +493,7 @@ function showAutocomplete(queryRaw) {
     const keyNorm = normalize(key);
     const nameNorm = normalize(card.name || "");
     const analogsNorm = (card.analogs || []).map(a => normalize(a));
-    const fullNorm = normalize(`${key} ${card.name || ""}`);
+      const fullNorm = normalize(`${key} ${card.name || ""}`);
 
     if (
       keyNorm.includes(query) ||
