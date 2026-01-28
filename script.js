@@ -558,37 +558,46 @@ function searchCard() {
 
 if (articleMatch) {
   const searchedArticle = articleMatch[0];
+  const resultElement = document.getElementById("result");
+  resultElement.innerHTML = "";
 
-  const foundCards = [];
+  let foundCard = null;
+  let reason = "";
 
   for (const [key, card] of Object.entries(cardDatabase)) {
     if (key === searchedArticle) {
-      foundCards.push({
-        article: key,
-        ...card,
-        reason: "найдено по артикулу"
-      });
+      foundCard = { article: key, ...card };
+      reason = "найдено по артикулу";
       break;
     }
 
     if ((card.analogs || []).includes(searchedArticle)) {
-      foundCards.push({
-        article: key,
-        ...card,
-        reason: "найдено по аналогу артикула"
-      });
+      foundCard = { article: key, ...card };
+      reason = "найдено по аналогу артикула";
       break;
     }
   }
 
-  if (foundCards.length > 0) {
-    renderResults(foundCards);
+  if (foundCard) {
+    const safeText = `${foundCard.article} ${foundCard.name}`.replace(/"/g, "&quot;");
+    resultElement.innerHTML = `
+      <div class="search-result">
+        <h3 class="copyable" onclick="copyToClipboard('${safeText}', this)">
+          ${foundCard.article} ${foundCard.name}
+        </h3>
+        <small style="color:#666;">${reason}</small>
+      </div>
+    `;
+    logSearchToSupabase(queryRaw, true, "article", foundCard.article);
   } else {
     showError("Карточка с таким артикулом не найдена");
+    logSearchToSupabase(queryRaw, false, "article", null);
   }
 
+  if (loader) loader.style.display = "none";
   return;
 }
+
     const resultElement = document.getElementById("result");
     resultElement.innerHTML = "";
 
