@@ -93,12 +93,6 @@
  <span class="btn-icon"><img src="sclad.png" alt="sclad" width="22" height="22"></span>
             <span class="btn-text">Заполнить остатки</span>
 </a>
-        <a href="#" class="menu-btn" onclick="handleOrderClick(event)">
-  <span class="btn-icon">
-    <img src="order.png" alt="order" width="22" height="22">
-  </span>
-  <span class="btn-text">Заказ овощей</span>
-</a>
     </div>
 </div>
     
@@ -271,87 +265,30 @@
 <div id="dropdownBackdrop" class="dropdown-backdrop"></div>
 
     <!-- 🔐 Модалка доступа к заказу -->
-<!-- 🔐 МОДАЛКА ЛОГИНА РЕСТОРАНА -->
-<div id="orderAuthModal" class="order-modal">
-  <div class="order-modal-content">
-    <span class="order-close" onclick="closeOrderAuthModal()">×</span>
+<div id="orderAuthModal" class="order-auth-modal" style="display:none;">
+  <div class="order-auth-card">
 
-    <h2>🔐 Вход ресторана</h2>
+    <h3>Доступ к калькулятору заказа</h3>
+    <p>Введите пароль администратора</p>
 
-    <div class="order-section">
-      <input id="restaurantLogin" type="text" placeholder="Логин (BK-01)">
+    <input 
+      type="password" 
+      id="orderAuthPassword" 
+      placeholder="Пароль доступа">
+
+    <div class="order-auth-actions">
+      <button onclick="submitOrderPassword()">
+        Войти
+      </button>
+      <button class="order-auth-cancel" onclick="closeOrderAuthModal()">
+        Отмена
+      </button>
     </div>
 
-    <div class="order-section">
-      <input id="restaurantPassword" type="password" placeholder="Пароль">
-    </div>
+    <div id="orderAuthError" class="order-auth-error"></div>
 
-    <button class="glow-on-hover" onclick="loginRestaurant()">
-      Войти
-    </button>
   </div>
 </div>
 
-<!-- МОДАЛЬНОЕ ОКНО ЗАКАЗА ОВОЩЕЙ -->
-<div id="orderModal" class="order-modal">
-  <div class="order-modal-content">
-    <span class="order-close" onclick="closeOrderModal()">×</span>
-
-    <h2>📦 Заказ овощей</h2>
-
-    <div class="order-meta">
-      <div><strong>Ресторан:</strong> <span id="orderRestaurant">—</span></div>
-      <div><strong>Регион:</strong> Минск</div>
-    </div>
-
-    <!-- ДАТЫ -->
-    <div class="order-section">
-      <h3>📅 Дата заказа</h3>
-      <div id="orderDates" class="order-dates"></div>
-    </div>
-
-    <!-- ОВОЩИ -->
-    <div class="order-section">
-      <h3>🥦 Овощи</h3>
-
-      <div class="order-row">
-        <label>🍅 Томаты</label>
-        <input type="number" id="tomatoQty" min="0" step="6" placeholder="кратно 6">
-      </div>
-
-      <div class="order-row locked">
-        <label>🧅 Лук 🔒</label>
-        <input type="number" disabled placeholder="недоступно">
-      </div>
-
-      <div class="order-row locked">
-        <label>🥬 Салат 🔒</label>
-        <input type="number" disabled placeholder="недоступно">
-      </div>
-    </div>
-
-    <div id="orderDeadlineInfo" class="order-deadline"></div>
-
-    <button class="glow-on-hover" onclick="submitOrderMock()">
-      Отправить заказ
-    </button>
-  </div>
-</div>
-<!-- 🥕 ЛОГИН ДЛЯ ЗАЯВКИ ОВОЩЕЙ -->
-<div id="vegAuthModal" class="order-modal" style="display:none;">
-  <div class="order-modal-content">
-    <span class="order-close" onclick="closeVegAuthModal()">×</span>
-
-    <h2>Вход ресторана</h2>
-
-    <input id="vegLogin" placeholder="Логин (BK-01)">
-    <input id="vegPassword" type="password" placeholder="Пароль">
-
-    <button class="glow-on-hover" onclick="loginVegRestaurant()">
-      Войти
-    </button>
-  </div>
-</div>
-    
 </body>
 </html>
