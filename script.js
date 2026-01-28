@@ -554,6 +554,30 @@ function searchCard() {
 
   setTimeout(() => {
     const query = normalize(queryRaw);
+    const articleMatch = queryRaw.match(/\d{5,}/); // артикул = 5+ цифр
+
+if (articleMatch) {
+  const searchedArticle = articleMatch[0];
+
+  for (const [key, card] of Object.entries(cardDatabase)) {
+    // прямое совпадение артикула
+    if (key === searchedArticle) {
+      renderSingleCard(key, card, "найдено по артикулу");
+      return;
+    }
+
+    // совпадение по аналогам
+    if ((card.analogs || []).includes(searchedArticle)) {
+      renderSingleCard(key, card, "найдено по аналогу артикула");
+      return;
+    }
+  }
+
+  // если артикул есть, но не найден —
+  // дальше НЕ ищем по названию
+  showError("Карточка с таким артикулом не найдена");
+  return;
+}
     const resultElement = document.getElementById("result");
     resultElement.innerHTML = "";
 
