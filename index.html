@@ -265,28 +265,24 @@
 <div id="dropdownBackdrop" class="dropdown-backdrop"></div>
 
     <!-- 🔐 Модалка доступа к заказу -->
-<div id="orderAuthModal" class="order-auth-modal" style="display:none;">
-  <div class="order-auth-card">
+<!-- 🔐 МОДАЛКА ЛОГИНА РЕСТОРАНА -->
+<div id="orderAuthModal" class="order-modal">
+  <div class="order-modal-content">
+    <span class="order-close" onclick="closeOrderAuthModal()">×</span>
 
-    <h3>Доступ к калькулятору заказа</h3>
-    <p>Введите пароль администратора</p>
+    <h2>🔐 Вход ресторана</h2>
 
-    <input 
-      type="password" 
-      id="orderAuthPassword" 
-      placeholder="Пароль доступа">
-
-    <div class="order-auth-actions">
-      <button onclick="submitOrderPassword()">
-        Войти
-      </button>
-      <button class="order-auth-cancel" onclick="closeOrderAuthModal()">
-        Отмена
-      </button>
+    <div class="order-section">
+      <input id="restaurantLogin" type="text" placeholder="Логин (BK-01)">
     </div>
 
-    <div id="orderAuthError" class="order-auth-error"></div>
+    <div class="order-section">
+      <input id="restaurantPassword" type="password" placeholder="Пароль">
+    </div>
 
+    <button class="glow-on-hover" onclick="loginRestaurant()">
+      Войти
+    </button>
   </div>
 </div>
 
