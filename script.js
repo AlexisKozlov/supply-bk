@@ -559,23 +559,34 @@ function searchCard() {
 if (articleMatch) {
   const searchedArticle = articleMatch[0];
 
+  const foundCards = [];
+
   for (const [key, card] of Object.entries(cardDatabase)) {
-    // прямое совпадение артикула
     if (key === searchedArticle) {
-      renderSingleCard(key, card, "найдено по артикулу");
-      return;
+      foundCards.push({
+        article: key,
+        ...card,
+        reason: "найдено по артикулу"
+      });
+      break;
     }
 
-    // совпадение по аналогам
     if ((card.analogs || []).includes(searchedArticle)) {
-      renderSingleCard(key, card, "найдено по аналогу артикула");
-      return;
+      foundCards.push({
+        article: key,
+        ...card,
+        reason: "найдено по аналогу артикула"
+      });
+      break;
     }
   }
 
-  // если артикул есть, но не найден —
-  // дальше НЕ ищем по названию
-  showError("Карточка с таким артикулом не найдена");
+  if (foundCards.length > 0) {
+    renderResults(foundCards);
+  } else {
+    showError("Карточка с таким артикулом не найдена");
+  }
+
   return;
 }
     const resultElement = document.getElementById("result");
