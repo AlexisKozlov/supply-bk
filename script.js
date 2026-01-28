@@ -1491,3 +1491,105 @@ async function submitOrderPassword() {
   }
 }
 
+// ===== МОДАЛКА ЗАКАЗА =====
+
+let selectedOrderDate = null;
+
+function getMSKNow() {
+  return new Date(
+    new Date().toLocaleString("en-US", { timeZone: "Europe/Moscow" })
+  );
+}
+
+function getAvailableDates() {
+  const now = getMSKNow();
+  const day = now.getDay(); // 1=Mon,3=Wed,5=Fri
+  const hour = now.getHours();
+
+  const isBeforeDeadline = hour < 12;
+
+  const map = {
+    1: { before: [3], after: [5] },
+    3: { before: [5], after: [1] },
+    5: { before: [1], after: [3] }
+  };
+
+  const rule = map[day];
+  if (!rule) return [];
+
+  const targets = isBeforeDeadline
+    ? rule.before.concat(rule.after)
+    : rule.after;
+
+  return targets.map(d => {
+    const date = new Date(now);
+    let diff = (d + 7 - day) % 7;
+    if (diff === 0) diff = 7;
+    date.setDate(now.getDate() + diff);
+    return date;
+  });
+}
+
+function openOrderModal() {
+  const modal = document.getElementById("orderModal");
+  const datesBox = document.getElementById("orderDates");
+  const info = document.getElementById("orderDeadlineInfo");
+
+  datesBox.innerHTML = "";
+  selectedOrderDate = null;
+
+  const dates = getAvailableDates();
+
+  dates.forEach((d, idx) => {
+    const btn = document.createElement("div");
+    btn.className = "order-date-btn";
+    btn.textContent = d.toLocaleDateString("ru-RU", {
+      weekday: "short",
+      day: "2-digit",
+      month: "2-digit"
+    });
+
+    if (idx === 0) {
+      btn.classList.add("active");
+      selectedOrderDate = d;
+    }
+
+    btn.onclick = () => {
+      document
+        .querySelectorAll(".order-date-btn")
+        .forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      selectedOrderDate = d;
+    };
+
+    datesBox.appendChild(btn);
+  });
+
+  info.textContent = "⏰ Редактирование возможно до 12:00 MSK дня дедлайна";
+
+  modal.style.display = "flex";
+}
+
+function closeOrderModal() {
+  document.getElementById("orderModal").style.display = "none";
+}
+
+function submitOrderMock() {
+  const qty = Number(document.getElementById("tomatoQty").value);
+
+  if (!selectedOrderDate) {
+    showError("Выберите дату заказа");
+    return;
+  }
+
+  if (qty % 6 !== 0) {
+    showError("Количество томатов должно быть кратно 6");
+    return;
+  }
+
+  showToast(
+    `Заказ сохранён на ${selectedOrderDate.toLocaleDateString("ru-RU")}`,
+    "success"
+  );
+  closeOrderModal();
+}
