@@ -2,292 +2,309 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-   <meta name="theme-color" content="#d62300">
-    <title>Поиск карточек</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Приложение переехало</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+        :root {
+            --red: #D62300;
+            --orange: #FF8732;
+            --brown: #502314;
+            --cream: #F5EBDC;
+            --mustard: #F2A900;
+            --dark: #3B2013;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--cream);
+            color: var(--brown);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated flame blobs */
+        .bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.13;
+        }
+
+        .blob:nth-child(1) {
+            width: 520px; height: 520px;
+            background: var(--red);
+            top: -18%; right: -12%;
+            animation: d1 14s ease-in-out infinite alternate;
+        }
+        .blob:nth-child(2) {
+            width: 420px; height: 420px;
+            background: var(--orange);
+            bottom: -12%; left: -10%;
+            animation: d2 17s ease-in-out infinite alternate;
+        }
+        .blob:nth-child(3) {
+            width: 280px; height: 280px;
+            background: var(--mustard);
+            top: 45%; left: 45%;
+            animation: d3 11s ease-in-out infinite alternate;
+        }
+
+        @keyframes d1 { to { transform: translate(-35px, 25px) scale(1.05); } }
+        @keyframes d2 { to { transform: translate(25px, -20px) scale(1.08); } }
+        @keyframes d3 { to { transform: translate(-20px, 15px) scale(0.9); } }
+
+        /* Grain */
+        .bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        /* Flame icon */
+        .flame {
+            font-size: 3.5rem;
+            margin-bottom: 1.8rem;
+            display: inline-block;
+            animation: flameIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes flameIn {
+            from { opacity: 0; transform: scale(0.3) rotate(-10deg); }
+            60% { transform: scale(1.1) rotate(3deg); }
+            to { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
+
+        h1 {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.85rem;
+            font-weight: 900;
+            line-height: 1.25;
+            color: var(--brown);
+            margin-bottom: 1rem;
+            animation: up 0.7s ease-out 0.15s both;
+        }
+
+        .sub {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: #8b6f5e;
+            margin-bottom: 2.2rem;
+            animation: up 0.7s ease-out 0.3s both;
+        }
+
+        @keyframes up {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Card */
+        .card {
+            background: #fff;
+            border-radius: 24px;
+            padding: 2rem 1.8rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow:
+                0 1px 3px rgba(80,35,20,0.05),
+                0 8px 32px rgba(80,35,20,0.07);
+            animation: up 0.7s ease-out 0.45s both;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--red), var(--orange), var(--mustard));
+        }
+
+        .card-label {
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--orange);
+            margin-bottom: 0.7rem;
+        }
+
+        .card-url {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: var(--brown);
+            word-break: break-all;
+            line-height: 1.4;
+        }
+
+        .card-url span { color: var(--red); }
+
+        .card-line {
+            width: 40px; height: 3px;
+            border-radius: 3px;
+            background: var(--cream);
+            margin: 1.1rem auto;
+        }
+
+        .card-text {
+            font-size: 0.88rem;
+            color: #a08876;
+            line-height: 1.6;
+        }
+
+        .card-text strong { color: var(--brown); }
+
+        /* Button */
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 18px 28px;
+            border-radius: 60px;
+            background: var(--red);
+            color: #fff;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 900;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 20px rgba(214,35,0,0.25);
+            animation: up 0.7s ease-out 0.6s both;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(214,35,0,0.35);
+            background: #bf2000;
+        }
+
+        .btn:active { transform: translateY(-1px); }
+
+        .btn svg {
+            width: 20px; height: 20px;
+            transition: transform 0.25s ease;
+        }
+
+        .btn:hover svg { transform: translateX(4px); }
+
+        /* Timer */
+        .timer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 1.2rem;
+            animation: up 0.7s ease-out 0.75s both;
+        }
+
+        .timer-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--orange);
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(0.7); }
+        }
+
+        .timer-text {
+            font-size: 0.8rem;
+            color: #a08876;
+        }
+
+        .timer-text b {
+            font-family: 'Nunito', sans-serif;
+            font-weight: 900;
+            color: var(--red);
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 1.55rem; }
+            .card-url { font-size: 1.1rem; }
+            .card { padding: 1.5rem 1.3rem; }
+        }
+    </style>
 </head>
 <body>
-<!-- Страница тех работ - ПОЛНОЭКРАННАЯ ВЕРСИЯ -->
-<div id="maintenance" class="maintenance-screen" style="display:none;">
-  <div class="maintenance-card">
-    
-    <img src="burger-king-logo.png" alt="Burger King" class="maintenance-logo">
-
-    <h1>Приложение временно недоступно</h1>
-    <p class="maintenance-subtitle">
-      Мы обновляем базу карточек и улучшаем систему.
-    </p>
-
-    <div class="maintenance-status">
-      🔧 Проводятся технические работы
+    <div class="bg">
+        <div class="blob"></div>
+        <div class="blob"></div>
+        <div class="blob"></div>
     </div>
 
-    <div class="maintenance-hint">
-      Попробуйте зайти через 10–15 минут
-    </div>
-
-    <!-- Админ-доступ -->
-    <div class="maintenance-admin">
-      <button id="adminBtn" class="maintenance-admin-btn">
-        Вход для отдела закупок
-      </button>
-
-      <div id="passwordForm" class="maintenance-password" style="display:none;">
-        <input 
-          type="password" 
-          id="adminPassword" 
-          placeholder="Пароль доступа">
-        <button class="maintenance-submit" onclick="checkPassword(event)">
-          Войти
-        </button>
-      </div>
-    </div>
-
-    <div class="maintenance-footer">
-      По срочным вопросам:  
-      <a href="https://t.me/alexiskozlov" target="_blank">поддержка</a>
-    </div>
-
-  </div>
-</div>
-
-    <!-- Верхнее меню -->
-<div class="top-menu">
-    <div class="menu-container">
-        <a href="https://docs.google.com/spreadsheets/d/1120BAXbfgI6YK66DGk-e-Z_ocqXqp4M_Rxp6qHhibek/edit?gid=0#gid=0" target="_blank" class="menu-btn">
-            <span class="btn-icon"><img src="salat.png" alt="Овощи" width="22" height="22"></span>
-            <span class="btn-text">Овощи</span>
-        </a>
-        <a href="https://docs.google.com/spreadsheets/d/1LymUxkYXmhx2sEta8qI9qj1IohgS2z79IBZ7EMlKeLc/edit?gid=378091923#gid=378091923" target="_blank" class="menu-btn">
-            <span class="btn-icon"> <img src="planet.png" alt="Планета ресторанов" width="22" height="22"> </span>
-            <span class="btn-text">Планета ресторанов</span>
-        </a>
-        <a href="https://docs.google.com/spreadsheets/d/1dv-s5Rqe9Hgyg1fbPeCWEwh0MaKMNkj7JK_gFyxPDdU/edit?pli=1&gid=0#gid=0" target="_blank" class="menu-btn">
-            <span class="btn-icon"> <img src="delivary.png" alt="no work" width="22" height="22"> </span>
-            <span class="btn-text">График поставок</span>
-        </a>
-        <a href="https://docs.google.com/spreadsheets/d/1ToILNXjzvBwvyRm8687h-RJrUA3RuffMx3vJuCdF-xQ/edit?gid=0#gid=0" target="_blank" class="menu-btn">
-            <span class="btn-icon"><img src="contact.png" alt="no work" width="22" height="22"></span>
-            <span class="btn-text">Контакты поставщиков</span>
-        </a>
-    <a href="order.xlsm" 
-   class="menu-btn" 
-   title="Файл заказа" 
-   download="Файл_заказа_Burger_King.xlsm"
-   onclick="showDownloadNotification()">
- <span class="btn-icon"><img src="order.png" alt="order" width="22" height="22"></span>
-        <span class="btn-text">Файл заказа</span>
-</a>
-        <a href="https://alexiskozlov.github.io/supply-bk-order" 
-               class="menu-btn"
-   title="Калькулятор заказа">
-    <span class="btn-icon">
-        <img src="order.png" alt="order" width="22" height="22">
-    </span>
-    <span class="btn-text">Заказ</span>
-</a>
-        <a href="#" class="menu-btn" title="Форма остатков" onclick="showGoogleForm()">
- <span class="btn-icon"><img src="sclad.png" alt="sclad" width="22" height="22"></span>
-            <span class="btn-text">Заполнить остатки</span>
-</a>
-    </div>
-</div>
-    
-    <!-- Админ доступ -->
-    <div class="admin-access-fixed">
-        <button id="adminAccessBtn" class="admin-access-btn">
-            <span class="btn-icon">🔧</span>
-            <span class="btn-text">База данных</span>
-        </button>
-        <div id="adminLoginForm" class="admin-login-form" style="display: none;">
-            <input type="password" id="adminLoginPassword" placeholder="Пароль">
-            <button onclick="loginAdmin()">Войти</button>
-            <button onclick="hideAdminLogin()">Отмена</button>
-        </div>
-    </div>
-    
-    <!-- Админ панель для добавления карточек -->
-    <div id="adminPanel" class="admin-panel" style="display: none;">
-        <h2>Управление базой данных</h2>
-        
-        <!-- Вкладки -->
-        <div class="admin-tabs">
-            <button class="tab-btn active" onclick="showTab('add')">Добавить</button>
-            <button class="tab-btn" onclick="showTab('edit')">Редактировать</button>
-        </div>
-        
-        <!-- Вкладка добавления -->
-        <div id="addTab" class="tab-content">
-            <h3>Добавить новую карточку товара</h3>
-            <form id="addCardForm" onsubmit="addCard(event); return false;">
-                <div class="form-group">
-                    <label for="cardId">Артикул:</label>
-                    <input type="text" id="cardId" required placeholder="Например: 123456">
-                </div>
-                <div class="form-group">
-                    <label for="cardName">Название товара:</label>
-                    <input type="text" id="cardName" required placeholder="Например: Куриные наггетсы">
-                </div>
-                <div class="form-group">
-                    <label for="cardAnalogs">Аналоги (через запятую):</label>
-                    <input type="text" id="cardAnalogs" placeholder="Например: наггетсы, курица, 654321">
-                </div>
-                <button type="submit" class="glow-on-hover">Добавить карточку</button>
-            </form>
-        </div>
-        
-        <!-- Вкладка редактирования -->
-        <div id="editTab" class="tab-content" style="display: none;">
-            <h3>Редактировать существующие карточки</h3>
-            <div class="search-edit">
-                <input type="text" id="editSearch" placeholder="Поиск карточки по артикулу или названию">
-                <button onclick="searchCardsForEdit()">Найти</button>
-            </div>
-            <div id="editCardList"></div>
-            <div id="editForm" style="display: none;">
-                <h4>Редактировать карточку</h4>
-              <form id="updateCardForm" onsubmit="updateCard(event); return false;">
-    <input type="hidden" id="editCardKey">
-
-    <div class="form-group">
-        <label for="editCardId">Артикул:</label>
-        <input type="text" id="editCardId" required>
-    </div>
-
-    <div class="form-group">
-        <label for="editCardName">Название товара:</label>
-        <input type="text" id="editCardName" required>
-    </div>
-
-    <div class="form-group">
-        <label for="editCardAnalogs">Аналоги (через запятую):</label>
-        <input type="text" id="editCardAnalogs">
-    </div>
-
-    <button type="submit" class="glow-on-hover">Сохранить изменения</button>
-    <button type="button" onclick="deleteCurrentCard()" class="delete-btn">Удалить карточку</button>
-    <button type="button" onclick="cancelEdit()">Отмена</button>
-</form>
-
-            </div>
-        </div>
-        
-    
-        <div id="adminMessage"></div>
-    </div>
-    
-    <!-- Overlay для админ панели -->
-    <div id="adminOverlay" class="admin-overlay" style="display: none;" onclick="closeAdminPanel()"></div>
-    
-    <!-- Основной контент -->
- <div id="normalSite" style="display: none;">
     <div class="container">
-            
-            <div class="logo-container">
-                <img src="burger-king-logo.png" alt="Burger King Logo" class="logo">
-                <h1>Поиск актуальных карточек</h1>
-            </div>
+        <div class="flame">🔥</div>
 
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Введите артикул..." title="Введите артикул карточки для поиска">
-                <button class="glow-on-hover" onclick="searchCard()" title="Нажмите для поиска карточки">Найти</button>
-                <button class="clear-btn" onclick="clearSearch()" title="Очистить поле поиска">🗑️</button>
-                <div id="autocompleteList" class="autocomplete-list"></div>
-            </div>
-            
-            <div id="result"></div>
+        <h1>Приложение поиска актуальных карточек переехало</h1>
 
+        <p class="sub">
+            Текущая версия по этому адресу прекращает работу.<br>
+            Пожалуйста, сохраните новую ссылку.
+        </p>
+
+        <div class="card">
+            <div class="card-label">Новый адрес</div>
+            <div class="card-url">supply-department.online<span>/search-cards</span></div>
+            <div class="card-line"></div>
+            <div class="card-text">
+                Все <strong>данные</strong> и <strong>функции</strong> сохранены.<br>
+                Обновите закладку — и всё готово.
+            </div>
+        </div>
+
+        <a href="https://supply-department.online/search-cards" class="btn">
+            Перейти
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+        </a>
+
+        <div class="timer">
+            <div class="timer-dot"></div>
+            <div class="timer-text">Автоматический переход через <b id="t">15</b> сек</div>
         </div>
     </div>
 
-    <!-- Плашка "Сообщить об ошибке" -->
-    <div class="error-report">
-        <a href="https://t.me/alexiskozlov" target="_blank">Сообщить об ошибке</a>
-    </div>
-
-
-    
-    <div id="loader" style="display: none;">
-        <img src="load.gif" alt="Загрузка" class="loader-gif">
-    </div>
-    
-    <div class="update-info" id="updateInfo">
-        <div class="update-icon">🔄</div>
-        <span class="update-text">Обновлено: <span id="lastUpdateDate"></span></span>
-    </div>
-
-    <div id="errorPopup" class="error-popup" style="display: none;">
-    <div class="error-content">
-        <span class="error-icon">⚠️</span>
-        <p id="errorMessage"></p>
-        <button class="error-close-btn">OK</button>
-    </div>
-</div>
-    <!-- Дисклеймер с подтверждением -->
-<div id="disclaimerPopup" class="disclaimer-popup">
-  <div class="disclaimer-content">
-    <div class="disclaimer-text">
-</script>
-      <p>Данное приложение предоставляется исключительно в информационных целях. Мы прилагаем все усилия для обеспечения точности информации, однако не гарантируем её абсолютную достоверность и актуальность.</p>
-    </div>
-    <div class="disclaimer-buttons">
-      <button id="acceptDisclaimer" class="disclaimer-button accept">Я принимаю условия</button>
-      <button id="declineDisclaimer" class="disclaimer-button decline">Не согласен</button>
-    </div>
-  </div>
-</div>
-
-<!-- Страница "Приложение недоступно" -->
-<div id="appUnavailable" class="app-unavailable" style="display: none;">
-  <div class="unavailable-content">
-    <div class="unavailable-icon">🚫</div>
-    <h1>Приложение недоступно</h1>
-    <p>Для использования сервиса необходимо принять условия использования.</p>
-    <p>Обновите страницу, чтобы попробовать снова.</p>
-    <button id="refreshPage" class="refresh-button">Обновить страницу</button>
-  </div>
-</div>
-
-<!-- Модальное окно для Google Form -->
-<div id="googleFormModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeGoogleForm()">&times;</span>
-        <div class="form-container">
-            <iframe id="googleFormFrame" src="" width="100%" height="500" frameborder="0" marginheight="0" marginwidth="0">Загрузка...</iframe>
-        </div>
-    </div>
-</div>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="script.js"></script>
-<div id="dropdownBackdrop" class="dropdown-backdrop"></div>
-
-    <!-- 🔐 Модалка доступа к заказу -->
-<div id="orderAuthModal" class="order-auth-modal" style="display:none;">
-  <div class="order-auth-card">
-
-    <h3>Доступ к калькулятору заказа</h3>
-    <p>Введите пароль администратора</p>
-
-    <input 
-      type="password" 
-      id="orderAuthPassword" 
-      placeholder="Пароль доступа">
-
-    <div class="order-auth-actions">
-      <button onclick="submitOrderPassword()">
-        Войти
-      </button>
-      <button class="order-auth-cancel" onclick="closeOrderAuthModal()">
-        Отмена
-      </button>
-    </div>
-
-    <div id="orderAuthError" class="order-auth-error"></div>
-
-  </div>
-</div>
-
+    <script>
+        let s = 15, el = document.getElementById('t');
+        const iv = setInterval(() => {
+            el.textContent = --s;
+            if (s <= 0) {
+                clearInterval(iv);
+                window.location.href = 'https://supply-department.online/search-cards';
+            }
+        }, 1000);
+    </script>
 </body>
 </html>
